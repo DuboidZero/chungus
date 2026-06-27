@@ -1,7 +1,5 @@
-@"
 .venv/
 __pycache__/
 *.pyc
 .env
 *.db
-"@ | Out-File -FilePath .gitignore -Encoding utf8
