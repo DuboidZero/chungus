@@ -1,0 +1,165 @@
+import { Mail, Phone, MapPin, Briefcase, Edit2, CheckCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '../../shared/ui/card';
+import { Badge } from '../../shared/ui/badge';
+import { Progress } from '../../shared/ui/progress';
+import type { StudentProfileData } from './types';
+import { calcCompletion } from './types';
+
+interface Props {
+  data: StudentProfileData;
+  name: string;
+  department: string;
+  onEdit: () => void;
+}
+
+export function ProfileView({ data, name, department, onEdit }: Props) {
+  const completion = calcCompletion(data);
+  const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2);
+
+  const prefLabel: Record<string, string> = {
+    online:  'Online',
+    offline: 'Offline',
+    none:    'No Preference',
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto space-y-6">
+      {/* Hero card */}
+      <Card>
+        <CardContent className="p-8">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-5">
+              {/* Avatar */}
+              {data.avatarUrl ? (
+                <img src={data.avatarUrl} alt="Profile" className="w-20 h-20 rounded-full object-cover shrink-0 border-2 border-white dark:border-brand-900 shadow-sm shadow-brand-900/20" />
+              ) : (
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-lg shadow-brand-900/20">
+                  {initials}
+                </div>
+              )}
+              <div>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{name}</h1>
+                <p className="text-slate-500 dark:text-slate-400 mt-0.5">{department}</p>
+
+                {/* Quick contact chips */}
+                <div className="flex flex-wrap items-center gap-2 mt-3">
+                  {data.email && (
+                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-brand-800 px-2.5 py-1 rounded-full">
+                      <Mail className="w-3 h-3" /> {data.email}
+                    </span>
+                  )}
+                  {data.location && (
+                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-brand-800 px-2.5 py-1 rounded-full">
+                      <MapPin className="w-3 h-3" /> {data.location}
+                    </span>
+                  )}
+                  {data.phone && (
+                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-brand-800 px-2.5 py-1 rounded-full">
+                      <Phone className="w-3 h-3" /> {data.phone}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Edit button */}
+            <button
+              onClick={onEdit}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-800 border border-brand-200 dark:border-brand-700 transition-colors"
+            >
+              <Edit2 className="w-3.5 h-3.5" />
+              Edit Profile
+            </button>
+          </div>
+
+          {/* Completion bar in hero */}
+          <div className="mt-6 pt-6 border-t border-slate-100 dark:border-brand-800">
+            <Progress value={completion} showLabel />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* About Me */}
+      {data.aboutMe && (
+        <Card>
+          <CardHeader><CardTitle>About Me</CardTitle></CardHeader>
+          <CardContent className="pb-6">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
+              {data.aboutMe}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Contact */}
+      <Card>
+        <CardHeader><CardTitle>Contact</CardTitle></CardHeader>
+        <CardContent className="pb-6">
+          <dl className="space-y-4">
+            <Row icon={Mail} label="Email">
+              <span className="text-slate-900 dark:text-slate-100">{data.email}</span>
+              <Badge variant="success" className="ml-2">
+                <CheckCircle className="w-3 h-3 mr-1" />Verified
+              </Badge>
+            </Row>
+            {data.phone ? (
+              <Row icon={Phone} label="Phone">
+                <span className="text-slate-900 dark:text-slate-100">{data.phone}</span>
+              </Row>
+            ) : (
+              <Row icon={Phone} label="Phone">
+                <button onClick={onEdit} className="text-sm text-brand-500 hover:underline">Add phone number</button>
+              </Row>
+            )}
+            {data.location ? (
+              <Row icon={MapPin} label="Location">
+                <span className="text-slate-900 dark:text-slate-100">{data.location}</span>
+              </Row>
+            ) : (
+              <Row icon={MapPin} label="Location">
+                <button onClick={onEdit} className="text-sm text-brand-500 hover:underline">Add location</button>
+              </Row>
+            )}
+          </dl>
+        </CardContent>
+      </Card>
+
+      {/* Internship Preferences */}
+      <Card>
+        <CardHeader><CardTitle>Internship Preferences</CardTitle></CardHeader>
+        <CardContent className="pb-6">
+          <div className="flex flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-slate-400" />
+              <span className="text-sm text-slate-600 dark:text-slate-400">Mode:</span>
+              <Badge variant={data.internshipPreference === 'none' ? 'info' : 'default'}>
+                {prefLabel[data.internshipPreference] ?? 'Not set'}
+              </Badge>
+            </div>
+            {data.internshipPreference === 'offline' && data.preferredRadius && (
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-slate-400" />
+                <span className="text-sm text-slate-600 dark:text-slate-400">Radius:</span>
+                <Badge variant="info">{data.preferredRadius}</Badge>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function Row({ icon: Icon, label, children }: {
+  icon: typeof Mail; label: string; children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <dt className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 w-24 shrink-0">
+        <Icon className="w-4 h-4" />
+        {label}
+      </dt>
+      <dd className="flex items-center text-sm">{children}</dd>
+    </div>
+  );
+}
