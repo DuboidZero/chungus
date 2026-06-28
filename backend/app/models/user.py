@@ -1,11 +1,12 @@
-from sqlalchemy import Column, Integer, String, Boolean
-from app.database import Base
+import uuid
+from sqlalchemy import Column, String, Boolean
+from app.database import Base, TimestampMixin
 
 
-class User(Base):
+class User(Base, TimestampMixin):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     role = Column(String, nullable=False)
     prn = Column(String, unique=True, nullable=True, index=True)
     email = Column(String, unique=True, nullable=True, index=True)
