@@ -2,17 +2,22 @@ from io import BytesIO
 
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from openpyxl import load_workbook
 
 from app.models.user import User
 from app.models.academic import Semester, Subject
-from app.schemas.admin import BulkUploadResult, SeededStudent
+from app.schemas.admin import BulkUploadResult, SeededStudent, TeacherCreate, UserSummary
 from app.core.dependencies import get_current_admin, get_db
 from app.core.security import hash_password, generate_initial_password
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
+# ============================================================
+#  Bulk student account upload
+#  Columns: A=PRN  B=Full Name  C=Year of Birth  D=Batch  E=Branch
+# ============================================================
 @router.post("/students/upload", response_model=BulkUploadResult)
 async def bulk_upload_students(
     file: UploadFile = File(...),
@@ -76,6 +81,12 @@ async def bulk_upload_students(
         students=seeded_students,
     )
 
+
+# ============================================================
+#  Bulk marks upload (one row per subject)
+#  Columns: A=PRN  B=Semester  C=Subject  D=Obtained  E=Max  F=Credits
+#  GPA/CGPA are computed from these marks by the grading code.
+# ============================================================
 @router.post("/marks/upload", response_model=dict)
 async def bulk_upload_marks(
     file: UploadFile = File(...),
@@ -91,7 +102,7 @@ async def bulk_upload_marks(
     sheet = workbook.active
     subjects_added = 0
     errors = []
-    semester_cache = {}  # (user_id, semester_number) -> Semester  (avoids re-creating the same semester)
+    semester_cache = {}  # (user_id, semester_number) -> Semester
 
     for row_num, row in enumerate(sheet.iter_rows(min_row=2, values_only=True), start=2):
         if row is None or all(cell is None for cell in row):
@@ -113,7 +124,6 @@ async def bulk_upload_marks(
             sem_num = int(semester_number)
             cache_key = (student.id, sem_num)
 
-            # find-or-create the semester (cached so all its subjects attach to one record)
             if cache_key in semester_cache:
                 semester = semester_cache[cache_key]
             else:
@@ -124,7 +134,7 @@ async def bulk_upload_marks(
                 if not semester:
                     semester = Semester(user_id=student.id, semester_number=sem_num)
                     db.add(semester)
-                    db.flush()  # get its id before adding subjects
+                    db.flush()
                 semester_cache[cache_key] = semester
 
             db.add(Subject(
@@ -141,3 +151,57 @@ async def bulk_upload_marks(
 
     db.commit()
     return {"subjectsAdded": subjects_added, "errors": errors}
+
+
+# ============================================================
+#  Teacher account creation
+# ============================================================
+@router.post("/teachers", response_model=UserSummary, status_code=status.HTTP_201_CREATED)
+async def create_teacher(
+    payload: TeacherCreate,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    if db.query(User).filter(User.email == payload.email).first():
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")
+    teacher = User(
+        role="teacher",
+        email=payload.email,
+        hashed_password=hash_password(payload.password),
+        must_change_password=True,
+    )
+    db.add(teacher)
+    db.commit()
+    db.refresh(teacher)
+    return teacher
+
+
+# ============================================================
+#  Account management: list users + activate/deactivate
+# ============================================================
+@router.get("/users", response_model=list[UserSummary])
+async def list_users(
+    role: str | None = None,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    query = db.query(User)
+    if role:
+        query = query.filter(User.role == role)
+    return query.all()
+
+
+@router.patch("/users/{user_id}/active", response_model=UserSummary)
+async def set_user_active(
+    user_id: str,
+    is_active: bool,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    user.is_active = is_active
+    db.commit()
+    db.refresh(user)
+    return user
