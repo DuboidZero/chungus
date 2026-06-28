@@ -1,7 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-
 from app.database import SessionLocal
 from app.models.user import User
 from app.core.security import decode_access_token
@@ -49,3 +48,13 @@ def get_current_user(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is deactivated")
 
     return user
+
+def get_current_admin(current_user: User = Depends(get_current_user)) -> User:
+    """Like get_current_user, but also requires the admin role.
+    Protects all /admin endpoints — students/teachers get 403."""
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
+        )
+    return current_user

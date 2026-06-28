@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-
+from sqlalchemy import or_
 from app.models.user import User
 from app.schemas.auth import LoginRequest, LoginResponse, UserResponse, ChangePasswordRequest
 from app.core.security import verify_password, create_access_token, hash_password
@@ -13,7 +13,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 @router.post("/login", response_model=LoginResponse)
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
     # 1. Look up the user by PRN
-    user = db.query(User).filter(User.prn == payload.prn).first()
+    user = db.query(User).filter(or_(User.prn == payload.prn, User.email == payload.prn)).first()
 
     # 2. If no user, or password is wrong -> reject (same message for both, on purpose)
     if not user or not verify_password(payload.password, user.hashed_password):
@@ -48,7 +48,7 @@ def me(current_user: User = Depends(get_current_user)):
 @router.post("/token", include_in_schema=False)
 def login_for_docs(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """Helper endpoint so the /docs 'Authorize' button works. Not for the frontend."""
-    user = db.query(User).filter(User.prn == form_data.username).first()
+    user = db.query(User).filter(or_(User.prn == form_data.username, User.email == form_data.username)).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid PRN or password")
     access_token = create_access_token({"sub": user.id, "role": user.role})
