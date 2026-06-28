@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from openpyxl import load_workbook
 
 from app.models.user import User
+from app.models.academic import Semester, Subject
 from app.schemas.admin import BulkUploadResult, SeededStudent
 from app.core.dependencies import get_current_admin, get_db
 from app.core.security import hash_password, generate_initial_password
@@ -18,7 +19,6 @@ async def bulk_upload_students(
     db: Session = Depends(get_db),
     admin: User = Depends(get_current_admin),
 ):
-    # 1. Read the uploaded file into memory
     contents = await file.read()
     try:
         workbook = load_workbook(BytesIO(contents))
@@ -32,27 +32,22 @@ async def bulk_upload_students(
     errors = []
     seeded_students = []
 
-    # 2. Loop rows (skip header row 1). Expected columns:
-    #    A=PRN  B=Full Name  C=Year of Birth  D=Batch  E=Branch
     for row_num, row in enumerate(sheet.iter_rows(min_row=2, values_only=True), start=2):
         if row is None or all(cell is None for cell in row):
-            continue  # skip blank rows
+            continue
 
         prn, full_name, year_of_birth, batch, branch = (list(row) + [None] * 5)[:5]
 
-        # 3. Validate required fields
         if not prn or not full_name or not year_of_birth:
             errors.append(f"Row {row_num}: missing PRN, name, or year of birth")
             continue
 
         prn = str(prn).strip()
 
-        # 4. Skip duplicates
         if db.query(User).filter(User.prn == prn).first():
             skipped += 1
             continue
 
-        # 5. Create the student account
         try:
             year = int(year_of_birth)
             initial_password = generate_initial_password(str(full_name), year)
@@ -80,3 +75,69 @@ async def bulk_upload_students(
         errors=errors,
         students=seeded_students,
     )
+
+@router.post("/marks/upload", response_model=dict)
+async def bulk_upload_marks(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    contents = await file.read()
+    try:
+        workbook = load_workbook(BytesIO(contents))
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Excel file")
+
+    sheet = workbook.active
+    subjects_added = 0
+    errors = []
+    semester_cache = {}  # (user_id, semester_number) -> Semester  (avoids re-creating the same semester)
+
+    for row_num, row in enumerate(sheet.iter_rows(min_row=2, values_only=True), start=2):
+        if row is None or all(cell is None for cell in row):
+            continue
+
+        prn, semester_number, subject_name, obtained, max_marks, credits = (list(row) + [None] * 6)[:6]
+
+        if not prn or not semester_number or not subject_name:
+            errors.append(f"Row {row_num}: missing PRN, semester, or subject")
+            continue
+
+        prn = str(prn).strip()
+        student = db.query(User).filter(User.prn == prn, User.role == "student").first()
+        if not student:
+            errors.append(f"Row {row_num}: no student with PRN {prn}")
+            continue
+
+        try:
+            sem_num = int(semester_number)
+            cache_key = (student.id, sem_num)
+
+            # find-or-create the semester (cached so all its subjects attach to one record)
+            if cache_key in semester_cache:
+                semester = semester_cache[cache_key]
+            else:
+                semester = db.query(Semester).filter(
+                    Semester.user_id == student.id,
+                    Semester.semester_number == sem_num,
+                ).first()
+                if not semester:
+                    semester = Semester(user_id=student.id, semester_number=sem_num)
+                    db.add(semester)
+                    db.flush()  # get its id before adding subjects
+                semester_cache[cache_key] = semester
+
+            db.add(Subject(
+                semester_id=semester.id,
+                name=str(subject_name),
+                marks_obtained=float(obtained) if obtained is not None else None,
+                max_marks=float(max_marks) if max_marks is not None else None,
+                grade=None,  # derived from marks % by the grading calculator
+                credits=int(credits) if credits else 0,
+            ))
+            subjects_added += 1
+        except Exception as e:
+            errors.append(f"Row {row_num}: {str(e)}")
+
+    db.commit()
+    return {"subjectsAdded": subjects_added, "errors": errors}
