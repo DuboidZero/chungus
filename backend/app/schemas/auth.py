@@ -1,21 +1,23 @@
-from pydantic import BaseModel
+from app.schemas.base import CamelModel
 
 
-class LoginRequest(BaseModel):
+class LoginRequest(CamelModel):
     prn: str
     password: str
 
 
-class UserResponse(BaseModel):
+class UserResponse(CamelModel):
     id: str
     prn: str | None
     email: str | None
     role: str
 
-    class Config:
-        from_attributes = True
 
-
-class LoginResponse(BaseModel):
+class LoginResponse(CamelModel):
     user: UserResponse
-    accessToken: str
+    access_token: str
+    must_change_password: bool
+
+class ChangePasswordRequest(CamelModel):
+    current_password: str
+    new_password: str
