@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth, profile, achievement, experience, project, skill
+from app.routes import auth, profile, achievement, experience, project, skill, academic, dashboard
 
 app = FastAPI(title="MIT WPU Portfolio System")
 
@@ -20,6 +20,8 @@ app.include_router(achievement.router, prefix="/api/v1")
 app.include_router(experience.router, prefix="/api/v1")
 app.include_router(project.router, prefix="/api/v1")
 app.include_router(skill.router, prefix="/api/v1")
+app.include_router(academic.router, prefix="/api/v1")
+app.include_router(dashboard.router, prefix="/api/v1")
 
 
 @app.get("/api/v1/health")
