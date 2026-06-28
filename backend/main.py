@@ -1,10 +1,24 @@
 from fastapi import FastAPI
-from app.routes import auth
+from fastapi.middleware.cors import CORSMiddleware
+from app.routes import auth, profile
 
-app = FastAPI()
+app = FastAPI(title="MIT WPU Portfolio System")
 
-app.include_router(auth.router)
+# CORS: allow the frontend (different server/domain) to call this backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/health")
+# All API routes live under /api/v1 (per the contract)
+app.include_router(auth.router, prefix="/api/v1")
+app.include_router(profile.router, prefix="/api/v1")
+
+
+@app.get("/api/v1/health")
 def health():
-    return {"status":"ok"}
+    from datetime import datetime, timezone
+    return {"status": "ok", "timestamp": datetime.now(timezone.utc).isoformat()}

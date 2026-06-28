@@ -8,7 +8,7 @@ from app.core.security import decode_access_token
 
 
 # Tells FastAPI to look for the token in the "Authorization: Bearer <token>" header
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
 
 
 def get_db():
