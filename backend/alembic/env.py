@@ -6,6 +6,7 @@ from app.models.profile import Profile
 from app.models.achievement import Achievement
 from app.models.experience import Experience
 from app.models.project import Project
+from app.models.skill import TechnicalSkill, SoftSkill, Language
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
