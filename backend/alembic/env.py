@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from app.database import Base
 from app.models.user import User  # import every model so Alembic can see it
 from app.models.profile import Profile
+from app.models.achievement import Achievement
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
