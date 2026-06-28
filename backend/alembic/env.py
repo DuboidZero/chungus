@@ -5,7 +5,7 @@ from app.models.user import User  # import every model so Alembic can see it
 from app.models.profile import Profile
 from app.models.achievement import Achievement
 from app.models.experience import Experience
-
+from app.models.project import Project
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
