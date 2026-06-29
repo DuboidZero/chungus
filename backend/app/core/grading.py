@@ -52,3 +52,7 @@ def calculate_cgpa(all_subjects: list) -> float:
         return 0.0
     weighted = sum(s.credits * subject_grade_points(s.grade, s.marks_obtained, s.max_marks) for s in all_subjects)
     return round(weighted / total_credits, 2)
+
+def cgpa_to_percentage(cgpa: float) -> float:
+    """MIT WPU: percentage = (CGPA - 0.75) × 10."""
+    return round((cgpa - 0.75) * 10, 2)

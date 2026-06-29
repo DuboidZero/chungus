@@ -3,16 +3,19 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.models.user import User
-from app.schemas.auth import LoginRequest, LoginResponse, UserResponse, ChangePasswordRequest
-from app.core.security import verify_password, create_access_token, hash_password
+from app.schemas.auth import LoginRequest, LoginResponse, UserResponse, ChangePasswordRequest, RefreshRequest, TokenPairResponse
+from app.core.security import verify_password, create_access_token, create_refresh_token, hash_password, decode_access_token
 from app.core.dependencies import get_current_user, get_db
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+# Separate router with NO /auth prefix — for the contract's GET /me
+me_router = APIRouter(tags=["user"])
+
 
 @router.post("/login", response_model=LoginResponse)
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
-    # 1. Look up the user by PRN
+    # 1. Look up the user by PRN or email
     user = db.query(User).filter(or_(User.prn == payload.prn, User.email == payload.prn)).first()
 
     # 2. If no user, or password is wrong -> reject (same message for both, on purpose)
@@ -31,15 +34,22 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 
     # 4. Mint a token carrying the user's id and role
     access_token = create_access_token({"sub": user.id, "role": user.role})
-
-    # 5. Return the user + token (FastAPI shapes it via LoginResponse)
+    refresh_token = create_refresh_token({"sub": user.id, "role": user.role})
     return {
         "user": user,
         "access_token": access_token,
+        "refresh_token": refresh_token,
         "must_change_password": user.must_change_password,
     }
 
 
+# Contract path: GET /me
+@me_router.get("/me", response_model=UserResponse)
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
+
+
+# Kept for backwards-compat: GET /auth/me
 @router.get("/me", response_model=UserResponse)
 def me(current_user: User = Depends(get_current_user)):
     return current_user
@@ -81,3 +91,19 @@ def change_password(
     db.commit()
 
     return {"detail": "Password changed successfully"}
+
+
+@router.post("/refresh", response_model=TokenPairResponse)
+def refresh_token(payload: RefreshRequest):
+    data = decode_access_token(payload.refresh_token)
+    if data is None or data.get("type") != "refresh":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
+    new_access = create_access_token({"sub": data["sub"], "role": data["role"]})
+    new_refresh = create_refresh_token({"sub": data["sub"], "role": data["role"]})
+    return {"access_token": new_access, "refresh_token": new_refresh}
+
+
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+def logout():
+    # Stateless JWT: the client discards the tokens. Server-side revocation is a future step.
+    return

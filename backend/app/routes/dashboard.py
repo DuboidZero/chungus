@@ -7,7 +7,7 @@ from app.models.achievement import Achievement
 from app.models.skill import TechnicalSkill, SoftSkill, Language
 from app.models.academic import Semester, Subject
 from app.core.dependencies import get_current_user, get_db
-from app.core.grading import calculate_cgpa, calculate_sgpa
+from app.core.grading import calculate_cgpa, calculate_sgpa, cgpa_to_percentage
 
 router = APIRouter(prefix="/me/dashboard", tags=["dashboard"])
 
@@ -30,12 +30,15 @@ def get_dashboard(db: Session = Depends(get_db), current_user: User = Depends(ge
 
     all_subjects = []
     cgpa_trend = []
+    total_credits = 0
     for sem in semesters:
         subs = db.query(Subject).filter(Subject.semester_id == sem.id).all()
         all_subjects.extend(subs)
+        total_credits += sum(s.credits for s in subs)
         cgpa_trend.append({
             "semester": f"Sem {sem.semester_number}",
             "cgpa": calculate_sgpa(subs),
+            "projected": None,
         })
 
     overall_cgpa = calculate_cgpa(all_subjects)
@@ -43,6 +46,8 @@ def get_dashboard(db: Session = Depends(get_db), current_user: User = Depends(ge
     return {
         "stats": {
             "cgpa": overall_cgpa,
+            "percentage": cgpa_to_percentage(overall_cgpa) if overall_cgpa else 0,
+            "totalCredits": total_credits,
             "projectCount": project_count,
             "achievementCount": achievement_count,
             "skillCount": skill_count,

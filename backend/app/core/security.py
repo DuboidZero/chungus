@@ -49,3 +49,10 @@ def generate_initial_password(full_name: str, year_of_birth: int) -> str:
     letters = "".join(c for c in full_name if c.isalpha()).lower()
     prefix = letters[:4] if len(letters) >= 4 else letters
     return f"{prefix}{year_of_birth}"
+
+def create_refresh_token(data: dict) -> str:
+    """Longer-lived token used only to get new access tokens."""
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(days=7)  # 7-day refresh
+    to_encode.update({"exp": expire, "type": "refresh"})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)

@@ -34,3 +34,7 @@ class SemesterResponse(CamelModel):
     subjects: list[SubjectResponse]
     created_at: datetime
     updated_at: datetime
+
+class SemesterUpdate(CamelModel):
+    semester_number: int | None = None
+    subjects: list[SubjectCreate] | None = None

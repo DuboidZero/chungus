@@ -8,6 +8,8 @@ class User(Base, TimestampMixin):
 
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     role = Column(String, nullable=False)
+    name = Column(String, nullable=True)
+    department = Column(String, nullable=True)
     prn = Column(String, unique=True, nullable=True, index=True)
     email = Column(String, unique=True, nullable=True, index=True)
     hashed_password = Column(String, nullable=False)

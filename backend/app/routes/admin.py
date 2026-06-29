@@ -59,6 +59,8 @@ async def bulk_upload_students(
             user = User(
                 role="student",
                 prn=prn,
+                name=str(full_name),
+                department=str(branch) if branch else None,
                 hashed_password=hash_password(initial_password),
                 must_change_password=True,
             )
@@ -167,6 +169,7 @@ async def create_teacher(
     teacher = User(
         role="teacher",
         email=payload.email,
+        name=payload.full_name,
         hashed_password=hash_password(payload.password),
         must_change_password=True,
     )
