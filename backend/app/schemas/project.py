@@ -1,5 +1,17 @@
+from enum import Enum
 from datetime import date as date_type, datetime
 from app.schemas.base import CamelModel
+
+
+class ProjectType(str, Enum):
+    college = "College Project"
+    personal = "Personal Project"
+    internship = "Internship Project"
+
+
+class ProjectStatus(str, Enum):
+    ongoing = "Ongoing"
+    completed = "Completed"
 
 
 class ProjectCreate(CamelModel):
@@ -8,9 +20,9 @@ class ProjectCreate(CamelModel):
     domain: str | None = None
     tech_stack: list[str] = []
     image_url: str | None = None
-    type: str
+    type: ProjectType
     mentor_name: str | None = None
-    status: str
+    status: ProjectStatus
     start_date: date_type | None = None
     end_date: date_type | None = None
 
@@ -21,9 +33,9 @@ class ProjectUpdate(CamelModel):
     domain: str | None = None
     tech_stack: list[str] | None = None
     image_url: str | None = None
-    type: str | None = None
+    type: ProjectType | None = None
     mentor_name: str | None = None
-    status: str | None = None
+    status: ProjectStatus | None = None
     start_date: date_type | None = None
     end_date: date_type | None = None
 

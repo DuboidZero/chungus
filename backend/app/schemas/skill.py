@@ -1,5 +1,5 @@
 from app.schemas.base import CamelModel
-
+from enum import Enum
 
 # --- Technical ---
 class TechnicalSkillCreate(CamelModel):
@@ -44,3 +44,10 @@ class SkillsResponse(CamelModel):
     technical: list[TechnicalSkillResponse]
     soft: list[SoftSkillResponse]
     languages: list[LanguageResponse]
+
+class LanguageProficiency(str, Enum):
+    basic = "Basic"
+    conversational = "Conversational"
+    proficient = "Proficient"
+    fluent = "Fluent"
+    native = "Native"

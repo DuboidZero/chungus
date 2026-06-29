@@ -1,5 +1,12 @@
+from enum import Enum
 from datetime import date as date_type, datetime
 from app.schemas.base import CamelModel
+
+
+class ExperienceType(str, Enum):
+    internship = "Internship"
+    part_time = "Part-time"
+    full_time = "Full-time"
 
 
 class ExperienceCreate(CamelModel):
@@ -8,7 +15,7 @@ class ExperienceCreate(CamelModel):
     start_date: date_type | None = None
     end_date: date_type | None = None
     description: str | None = None
-    type: str
+    type: ExperienceType
 
 
 class ExperienceUpdate(CamelModel):
@@ -17,7 +24,7 @@ class ExperienceUpdate(CamelModel):
     start_date: date_type | None = None
     end_date: date_type | None = None
     description: str | None = None
-    type: str | None = None
+    type: ExperienceType | None = None
 
 
 class ExperienceResponse(CamelModel):
