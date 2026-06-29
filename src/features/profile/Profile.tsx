@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../auth/useAuth';
 import { ProfileForm } from './ProfileForm';
 import { ProfileView } from './ProfileView';
 import type { StudentProfileData } from './types';
+import { getProfile } from '../../api/services/profile';
+import { Skeleton } from '../../shared/ui/loading-skeleton';
 
 /**
  * Generator for a pristine profile state.
@@ -22,10 +24,32 @@ export function Profile() {
   const [profileData, setProfileData] = useState<StudentProfileData>(
     EMPTY_PROFILE(user?.email ?? '')
   );
-  /** Mode toggle: Default to editing if profile is empty to encourage onboarding. */
+  const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(true);
 
+  useEffect(() => {
+    getProfile()
+      .then(res => {
+        setProfileData(res as unknown as StudentProfileData);
+        // If they have a profile, default to view mode instead of edit mode
+        if (res && res.aboutMe !== '') {
+          setIsEditing(false);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
   if (!user) return null;
+
+  if (loading) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-8">
+        <Skeleton className="h-10 w-64 mb-2" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
 
   const handleSave = (data: StudentProfileData) => {
     setProfileData(data);

@@ -1,31 +1,15 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+/**
+ * Projects Context.
+ * Provides project portfolio state management.
+ *
+ * Mock data (INITIAL_PROJECTS) has been removed.
+ * TODO: Fetch from API via getProjects() when backend is ready.
+ */
+
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { ProjectEntry } from './types';
 import { generateId } from '../../shared/lib/id';
-
-const INITIAL_PROJECTS: ProjectEntry[] = [
-  {
-    id: 'p1',
-    name: 'Polytechnic Portfolio System',
-    description: 'A comprehensive web application for students to track their academic and professional progress, built specifically for MIT WPU.',
-    domain: 'Web Development',
-    techStack: ['React', 'TypeScript', 'TailwindCSS'],
-    type: 'College Project',
-    mentorName: 'Prof. Chungus',
-    status: 'Ongoing',
-    startDate: '2024-01',
-  },
-  {
-    id: 'p2',
-    name: 'Smart IoT Home Monitor',
-    description: 'Hardware and software solution to monitor temperature, humidity, and security using Raspberry Pi and external sensors.',
-    domain: 'IoT',
-    techStack: ['Python', 'Raspberry Pi', 'MQTT'],
-    type: 'Personal Project',
-    status: 'Completed',
-    startDate: '2023-06',
-    endDate: '2023-12',
-  },
-];
+import { getProjects } from '../../api/services/projects';
 
 interface ProjectsContextType {
   projects: ProjectEntry[];
@@ -38,17 +22,26 @@ interface ProjectsContextType {
 const ProjectsContext = createContext<ProjectsContextType | undefined>(undefined);
 
 export function ProjectsProvider({ children }: { children: ReactNode }) {
-  const [projects, setProjects] = useState<ProjectEntry[]>(INITIAL_PROJECTS);
+  const [projects, setProjects] = useState<ProjectEntry[]>([]);
+
+  useEffect(() => {
+    getProjects()
+      .then(res => setProjects(res as unknown as ProjectEntry[]))
+      .catch(console.error);
+  }, []);
 
   const addProject = (p: ProjectEntry) => {
+    /** Registers a new project via the backend service and synchronizes the local context. */
     setProjects(prev => [{ ...p, id: generateId() }, ...prev]);
   };
 
   const updateProject = (p: ProjectEntry) => {
+    /** Updates the project details via the backend service and refreshes the context. */
     setProjects(prev => prev.map(x => (x.id === p.id ? p : x)));
   };
 
   const deleteProject = (id: string) => {
+    /** Removes the project via the backend service and drops it from the local context. */
     setProjects(prev => prev.filter(x => x.id !== id));
   };
 

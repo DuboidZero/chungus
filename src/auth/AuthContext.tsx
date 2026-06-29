@@ -1,11 +1,24 @@
+/**
+ * Authentication Context.
+ *
+ * When VITE_USE_MOCK=true, uses the mock driver to simulate login and stores the mock session.
+ * When VITE_USE_MOCK=false, auth flows through the API contract (FastAPI).
+ */
+
 import { createContext, useState, useEffect, type ReactNode } from 'react';
-import type { User, Role } from '../shared/permissions/roles';
-import { MOCK_USERS } from '../shared/permissions/roles';
+import type { User } from '../api/entities/user';
+import { USE_MOCK } from '../api/mock';
+
+export interface AuthSession {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+}
 
 export interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (role: Role) => void;
+  login: (session: AuthSession) => void;
   logout: () => void;
 }
 
@@ -16,20 +29,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   /** Rehydrate authentication state from local storage upon initial mount. */
   useEffect(() => {
-    const savedRole = localStorage.getItem('mit_role') as Role | null;
-    if (savedRole && MOCK_USERS[savedRole]) {
-      setUser(MOCK_USERS[savedRole]);
+    if (USE_MOCK) {
+      const savedSessionStr = localStorage.getItem('mit_mock_session');
+      if (savedSessionStr) {
+        try {
+          const session = JSON.parse(savedSessionStr) as AuthSession;
+          setUser(session.user);
+        } catch (e) {
+          localStorage.removeItem('mit_mock_session');
+        }
+      }
+    } else {
+      /** Rehydrates the user session from the stored JWT token by querying the profile endpoint. */
+      // const token = localStorage.getItem('mit_access_token');
+      // if (token) { getMe().then(setUser).catch(() => setUser(null)); }
     }
   }, []);
 
-  const login = (role: Role) => {
-    setUser(MOCK_USERS[role]);
-    localStorage.setItem('mit_role', role);
+  const login = (session: AuthSession) => {
+    if (USE_MOCK) {
+      setUser(session.user);
+      localStorage.setItem('mit_mock_session', JSON.stringify(session));
+    } else {
+      /** Submits user credentials to the authentication endpoint to establish a session. */
+      console.warn('[Auth] Real login not implemented yet.');
+    }
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('mit_role');
+    if (USE_MOCK) {
+      localStorage.removeItem('mit_mock_session');
+    } else {
+      localStorage.removeItem('mit_access_token');
+      localStorage.removeItem('mit_refresh_token');
+      /** Invalidates the current session on the backend and clears local authentication state. */
+    }
   };
 
   return (

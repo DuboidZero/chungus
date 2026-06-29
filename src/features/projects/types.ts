@@ -1,6 +1,15 @@
-export type ProjectType = 'College Project' | 'Personal Project' | 'Internship Project';
-export type ProjectStatus = 'Ongoing' | 'Completed';
+/**
+ * Project types — re-exported from the canonical API entity.
+ * Includes local form-state type that omits server-generated fields.
+ */
 
+export type { Project, ProjectType, ProjectStatus } from '../../api/entities/project';
+
+/**
+ * Local form state for project creation/editing.
+ * Omits server-generated fields (createdAt, updatedAt).
+ * Used by ProjectForm and ProjectsContext for local state management.
+ */
 export interface ProjectEntry {
   id: string;
   name: string;
@@ -8,13 +17,11 @@ export interface ProjectEntry {
   domain: string;
   techStack: string[];
   imageUrl?: string;
-  type: ProjectType;
-  mentorName?: string; /** Required only when type is 'College Project' */
-  status: ProjectStatus;
+  type: 'College Project' | 'Personal Project' | 'Internship Project';
+  mentorName?: string;
+  status: 'Ongoing' | 'Completed';
   startDate?: string;
   endDate?: string;
-  
-  /** Phase 2: Optional GitHub integration metadata */
   githubRepo?: {
     name: string;
     url: string;

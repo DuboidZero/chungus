@@ -1,47 +1,26 @@
-import { Edit2, Trash2 } from 'lucide-react';
 import { Card, CardHeader, CardTitle } from '../../shared/ui/card';
 import { Badge } from '../../shared/ui/badge';
 import type { SemesterRecord } from './types';
 
 interface Props {
   semester: SemesterRecord;
-  onEdit: () => void;
-  onDelete: () => void;
 }
 
-export function SemesterCard({ semester, onEdit, onDelete }: Props) {
+export function SemesterCard({ semester }: Props) {
   return (
     <Card className="overflow-hidden">
       <CardHeader className="bg-slate-50 dark:bg-brand-900/50 border-b border-slate-100 dark:border-brand-800 flex flex-row items-center justify-between py-4">
         <CardTitle className="text-lg">Semester {semester.semesterNumber}</CardTitle>
-        <div className="flex items-center gap-4">
-          <div className="flex gap-3 text-sm">
-            <span className="text-slate-500 dark:text-slate-400">
-              GPA: <span className="font-bold text-slate-900 dark:text-slate-100">{semester.gpa.toFixed(2)}</span>
-            </span>
-            <span className="text-slate-500 dark:text-slate-400">
-              Credits: <span className="font-bold text-slate-900 dark:text-slate-100">{semester.totalCredits}</span>
-            </span>
-          </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={onEdit}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:text-brand-400 dark:hover:bg-brand-800 transition-colors"
-              title="Edit Semester"
-            >
-              <Edit2 className="w-4 h-4" />
-            </button>
-            <button
-              onClick={onDelete}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:text-red-400 dark:hover:bg-red-900/20 transition-colors"
-              title="Delete Semester"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
+        <div className="flex gap-4 text-sm">
+          <span className="text-slate-500 dark:text-slate-400">
+            GPA: <span className="font-bold text-slate-900 dark:text-slate-100">{semester.gpa.toFixed(2)}</span>
+          </span>
+          <span className="text-slate-500 dark:text-slate-400">
+            Credits: <span className="font-bold text-slate-900 dark:text-slate-100">{semester.totalCredits}</span>
+          </span>
         </div>
       </CardHeader>
-      
+
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
           <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-brand-950/20 border-b border-slate-100 dark:border-brand-800">

@@ -5,7 +5,7 @@ import { Label } from '../../shared/ui/label';
 import { Textarea } from '../../shared/ui/textarea';
 import { Progress } from '../../shared/ui/progress';
 import type { StudentProfileData, InternshipPreference } from './types';
-import { calcCompletion } from './types';
+import { calcCompletion, DOMAIN_OPTIONS } from './types';
 
 interface Props {
   initial: StudentProfileData;
@@ -161,6 +161,36 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 onChange={e => set('location', e.target.value)}
                 className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
               />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ── Section: Domain Interest ── */}
+      <Card>
+        <CardContent className="p-6 space-y-5">
+          <div className="flex items-center gap-2 mb-2">
+            <Briefcase className="w-4 h-4 text-brand-500" />
+            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Domain Interest</h2>
+          </div>
+          <div>
+            <Label htmlFor="domainInterest">Primary Domain</Label>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+              Your main area of technical interest. This helps your teacher understand your goals.
+            </p>
+            <div className="relative">
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <select
+                id="domainInterest"
+                value={data.domainInterest ?? ''}
+                onChange={e => set('domainInterest', e.target.value)}
+                className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
+              >
+                <option value="">Select your primary domain...</option>
+                {DOMAIN_OPTIONS.map(d => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
             </div>
           </div>
         </CardContent>

@@ -1,0 +1,134 @@
+{
+  "_meta": {
+    "tier": "Average - Guidable",
+    "completion": 70
+  },
+  "user": {
+    "id": "f0b5c1d4-7e6a-4b2d-bc8f-5a4b9e0d2f37",
+    "prn": "1032210004",
+    "name": "Nisha Kulkarni",
+    "email": "nisha.kulkarni@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2023-2027"
+  },
+  "profile": {
+    "id": "prf-f0b5c1d4",
+    "userId": "f0b5c1d4-7e6a-4b2d-bc8f-5a4b9e0d2f37",
+    "aboutMe": "Diligent student looking for opportunities in IoT.",
+    "email": "nisha.kulkarni@student.mitwpu.edu.in",
+    "phone": "+91 9345678901",
+    "location": "Pune, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 30km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "IoT"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 7.4,
+      "percentage": 71.0,
+      "totalCredits": 120,
+      "projectCount": 1,
+      "achievementCount": 0,
+      "skillCount": 4
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 6.8,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 7.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 7.2,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 7.3,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 7.4,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 7.4,
+        "projected": null
+      }
+    ],
+    "upcomingDeadlines": []
+  },
+  "academic": [
+    {
+      "id": "sem-nisha-6",
+      "semesterNumber": 6,
+      "gpa": 7.4,
+      "totalCredits": 22,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-nisha-6-1",
+          "name": "Internet of Things",
+          "marksObtained": 74,
+          "maxMarks": 100,
+          "grade": "B+",
+          "credits": 4
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [
+      {
+        "id": "ts-nisha-1",
+        "domain": "IoT",
+        "name": "Arduino",
+        "proficiency": 3
+      },
+      {
+        "id": "ts-nisha-2",
+        "domain": "IoT",
+        "name": "Raspberry Pi",
+        "proficiency": 2
+      }
+    ],
+    "soft": [],
+    "languages": []
+  },
+  "projects": [
+    {
+      "id": "proj-nisha-1",
+      "userId": "f0b5c1d4-7e6a-4b2d-bc8f-5a4b9e0d2f37",
+      "title": "Smart Home Automation",
+      "description": "IoT based home automation system.",
+      "category": "College Project",
+      "techStack": [
+        "Arduino",
+        "C++",
+        "WiFi Module"
+      ],
+      "startDate": "2025-08-01T00:00:00Z",
+      "endDate": "2025-11-20T00:00:00Z",
+      "status": "Completed",
+      "repositoryUrl": "",
+      "liveUrl": "",
+      "createdAt": "2025-08-01T00:00:00Z",
+      "updatedAt": "2025-11-20T00:00:00Z"
+    }
+  ],
+  "experience": [],
+  "achievements": []
+}

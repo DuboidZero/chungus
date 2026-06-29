@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "tier": "Failing",
+    "completion": 10
+  },
+  "user": {
+    "id": "f6b1c7d0-3e2a-4b8d-b24f-1a0b5e6d8f93",
+    "prn": "1032210010",
+    "name": "Ritika Verma",
+    "email": "ritika.verma@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2023-2027"
+  },
+  "profile": {
+    "id": "prf-f6b1c7d0",
+    "userId": "f6b1c7d0-3e2a-4b8d-b24f-1a0b5e6d8f93",
+    "aboutMe": "",
+    "email": "ritika.verma@student.mitwpu.edu.in",
+    "phone": "+91 9901234567",
+    "location": "Pune, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 5km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "Web Development"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 3.2,
+      "percentage": 35.0,
+      "totalCredits": 60,
+      "projectCount": 0,
+      "achievementCount": 0,
+      "skillCount": 0
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 4.5,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 4.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 3.8,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 3.5,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 3.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 3.2,
+        "projected": null
+      }
+    ],
+    "upcomingDeadlines": []
+  },
+  "academic": [
+    {
+      "id": "sem-ritika-6",
+      "semesterNumber": 6,
+      "gpa": 3.2,
+      "totalCredits": 8,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-ritika-6-1",
+          "name": "Machine Learning",
+          "marksObtained": 25,
+          "maxMarks": 100,
+          "grade": "F",
+          "credits": 0
+        },
+        {
+          "id": "sub-ritika-6-2",
+          "name": "Web Technology",
+          "marksObtained": 30,
+          "maxMarks": 100,
+          "grade": "F",
+          "credits": 0
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [],
+    "soft": [],
+    "languages": []
+  },
+  "projects": [],
+  "experience": [],
+  "achievements": []
+}

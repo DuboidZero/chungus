@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '../../shared/ui/card';
 import { Tabs } from '../../shared/ui/tabs';
@@ -6,29 +6,28 @@ import { Badge } from '../../shared/ui/badge';
 import { DeleteConfirmModal } from '../../shared/ui/modal';
 import { AddTechnicalSkillModal, AddSoftSkillModal, AddLanguageModal } from './SkillForms';
 import type { SkillsData } from './types';
+import { getSkills } from '../../api/services/skills';
+import { Skeleton } from '../../shared/ui/loading-skeleton';
 
-/** Initial seed data for skills. */
-const INITIAL_DATA: SkillsData = {
-  technical: [
-    { id: 't1', domain: 'Web Development', name: 'React', proficiency: 4 },
-    { id: 't2', domain: 'Web Development', name: 'TypeScript', proficiency: 4 },
-    { id: 't3', domain: 'AI/ML', name: 'Python', proficiency: 3 },
-  ],
-  soft: [
-    { id: 's1', name: 'Leadership', proficiency: 4 },
-    { id: 's2', name: 'Communication', proficiency: 5 },
-    { id: 's3', name: 'Teamwork' },
-  ],
-  languages: [
-    { id: 'l1', name: 'English', proficiency: 'Fluent' },
-    { id: 'l2', name: 'Hindi', proficiency: 'Native' },
-  ],
+/** Fetches the skill taxonomy and proficiency levels from the backend service. */
+const EMPTY_SKILLS: SkillsData = {
+  technical: [],
+  soft: [],
+  languages: [],
 };
 
 export function Skills() {
-  const [data, setData] = useState<SkillsData>(INITIAL_DATA);
+  const [data, setData] = useState<SkillsData>(EMPTY_SKILLS);
+  const [loading, setLoading] = useState(true);
   const [modals, setModals] = useState({ tech: false, soft: false, lang: false });
   const [deleting, setDeleting] = useState<{ id: string, type: keyof SkillsData, name: string } | null>(null);
+
+  useEffect(() => {
+    getSkills()
+      .then(setData)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleDelete = () => {
     if (!deleting) return;
@@ -40,6 +39,15 @@ export function Skills() {
 
   /** Extract unique domains to group technical skills categorically. */
   const domains = Array.from(new Set(data.technical.map(t => t.domain)));
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-8">
+        <Skeleton className="h-10 w-64 mb-2" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">

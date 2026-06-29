@@ -1,35 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Briefcase } from 'lucide-react';
 import { DeleteConfirmModal } from '../../shared/ui/modal';
 import { ExperienceFormModal } from './ExperienceFormModal';
 import type { WorkExperienceEntry } from './types';
-
-const INITIAL_DATA: WorkExperienceEntry[] = [
-  {
-    id: 'w1',
-    organisationName: 'Tech Innovations Pvt Ltd',
-    role: 'Frontend Developer Intern',
-    type: 'Internship',
-    startDate: '2023-06',
-    endDate: '2023-08',
-    description: 'Developed scalable UI components using React and TailwindCSS. Improved application performance by 20% through code splitting.'
-  },
-  {
-    id: 'w2',
-    organisationName: 'Open Source Community',
-    role: 'Core Contributor',
-    type: 'Part-time',
-    startDate: '2024-01',
-    endDate: undefined, /** Indicates the user is currently working here */
-    description: 'Maintaining various open-source React libraries. Reviewing PRs and writing comprehensive documentation.'
-  }
-];
+import { getExperience } from '../../api/services/experience';
+import { Skeleton } from '../../shared/ui/loading-skeleton';
 
 export function WorkExperience() {
-  const [entries, setEntries] = useState<WorkExperienceEntry[]>(INITIAL_DATA);
+  const [entries, setEntries] = useState<WorkExperienceEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    getExperience()
+      .then(res => setEntries(res as unknown as WorkExperienceEntry[]))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleSave = (entry: WorkExperienceEntry) => {
     if (editingId) {
@@ -49,6 +38,15 @@ export function WorkExperience() {
   };
 
   const editingEntry = entries.find(e => e.id === editingId);
+
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto space-y-12">
+        <Skeleton className="h-10 w-64 mb-2" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto space-y-12">

@@ -1,14 +1,20 @@
-export type AchievementCategory = 'Academic' | 'Co-curricular' | 'Sports' | 'Technical' | 'Cultural' | 'Other';
-export type AchievementType = 'Competition' | 'Hackathon' | 'Award' | 'Certification' | 'Publication' | 'Other';
-export type AchievementLevel = 'College' | 'State' | 'National' | 'International';
+/**
+ * Achievement types — re-exported from the canonical API entity.
+ */
 
+export type { Achievement, AchievementCategory, AchievementType, AchievementLevel } from '../../api/entities/achievement';
+
+/**
+ * Local form state for achievement records.
+ * Omits server-generated fields (createdAt, updatedAt).
+ */
 export interface AchievementEntry {
   id: string;
   title: string;
   description: string;
-  category: AchievementCategory;
-  type: AchievementType;
-  level: AchievementLevel;
+  category: import('../../api/entities/achievement').AchievementCategory;
+  type: import('../../api/entities/achievement').AchievementType;
+  level: import('../../api/entities/achievement').AchievementLevel;
   date: string; // e.g. "2024-03-15"
   certificateUrl?: string; // Phase 2 / not MVP
 }

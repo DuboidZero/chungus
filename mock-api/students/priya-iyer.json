@@ -1,0 +1,157 @@
+{
+  "_meta": {
+    "tier": "High Performing",
+    "completion": 85
+  },
+  "user": {
+    "id": "d8f3a9b2-5c4e-4f0b-9a6d-3e2f7c8b0d15",
+    "prn": "1032210002",
+    "name": "Priya Iyer",
+    "email": "priya.iyer@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2023-2027"
+  },
+  "profile": {
+    "id": "prf-d8f3a9b2",
+    "userId": "d8f3a9b2-5c4e-4f0b-9a6d-3e2f7c8b0d15",
+    "aboutMe": "Cybersecurity enthusiast and mobile app developer.",
+    "email": "priya.iyer@student.mitwpu.edu.in",
+    "phone": "+91 9123456780",
+    "location": "Mumbai, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 20km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "Data Science"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 8.8,
+      "percentage": 82.5,
+      "totalCredits": 120,
+      "projectCount": 2,
+      "achievementCount": 1,
+      "skillCount": 8
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 8.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 8.2,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 8.5,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 8.8,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 9.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 8.8,
+        "projected": null
+      }
+    ],
+    "upcomingDeadlines": []
+  },
+  "academic": [
+    {
+      "id": "sem-priya-6",
+      "semesterNumber": 6,
+      "gpa": 8.8,
+      "totalCredits": 22,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-priya-6-1",
+          "name": "Cybersecurity",
+          "marksObtained": 85,
+          "maxMarks": 100,
+          "grade": "A+",
+          "credits": 4
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [
+      {
+        "id": "ts-priya-1",
+        "domain": "Mobile Development",
+        "name": "Flutter",
+        "proficiency": 4
+      },
+      {
+        "id": "ts-priya-2",
+        "domain": "Cybersecurity",
+        "name": "Ethical Hacking",
+        "proficiency": 3
+      }
+    ],
+    "soft": [],
+    "languages": []
+  },
+  "projects": [
+    {
+      "id": "proj-priya-1",
+      "userId": "d8f3a9b2-5c4e-4f0b-9a6d-3e2f7c8b0d15",
+      "title": "Secure Vault App",
+      "description": "Encrypted password manager using Flutter and Firebase.",
+      "category": "Personal Project",
+      "techStack": [
+        "Flutter",
+        "Firebase",
+        "Cryptography"
+      ],
+      "startDate": "2025-10-01T00:00:00Z",
+      "endDate": "2026-02-15T00:00:00Z",
+      "status": "Completed",
+      "repositoryUrl": "",
+      "liveUrl": "",
+      "createdAt": "2025-10-01T00:00:00Z",
+      "updatedAt": "2026-02-15T00:00:00Z"
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp-priya-1",
+      "organisationName": "CyberSec Solutions",
+      "role": "Security Intern",
+      "startDate": "2025-05-15T00:00:00Z",
+      "endDate": "2025-07-15T00:00:00Z",
+      "description": "Conducted vulnerability assessments.",
+      "type": "Internship",
+      "createdAt": "2025-07-20T00:00:00Z",
+      "updatedAt": "2025-07-20T00:00:00Z"
+    },
+    {
+      "id": "exp-priya-2",
+      "organisationName": "AppWorks",
+      "role": "Flutter Developer Intern",
+      "startDate": "2026-01-10T00:00:00Z",
+      "endDate": "2026-04-10T00:00:00Z",
+      "description": "Developed cross-platform mobile apps.",
+      "type": "Internship",
+      "createdAt": "2026-04-15T00:00:00Z",
+      "updatedAt": "2026-04-15T00:00:00Z"
+    }
+  ],
+  "achievements": []
+}

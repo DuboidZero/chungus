@@ -1,0 +1,134 @@
+{
+  "_meta": {
+    "tier": "Average - Guidable",
+    "completion": 60
+  },
+  "user": {
+    "id": "a1c6d2e5-8f7b-4c3e-cd9a-6b5c0f1e3a48",
+    "prn": "1032210005",
+    "name": "Karan Mehta",
+    "email": "karan.mehta@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2022-2026"
+  },
+  "profile": {
+    "id": "prf-a1c6d2e5",
+    "userId": "a1c6d2e5-8f7b-4c3e-cd9a-6b5c0f1e3a48",
+    "aboutMe": "Interest in web development.",
+    "email": "karan.mehta@student.mitwpu.edu.in",
+    "phone": "+91 9456789012",
+    "location": "Pune, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 20km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "Mobile"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 7.1,
+      "percentage": 68.5,
+      "totalCredits": 120,
+      "projectCount": 1,
+      "achievementCount": 0,
+      "skillCount": 3
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 7.1,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 7.1,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 7.2,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 7.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 7.1,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 7.1,
+        "projected": null
+      }
+    ],
+    "upcomingDeadlines": []
+  },
+  "academic": [
+    {
+      "id": "sem-karan-6",
+      "semesterNumber": 6,
+      "gpa": 7.1,
+      "totalCredits": 22,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-karan-6-1",
+          "name": "Software Engineering",
+          "marksObtained": 71,
+          "maxMarks": 100,
+          "grade": "B",
+          "credits": 4
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [
+      {
+        "id": "ts-karan-1",
+        "domain": "Web Development",
+        "name": "HTML/CSS",
+        "proficiency": 4
+      },
+      {
+        "id": "ts-karan-2",
+        "domain": "Web Development",
+        "name": "JavaScript",
+        "proficiency": 3
+      }
+    ],
+    "soft": [],
+    "languages": []
+  },
+  "projects": [
+    {
+      "id": "proj-karan-1",
+      "userId": "a1c6d2e5-8f7b-4c3e-cd9a-6b5c0f1e3a48",
+      "title": "Portfolio Website",
+      "description": "A simple portfolio website.",
+      "category": "Personal Project",
+      "techStack": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ],
+      "startDate": "2025-06-01T00:00:00Z",
+      "endDate": "2025-07-01T00:00:00Z",
+      "status": "Completed",
+      "repositoryUrl": "",
+      "liveUrl": "",
+      "createdAt": "2025-06-01T00:00:00Z",
+      "updatedAt": "2025-07-01T00:00:00Z"
+    }
+  ],
+  "experience": [],
+  "achievements": []
+}

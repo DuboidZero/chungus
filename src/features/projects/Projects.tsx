@@ -40,12 +40,13 @@ export function Projects() {
       {projects.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {projects.map(project => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onEdit={() => navigate(`/projects/${project.id}/edit`)}
-              onDelete={() => setDeleting({ id: project.id, name: project.name })}
-            />
+            <div key={project.id} onClick={() => navigate(`/projects/${project.id}`)} className="cursor-pointer">
+              <ProjectCard
+                project={project}
+                onEdit={(e) => { e.stopPropagation(); navigate(`/projects/${project.id}/edit`); }}
+                onDelete={(e) => { e.stopPropagation(); setDeleting({ id: project.id, name: project.name }); }}
+              />
+            </div>
           ))}
         </div>
       ) : (

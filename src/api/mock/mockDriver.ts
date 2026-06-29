@@ -1,0 +1,426 @@
+/**
+ * Mock Driver
+ * Dynamically loads JSON files from frontend/mock-api using Vite's import.meta.glob.
+ * In-memory mutations (create/update/delete) are stored in runtime Maps so they
+ * survive navigation within a session but reset on page refresh — exactly right
+ * for mock development.
+ */
+
+/** Loads all mock data fixtures synchronously into the driver context. */
+const studentModules = import.meta.glob('../../../mock-api/students/*.json', { eager: true });
+const teacherModules = import.meta.glob('../../../mock-api/teacher/*.json', { eager: true });
+const adminModules   = import.meta.glob('../../../mock-api/admin/*.json',   { eager: true });
+
+const getMockData = (modules: Record<string, any>) =>
+  Object.values(modules).map(mod => mod.default || mod);
+
+/** Performs a deep clone to prevent in-memory mutations from polluting the Vite module cache. */
+const allStudents: any[] = getMockData(studentModules).map(s => JSON.parse(JSON.stringify(s)));
+const allTeachers: any[] = getMockData(teacherModules).map(t => JSON.parse(JSON.stringify(t)));
+const allAdmins:   any[] = getMockData(adminModules).map(a => JSON.parse(JSON.stringify(a)));
+
+const mockMilestones: any[] = [];
+
+/** UUID Generation Utility */
+function mockUuid(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+
+export const mockDriver = {
+  // ─── Session ─────────────────────────────────────────────────────────────
+  getCurrentUserId(): string | null {
+    const s = localStorage.getItem('mit_mock_session');
+    if (!s) return null;
+    try { return JSON.parse(s)?.user?.id || null; } catch { return null; }
+  },
+
+  /** Authorization and User Context */
+  getUsersByRole(role: 'student' | 'teacher' | 'admin') {
+    if (role === 'student') return allStudents.map(s => s.user);
+    if (role === 'teacher') return allTeachers.map(t => t.user);
+    return allAdmins.map(a => a.user);
+  },
+
+  getUserById(id: string) {
+    return (
+      allStudents.find(s => s.user.id === id)?.user ||
+      allTeachers.find(t => t.user.id === id)?.user ||
+      allAdmins.find(a => a.user.id === id)?.user ||
+      null
+    );
+  },
+
+  /** Student Entity Read Operations */
+  getProfile(userId: string) {
+    return allStudents.find(s => s.user.id === userId)?.profile ?? null;
+  },
+  getStudentDashboard(userId: string) {
+    return allStudents.find(s => s.user.id === userId)?.dashboard ?? null;
+  },
+  getAcademicRecords(userId: string) {
+    return allStudents.find(s => s.user.id === userId)?.academic ?? [];
+  },
+  getSkills(userId: string) {
+    return allStudents.find(s => s.user.id === userId)?.skills ?? { technical: [], soft: [], languages: [] };
+  },
+  getProjects(userId: string) {
+    return allStudents.find(s => s.user.id === userId)?.projects ?? [];
+  },
+  getExperience(userId: string) {
+    return allStudents.find(s => s.user.id === userId)?.experience ?? [];
+  },
+  getAchievements(userId: string) {
+    return allStudents.find(s => s.user.id === userId)?.achievements ?? [];
+  },
+
+  /** Teacher Dashboard and Aggregation */
+  getTeacherDashboard(teacherId: string) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) return null;
+
+    const dash = { ...teacher.dashboard };
+
+    /** Dynamically aggregates domain interests from live student profile data. */
+    const studentIds: string[] = teacher.students ?? [];
+    const domainCounts: Record<string, number> = {};
+    for (const sid of studentIds) {
+      const s = allStudents.find(s => s.user.id === sid);
+      const domain = s?.profile?.domainInterest;
+      if (domain) domainCounts[domain] = (domainCounts[domain] ?? 0) + 1;
+    }
+    dash.domainInterests = Object.entries(domainCounts)
+      .map(([domain, count]) => ({ domain, count }))
+      .sort((a, b) => b.count - a.count);
+
+    return dash;
+  },
+
+  /** Filterable Student Directory Methods */
+  getAssignedStudents(teacherId: string, filters?: any) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) return [];
+
+    let students = (teacher.students as string[]).map(studentId => {
+      const s = allStudents.find(s => s.user.id === studentId);
+      if (!s) return null;
+      return {
+        id: s.user.id,
+        prn: s.user.prn,
+        name: s.user.name,
+        cgpa: s.dashboard.stats.cgpa,
+        performanceTier: s._meta.tier,
+        guidanceStatus: null,
+        lastInteractionDate: null,
+        _raw: s,
+      };
+    }).filter(Boolean) as any[];
+
+    if (filters) {
+      if (filters.search) {
+        const q = filters.search.toLowerCase();
+        students = students.filter(s =>
+          s.name.toLowerCase().includes(q) || s.prn.toLowerCase().includes(q)
+        );
+      }
+      if (filters.performanceTier)
+        students = students.filter(s => s.performanceTier === filters.performanceTier);
+      if (filters.batch)
+        students = students.filter(s => s._raw.user.batch === filters.batch);
+      if (filters.skill)
+        students = students.filter(s =>
+          s._raw.skills.technical.some((t: any) => t.name.toLowerCase() === filters.skill.toLowerCase())
+        );
+      if (filters.domain)
+        students = students.filter(s =>
+          s._raw.projects.some((p: any) => p.domain?.toLowerCase() === filters.domain.toLowerCase()) ||
+          s._raw.skills.technical.some((t: any) => t.domain?.toLowerCase() === filters.domain.toLowerCase())
+        );
+      if (filters.supportNeeded)
+        students = students.filter(s => {
+          const hasFailed = s._raw.academic.some((sem: any) =>
+            sem.subjects.some((sub: any) => sub.grade === 'F')
+          );
+          return hasFailed || s.cgpa < 5.0;
+        });
+    }
+
+    return students.map(({ _raw, ...rest }) => rest);
+  },
+
+  /** Detailed Student Analytics and Views */
+  getStudentOverview(studentId: string) {
+    const s = allStudents.find(s => s.user.id === studentId);
+    if (!s) return null;
+    return {
+      profile: s.profile,
+      cgpa: s.dashboard.stats.cgpa,
+      cgpaTrend: s.dashboard.cgpaTrend.filter((t: any) => t.cgpa !== null),
+      radarSkills: s.skills.technical.map((sk: any) => ({ domain: sk.name, score: sk.proficiency * 20 })),
+      activeProjectsCount: s.projects.filter((p: any) => p.status === 'Ongoing').length,
+      totalAchievements: s.achievements.length,
+    };
+  },
+
+  /** Teacher Notes Management Interface */
+  getStudentNotes(teacherId: string, studentId: string) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) return [];
+    if (!teacher.notes) teacher.notes = {};
+    if (!teacher.notes[studentId]) teacher.notes[studentId] = [];
+    return teacher.notes[studentId];
+  },
+
+  createNote(teacherId: string, studentId: string, content: string) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) throw new Error('Teacher not found');
+    if (!teacher.notes) teacher.notes = {};
+    if (!teacher.notes[studentId]) teacher.notes[studentId] = [];
+    const note = {
+      id: mockUuid(),
+      studentId,
+      teacherId,
+      teacherName: teacher.user.name,
+      content,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    teacher.notes[studentId].unshift(note);
+    return note;
+  },
+
+  updateNote(teacherId: string, studentId: string, noteId: string, content: string) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) throw new Error('Teacher not found');
+    const notes = teacher.notes?.[studentId] ?? [];
+    const note = notes.find((n: any) => n.id === noteId && n.teacherId === teacherId);
+    if (!note) throw new Error('Note not found or no permission');
+    note.content = content;
+    note.updatedAt = new Date().toISOString();
+    return note;
+  },
+
+  deleteNote(teacherId: string, studentId: string, noteId: string) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) throw new Error('Teacher not found');
+    const notes = teacher.notes?.[studentId] ?? [];
+    const idx = notes.findIndex((n: any) => n.id === noteId && n.teacherId === teacherId);
+    if (idx === -1) throw new Error('Note not found or no permission');
+    notes.splice(idx, 1);
+  },
+
+  /** Assessment Mark Management Interface */
+  getStudentMarks(teacherId: string, studentId: string) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) return [];
+    if (!teacher.marks) teacher.marks = {};
+    if (!teacher.marks[studentId]) teacher.marks[studentId] = [];
+    return teacher.marks[studentId];
+  },
+
+  createStudentMark(teacherId: string, studentId: string, data: {
+    assessmentTitle: string; score: number; maxScore: number; comments: string; date: string;
+  }) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) throw new Error('Teacher not found');
+    if (!teacher.marks) teacher.marks = {};
+    if (!teacher.marks[studentId]) teacher.marks[studentId] = [];
+    const mark = {
+      id: mockUuid(),
+      studentId,
+      projectId: null,
+      teacherId,
+      teacherName: teacher.user.name,
+      ...data,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    teacher.marks[studentId].unshift(mark);
+    return mark;
+  },
+
+  /** Retrieves all assessment marks recorded by the specified teacher across all their assigned students. */
+  /** Injects resolved student name and PRN metadata into the response payload. */
+  getAllMarks(teacherId: string) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher || !teacher.marks) return [];
+    const result: any[] = [];
+    for (const [studentId, markList] of Object.entries(teacher.marks as Record<string, any[]>)) {
+      const student = allStudents.find(s => s.user.id === studentId);
+      for (const mark of markList) {
+        result.push({ ...mark, studentName: student?.user?.name ?? studentId, studentPrn: student?.user?.prn ?? '' });
+      }
+    }
+    return result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  },
+
+  /** Timeline Aggregator (Notes, Marks, Activity) */
+  getStudentTimeline(teacherId: string, studentId: string, filters?: {
+    type?: string; from?: string; to?: string;
+  }) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    const student = allStudents.find(s => s.user.id === studentId);
+    if (!teacher || !student) return [];
+
+    const events: any[] = [];
+
+    /** Aggregates teacher-authored private notes. */
+    const notes = teacher.notes?.[studentId] ?? [];
+    for (const note of notes) {
+      events.push({
+        id: `tl-note-${note.id}`,
+        type: 'NOTE',
+        date: note.createdAt,
+        title: 'Private Note Added',
+        description: note.content,
+        author: note.teacherName,
+        isTeacherInitiated: true,
+        metadata: { noteId: note.id },
+      });
+    }
+
+    /** Aggregates teacher-authored assessment marks. */
+    const marks = teacher.marks?.[studentId] ?? [];
+    for (const mark of marks) {
+      events.push({
+        id: `tl-mark-${mark.id}`,
+        type: 'MARK',
+        date: mark.createdAt,
+        title: `Assessment: ${mark.assessmentTitle}`,
+        description: mark.comments,
+        author: mark.teacherName,
+        isTeacherInitiated: true,
+        metadata: { score: mark.score, maxScore: mark.maxScore, projectId: mark.projectId },
+      });
+    }
+
+    /** Aggregates student-published achievements. */
+    for (const ach of (student.achievements ?? [])) {
+      events.push({
+        id: `tl-ach-${ach.id}`,
+        type: 'ACHIEVEMENT',
+        date: ach.date ? `${ach.date}T00:00:00.000Z` : ach.createdAt,
+        title: `Achievement Added: ${ach.title}`,
+        description: `${ach.level} level — ${ach.category}`,
+        author: student.user.name,
+        isTeacherInitiated: false,
+        metadata: { level: ach.level, category: ach.category },
+      });
+    }
+
+    /** Aggregates student-published skills. */
+    for (const skill of (student.skills?.technical ?? [])) {
+      events.push({
+        id: `tl-skill-${skill.id}`,
+        type: 'SKILL_ADD',
+        date: skill.createdAt ?? '2025-01-01T00:00:00.000Z',
+        title: `Skill Added: ${skill.name}`,
+        description: `Proficiency ${skill.proficiency}/5 — ${skill.domain}`,
+        author: student.user.name,
+        isTeacherInitiated: false,
+        metadata: { domain: skill.domain, proficiency: skill.proficiency },
+      });
+    }
+
+    /** Aggregates system-generated guidance cases. */
+    const guidanceCases = teacher.dashboard?.guidanceCases ?? [];
+    for (const gc of guidanceCases) {
+      if (gc.studentId === studentId) {
+        events.push({
+          id: `tl-gc-${gc.id}`,
+          type: 'GUIDANCE_CASE',
+          date: gc.dateOpened,
+          title: 'Guidance Case Opened',
+          description: `Trigger: ${gc.triggerSignal}. Assigned to ${gc.owningTeacherName}.`,
+          author: 'System',
+          isTeacherInitiated: false,
+          metadata: { caseId: gc.id, status: gc.status },
+        });
+      }
+    }
+
+    /** Applies chronological descending sort. */
+    let sorted = events.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    /** Applies query filters to the aggregated result set. */
+    if (filters?.type) sorted = sorted.filter(e => e.type === filters.type);
+    if (filters?.from) sorted = sorted.filter(e => new Date(e.date) >= new Date(filters.from!));
+    if (filters?.to)   sorted = sorted.filter(e => new Date(e.date) <= new Date(filters.to!));
+
+    return sorted;
+  },
+
+  /** Teacher Project and Milestone Management */
+  getProjectById(projectId: string) {
+    for (const student of allStudents) {
+      const p = student.projects?.find((proj: any) => proj.id === projectId);
+      if (p) return p;
+    }
+    return null;
+  },
+
+  createProjectMark(teacherId: string, projectId: string, data: any) {
+    const teacher = allTeachers.find(t => t.user.id === teacherId);
+    if (!teacher) throw new Error("Teacher not found");
+    
+    let studentId = '';
+    for (const student of allStudents) {
+      if (student.projects?.find((p: any) => p.id === projectId)) {
+        studentId = student.user.id;
+        break;
+      }
+    }
+    
+    if (!teacher.marks) teacher.marks = {};
+    if (!teacher.marks[studentId]) teacher.marks[studentId] = [];
+    const newMark = {
+      id: `mark-${mockUuid()}`,
+      studentId,
+      projectId,
+      assessmentTitle: data.assessmentTitle,
+      score: data.score,
+      maxScore: data.maxScore,
+      comments: data.comments,
+      teacherId,
+      teacherName: teacher.user.name,
+      date: data.date,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    teacher.marks[studentId].push(newMark);
+    return newMark;
+  },
+
+  createProjectMilestone(_teacherId: string, projectId: string, data: any) {
+    const ms = {
+      id: `ms-${mockUuid()}`,
+      projectId,
+      description: data.description,
+      status: data.status,
+      date: data.date,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    mockMilestones.push(ms);
+    return ms;
+  },
+
+  getProjectMilestones(projectId: string) {
+    return mockMilestones.filter(m => m.projectId === projectId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  },
+
+  getProjectMarks(_teacherId: string, projectId: string) {
+    /** Aggregates all marks associated with this project across the teacher corpus. */
+    let projectMarks: any[] = [];
+    for (const teacher of allTeachers) {
+      if (teacher.marks) {
+        for (const marksArray of Object.values(teacher.marks as Record<string, any[]>)) {
+          projectMarks = projectMarks.concat(marksArray.filter((m: any) => m.projectId === projectId));
+        }
+      }
+    }
+    return projectMarks.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  },
+};

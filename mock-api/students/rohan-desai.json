@@ -1,0 +1,146 @@
+{
+  "_meta": {
+    "tier": "High Performing",
+    "completion": 80
+  },
+  "user": {
+    "id": "e9a4b0c3-6d5f-4a1c-ab7e-4f3a8d9c1e26",
+    "prn": "1032210003",
+    "name": "Rohan Desai",
+    "email": "rohan.desai@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2022-2026"
+  },
+  "profile": {
+    "id": "prf-e9a4b0c3",
+    "userId": "e9a4b0c3-6d5f-4a1c-ab7e-4f3a8d9c1e26",
+    "aboutMe": "Hackathon enthusiast and competitive programmer.",
+    "email": "rohan.desai@student.mitwpu.edu.in",
+    "phone": "+91 9234567890",
+    "location": "Pune, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 100km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "AI / ML"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 8.2,
+      "percentage": 78.5,
+      "totalCredits": 120,
+      "projectCount": 3,
+      "achievementCount": 2,
+      "skillCount": 5
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 7.8,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 7.9,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 8.1,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 8.5,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 8.3,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 8.2,
+        "projected": null
+      }
+    ],
+    "upcomingDeadlines": []
+  },
+  "academic": [
+    {
+      "id": "sem-rohan-6",
+      "semesterNumber": 6,
+      "gpa": 8.2,
+      "totalCredits": 22,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-rohan-6-1",
+          "name": "Design and Analysis of Algorithms",
+          "marksObtained": 82,
+          "maxMarks": 100,
+          "grade": "A",
+          "credits": 4
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [
+      {
+        "id": "ts-rohan-1",
+        "domain": "Competitive Programming",
+        "name": "C++",
+        "proficiency": 5
+      },
+      {
+        "id": "ts-rohan-2",
+        "domain": "Web Development",
+        "name": "React",
+        "proficiency": 3
+      }
+    ],
+    "soft": [],
+    "languages": []
+  },
+  "projects": [
+    {
+      "id": "proj-rohan-1",
+      "userId": "e9a4b0c3-6d5f-4a1c-ab7e-4f3a8d9c1e26",
+      "title": "Algorithm Visualizer",
+      "description": "A web app to visualize sorting and pathfinding algorithms.",
+      "category": "Personal Project",
+      "techStack": [
+        "React",
+        "JavaScript",
+        "CSS"
+      ],
+      "startDate": "2025-06-01T00:00:00Z",
+      "endDate": "2025-07-20T00:00:00Z",
+      "status": "Completed",
+      "repositoryUrl": "",
+      "liveUrl": "",
+      "createdAt": "2025-06-01T00:00:00Z",
+      "updatedAt": "2025-07-20T00:00:00Z"
+    }
+  ],
+  "experience": [],
+  "achievements": [
+    {
+      "id": "ach-rohan-1",
+      "title": "CodeSprint Hackathon Winner",
+      "description": "Won 1st place out of 50 teams.",
+      "category": "Technical",
+      "type": "Hackathon",
+      "level": "State",
+      "date": "2025-09-15T00:00:00Z",
+      "createdAt": "2025-09-20T00:00:00Z",
+      "updatedAt": "2025-09-20T00:00:00Z"
+    }
+  ]
+}

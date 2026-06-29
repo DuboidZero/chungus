@@ -1,0 +1,329 @@
+{
+  "user": {
+    "id": "a7c2d8e1-4f3b-4c9e-c35a-2b1c6f7e9a04",
+    "prn": "T1032001",
+    "name": "Dr. Anand Patel",
+    "email": "anand.patel@mitwpu.edu.in",
+    "role": "teacher",
+    "department": "Computer Engineering",
+    "createdAt": "2020-05-10T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z"
+  },
+  "dashboard": {
+    "stats": {
+      "totalAssignedStudents": 10,
+      "highPerformingCount": 3,
+      "midTierCount": 3,
+      "underperformingCount": 4,
+      "activeGuidanceCases": 2
+    },
+    "supportNeeded": [
+      {
+        "id": "sig-1",
+        "studentId": "e5a0b6c9-2d1f-4a7c-a13e-0f9a4d5c7e82",
+        "studentName": "Suresh Rao",
+        "studentPrn": "1032210009",
+        "studentCgpa": 4.8,
+        "urgencyLabel": "Critical",
+        "reasonTags": [
+          "Failed Subject",
+          "CGPA < 5.0"
+        ],
+        "isActiveSupport": true,
+        "createdAt": "2026-06-20T10:00:00Z"
+      },
+      {
+        "id": "sig-2",
+        "studentId": "f6b1c7d0-3e2a-4b8d-b24f-1a0b5e6d8f93",
+        "studentName": "Ritika Verma",
+        "studentPrn": "1032210010",
+        "studentCgpa": 3.2,
+        "urgencyLabel": "Critical",
+        "reasonTags": [
+          "Multiple Fails",
+          "CGPA < 5.0"
+        ],
+        "isActiveSupport": true,
+        "createdAt": "2026-06-22T10:00:00Z"
+      }
+    ],
+    "guidanceCases": [
+      {
+        "id": "case-1",
+        "studentId": "c3e8f4a7-0b9d-4e5a-ef1c-8d7e2b3a5c60",
+        "studentName": "Arjun Patil",
+        "studentPrn": "1032210007",
+        "studentCgpa": 6.2,
+        "triggerSignal": "CGPA Declining",
+        "owningTeacherId": "a7c2d8e1-4f3b-4c9e-c35a-2b1c6f7e9a04",
+        "owningTeacherName": "Dr. Anand Patel",
+        "status": "In Progress",
+        "dateOpened": "2026-06-15T10:00:00Z",
+        "createdAt": "2026-06-15T10:00:00Z",
+        "updatedAt": "2026-06-15T10:00:00Z"
+      },
+      {
+        "id": "case-2",
+        "studentId": "d4f9a5b8-1c0e-4f6b-f02d-9e8f3c4b6d71",
+        "studentName": "Meera Joshi",
+        "studentPrn": "1032210008",
+        "studentCgpa": 5.9,
+        "triggerSignal": "CGPA < 6.0",
+        "owningTeacherId": "a7c2d8e1-4f3b-4c9e-c35a-2b1c6f7e9a04",
+        "owningTeacherName": "Dr. Anand Patel",
+        "status": "Assigned",
+        "dateOpened": "2026-06-25T10:00:00Z",
+        "createdAt": "2026-06-25T10:00:00Z",
+        "updatedAt": "2026-06-25T10:00:00Z"
+      }
+    ],
+    "cgpaDistribution": [
+      {
+        "range": "9-10",
+        "count": 1
+      },
+      {
+        "range": "8-9",
+        "count": 2
+      },
+      {
+        "range": "7-8",
+        "count": 2
+      },
+      {
+        "range": "6-7",
+        "count": 2
+      },
+      {
+        "range": "<6",
+        "count": 3
+      }
+    ],
+    "gpaTrend": [
+      {
+        "semester": "Sem 1",
+        "averageGpa": 7.4
+      },
+      {
+        "semester": "Sem 2",
+        "averageGpa": 7.6
+      },
+      {
+        "semester": "Sem 3",
+        "averageGpa": 7.5
+      },
+      {
+        "semester": "Sem 4",
+        "averageGpa": 7.8
+      }
+    ],
+    "skillHeatmap": [
+      {
+        "domain": "Web Development",
+        "skills": [
+          {
+            "name": "React",
+            "avgProficiency": 4.0,
+            "studentCount": 3
+          },
+          {
+            "name": "Node.js",
+            "avgProficiency": 3.5,
+            "studentCount": 2
+          }
+        ]
+      },
+      {
+        "domain": "AI / ML",
+        "skills": [
+          {
+            "name": "Python",
+            "avgProficiency": 3.8,
+            "studentCount": 4
+          },
+          {
+            "name": "TensorFlow",
+            "avgProficiency": 3.0,
+            "studentCount": 2
+          }
+        ]
+      }
+    ],
+    "domainInterests": [
+      {
+        "domain": "Web Development",
+        "studentCount": 3
+      },
+      {
+        "domain": "AI / ML",
+        "studentCount": 4
+      },
+      {
+        "domain": "Cybersecurity",
+        "studentCount": 1
+      },
+      {
+        "domain": "IoT",
+        "studentCount": 1
+      }
+    ],
+    "achievementVolume": [
+      {
+        "category": "Technical",
+        "level": "National",
+        "count": 4
+      },
+      {
+        "category": "Technical",
+        "level": "College",
+        "count": 8
+      },
+      {
+        "category": "Academic",
+        "level": "College",
+        "count": 12
+      },
+      {
+        "category": "Academic",
+        "level": "State",
+        "count": 2
+      },
+      {
+        "category": "Co-curricular",
+        "level": "College",
+        "count": 5
+      },
+      {
+        "category": "Sports",
+        "level": "State",
+        "count": 3
+      },
+      {
+        "category": "Cultural",
+        "level": "College",
+        "count": 2
+      },
+      {
+        "category": "Other",
+        "level": "International",
+        "count": 1
+      }
+    ],
+    "projectActivity": [
+      {
+        "domain": "Web Development",
+        "techStack": "React",
+        "count": 8
+      },
+      {
+        "domain": "Web Development",
+        "techStack": "Vue",
+        "count": 3
+      },
+      {
+        "domain": "AI/ML",
+        "techStack": "Python",
+        "count": 6
+      },
+      {
+        "domain": "Mobile",
+        "techStack": "Flutter",
+        "count": 4
+      },
+      {
+        "domain": "IoT",
+        "techStack": "Arduino",
+        "count": 2
+      },
+      {
+        "domain": "Cybersecurity",
+        "techStack": "Kali Linux",
+        "count": 1
+      },
+      {
+        "domain": "Cloud",
+        "techStack": "AWS",
+        "count": 2
+      }
+    ],
+    "internshipPreferences": [
+      {
+        "preference": "online",
+        "count": 18
+      },
+      {
+        "preference": "offline",
+        "count": 22
+      },
+      {
+        "preference": "none",
+        "count": 5
+      }
+    ]
+  },
+  "students": [
+    "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",
+    "d8f3a9b2-5c4e-4f0b-9a6d-3e2f7c8b0d15",
+    "e9a4b0c3-6d5f-4a1c-ab7e-4f3a8d9c1e26",
+    "f0b5c1d4-7e6a-4b2d-bc8f-5a4b9e0d2f37",
+    "a1c6d2e5-8f7b-4c3e-cd9a-6b5c0f1e3a48",
+    "b2d7e3f6-9a8c-4d4f-de0b-7c6d1a2f4b59",
+    "c3e8f4a7-0b9d-4e5a-ef1c-8d7e2b3a5c60",
+    "d4f9a5b8-1c0e-4f6b-f02d-9e8f3c4b6d71",
+    "e5a0b6c9-2d1f-4a7c-a13e-0f9a4d5c7e82",
+    "f6b1c7d0-3e2a-4b8d-b24f-1a0b5e6d8f93"
+  ],
+  "timelines": {
+    "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04": [
+      {
+        "id": "tl-1",
+        "type": "ACHIEVEMENT",
+        "date": "2026-01-05T10:00:00Z",
+        "title": "Smart India Hackathon Finalist",
+        "description": "Student added achievement.",
+        "author": "Student",
+        "isTeacherInitiated": false
+      },
+      {
+        "id": "tl-2",
+        "type": "NOTE",
+        "date": "2026-02-10T10:00:00Z",
+        "title": "Discussion on Final Year Project",
+        "description": "Student is on track for their ML project.",
+        "author": "Dr. Anand Patel",
+        "isTeacherInitiated": true
+      }
+    ]
+  },
+  "notes": {
+    "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04": [
+      {
+        "id": "note-1",
+        "studentId": "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",
+        "teacherId": "a7c2d8e1-4f3b-4c9e-c35a-2b1c6f7e9a04",
+        "teacherName": "Dr. Anand Patel",
+        "content": "Aarav is an excellent student, highly recommend him for the upcoming Google recruitment drive.",
+        "createdAt": "2026-02-10T10:00:00Z",
+        "updatedAt": "2026-02-10T10:00:00Z"
+      }
+    ]
+  },
+  "marks": {
+    "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04": [
+      {
+        "id": "mark-1",
+        "studentId": "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",
+        "projectId": "proj-aarav-1",
+        "assessmentTitle": "Project Mid-Review",
+        "score": 45,
+        "maxScore": 50,
+        "comments": "Excellent progress on the Smart Campus app.",
+        "teacherId": "a7c2d8e1-4f3b-4c9e-c35a-2b1c6f7e9a04",
+        "teacherName": "Dr. Anand Patel",
+        "date": "2025-10-15T10:00:00Z",
+        "createdAt": "2025-10-15T10:00:00Z",
+        "updatedAt": "2025-10-15T10:00:00Z"
+      }
+    ]
+  }
+}

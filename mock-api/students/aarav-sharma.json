@@ -1,0 +1,296 @@
+{
+  "_meta": {
+    "tier": "Outstanding",
+    "completion": 95
+  },
+  "user": {
+    "id": "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",
+    "prn": "1032210001",
+    "name": "Aarav Sharma",
+    "email": "aarav.sharma@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2022-2026"
+  },
+  "profile": {
+    "id": "prf-c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",
+    "userId": "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",
+    "aboutMe": "Passionate Computer Engineering student with a strong focus on AI/ML and full-stack web development. Always looking for challenging problems to solve.",
+    "email": "aarav.sharma@student.mitwpu.edu.in",
+    "phone": "+91 9876543210",
+    "location": "Pune, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 50km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "Web Development"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 9.5,
+      "percentage": 89.2,
+      "totalCredits": 120,
+      "projectCount": 4,
+      "achievementCount": 3,
+      "skillCount": 12
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 9.2,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 9.4,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 9.3,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 9.6,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 9.8,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 9.7,
+        "projected": null
+      },
+      {
+        "semester": "Sem 7",
+        "cgpa": null,
+        "projected": 9.8
+      }
+    ],
+    "upcomingDeadlines": [
+      {
+        "id": "dl-aarav-1",
+        "title": "Final Year Project Synopsis Submission",
+        "subject": "Project Phase 1",
+        "dueDate": "2026-07-15T23:59:00Z",
+        "urgencyLabel": "Next Week",
+        "urgency": "urgent"
+      },
+      {
+        "id": "dl-aarav-2",
+        "title": "Cloud Computing Assignment 3",
+        "subject": "Cloud Computing",
+        "dueDate": "2026-07-20T23:59:00Z",
+        "urgencyLabel": "2 Weeks",
+        "urgency": "normal"
+      }
+    ]
+  },
+  "academic": [
+    {
+      "id": "sem-aarav-6",
+      "semesterNumber": 6,
+      "gpa": 9.7,
+      "totalCredits": 22,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-aarav-6-1",
+          "name": "Machine Learning",
+          "marksObtained": 92,
+          "maxMarks": 100,
+          "grade": "O",
+          "credits": 4
+        },
+        {
+          "id": "sub-aarav-6-2",
+          "name": "Web Technology",
+          "marksObtained": 95,
+          "maxMarks": 100,
+          "grade": "O",
+          "credits": 4
+        },
+        {
+          "id": "sub-aarav-6-3",
+          "name": "Design and Analysis of Algorithms",
+          "marksObtained": 88,
+          "maxMarks": 100,
+          "grade": "A+",
+          "credits": 4
+        },
+        {
+          "id": "sub-aarav-6-4",
+          "name": "Software Engineering",
+          "marksObtained": 85,
+          "maxMarks": 100,
+          "grade": "A+",
+          "credits": 4
+        },
+        {
+          "id": "sub-aarav-6-5",
+          "name": "Internet of Things",
+          "marksObtained": 91,
+          "maxMarks": 100,
+          "grade": "O",
+          "credits": 3
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [
+      {
+        "id": "ts-aarav-1",
+        "domain": "Web Development",
+        "name": "React",
+        "proficiency": 5
+      },
+      {
+        "id": "ts-aarav-2",
+        "domain": "Web Development",
+        "name": "Node.js",
+        "proficiency": 4
+      },
+      {
+        "id": "ts-aarav-3",
+        "domain": "AI / ML",
+        "name": "Python",
+        "proficiency": 5
+      },
+      {
+        "id": "ts-aarav-4",
+        "domain": "AI / ML",
+        "name": "TensorFlow",
+        "proficiency": 4
+      },
+      {
+        "id": "ts-aarav-5",
+        "domain": "Database",
+        "name": "PostgreSQL",
+        "proficiency": 4
+      }
+    ],
+    "soft": [
+      {
+        "id": "ss-aarav-1",
+        "name": "Leadership",
+        "proficiency": 5
+      },
+      {
+        "id": "ss-aarav-2",
+        "name": "Communication",
+        "proficiency": 4
+      },
+      {
+        "id": "ss-aarav-3",
+        "name": "Problem Solving",
+        "proficiency": 5
+      }
+    ],
+    "languages": [
+      {
+        "id": "ls-aarav-1",
+        "name": "English",
+        "proficiency": "Fluent"
+      },
+      {
+        "id": "ls-aarav-2",
+        "name": "Hindi",
+        "proficiency": "Native"
+      },
+      {
+        "id": "ls-aarav-3",
+        "name": "Marathi",
+        "proficiency": "Native"
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": "proj-aarav-1",
+      "userId": "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",
+      "title": "Smart Campus Navigation System",
+      "description": "An interactive map and routing system for the university campus using A* algorithm and React Native.",
+      "category": "College Project",
+      "techStack": [
+        "React Native",
+        "Node.js",
+        "MongoDB",
+        "Google Maps API"
+      ],
+      "startDate": "2025-08-10T00:00:00Z",
+      "endDate": "2025-11-20T00:00:00Z",
+      "status": "Completed",
+      "repositoryUrl": "https://github.com/aarav/smart-campus",
+      "liveUrl": "",
+      "createdAt": "2025-08-10T00:00:00Z",
+      "updatedAt": "2025-11-20T00:00:00Z"
+    },
+    {
+      "id": "proj-aarav-2",
+      "userId": "c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",
+      "title": "AI Image Classifier",
+      "description": "A CNN based model to classify medical images for early disease detection.",
+      "category": "Personal Project",
+      "techStack": [
+        "Python",
+        "TensorFlow",
+        "Keras",
+        "Flask",
+        "React"
+      ],
+      "startDate": "2026-01-15T00:00:00Z",
+      "endDate": "",
+      "status": "Ongoing",
+      "repositoryUrl": "https://github.com/aarav/med-ai",
+      "liveUrl": "",
+      "createdAt": "2026-01-15T00:00:00Z",
+      "updatedAt": "2026-06-20T00:00:00Z"
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp-aarav-1",
+      "organisationName": "TechFlow Innovations",
+      "role": "Software Engineering Intern",
+      "startDate": "2025-05-15T00:00:00Z",
+      "endDate": "2025-07-15T00:00:00Z",
+      "description": "Developed internal dashboard tools using React and Express. Improved query performance by 25%.",
+      "type": "Internship",
+      "createdAt": "2025-07-20T00:00:00Z",
+      "updatedAt": "2025-07-20T00:00:00Z"
+    }
+  ],
+  "achievements": [
+    {
+      "id": "ach-aarav-1",
+      "title": "Smart India Hackathon Finalist",
+      "description": "Selected among top 50 teams nationally for developing a rural healthcare solution.",
+      "category": "Technical",
+      "type": "Hackathon",
+      "level": "National",
+      "date": "2025-12-10T00:00:00Z",
+      "certificateUrl": "https://example.com/sih-aarav.pdf",
+      "createdAt": "2026-01-05T00:00:00Z",
+      "updatedAt": "2026-01-05T00:00:00Z"
+    },
+    {
+      "id": "ach-aarav-2",
+      "title": "Dean's Merit List",
+      "description": "Awarded for being in the top 1% of the Computer Engineering department.",
+      "category": "Academic",
+      "type": "Award",
+      "level": "College",
+      "date": "2025-08-15T00:00:00Z",
+      "createdAt": "2025-08-20T00:00:00Z",
+      "updatedAt": "2025-08-20T00:00:00Z"
+    }
+  ]
+}

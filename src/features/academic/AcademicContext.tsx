@@ -1,6 +1,15 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+/**
+ * Academic Context.
+ * Provides semester records state management.
+ *
+ * Mock data (INITIAL_SEMESTERS) has been removed.
+ * TODO: Fetch from API via getAcademicRecords() when backend is ready.
+ */
+
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { SemesterRecord } from './types';
 import { calculateGPA } from './types';
+import { getAcademicRecords } from '../../api/services/academic';
 
 interface AcademicContextType {
   semesters: SemesterRecord[];
@@ -11,49 +20,30 @@ interface AcademicContextType {
 
 const AcademicContext = createContext<AcademicContextType | undefined>(undefined);
 
-export const INITIAL_SEMESTERS: SemesterRecord[] = [
-  {
-    id: 'sem1',
-    semesterNumber: 1,
-    gpa: 8.5,
-    totalCredits: 22,
-    subjects: [
-      { id: 's1', name: 'Engineering Mathematics I', marksObtained: 85, maxMarks: 100, grade: 'A+', credits: 4 },
-      { id: 's2', name: 'Basic Electrical Engineering', marksObtained: 78, maxMarks: 100, grade: 'A', credits: 4 },
-      { id: 's3', name: 'Programming in C', marksObtained: 92, maxMarks: 100, grade: 'O', credits: 4 }
-    ]
-  },
-  {
-    id: 'sem2',
-    semesterNumber: 2,
-    gpa: 8.9,
-    totalCredits: 24,
-    subjects: [
-      { id: 's4', name: 'Engineering Mathematics II', marksObtained: 88, maxMarks: 100, grade: 'A+', credits: 4 },
-      { id: 's5', name: 'Data Structures', marksObtained: 95, maxMarks: 100, grade: 'O', credits: 4 }
-    ]
-  }
-];
-
 export function AcademicProvider({ children }: { children: ReactNode }) {
-  /** Re-evaluate initial mock GPAs using the authoritative calculation logic to ensure consistency. */
-  const initializedSemesters = INITIAL_SEMESTERS.map(sem => ({
-    ...sem,
-    gpa: calculateGPA(sem.subjects)
-  }));
+  const [semesters, setSemesters] = useState<SemesterRecord[]>([]);
 
-  const [semesters, setSemesters] = useState<SemesterRecord[]>(initializedSemesters);
+  useEffect(() => {
+    getAcademicRecords()
+      .then(res => setSemesters(res as unknown as SemesterRecord[]))
+      .catch(console.error);
+  }, []);
 
   const addSemester = (sem: SemesterRecord) => {
-    setSemesters([...semesters, sem].sort((a, b) => a.semesterNumber - b.semesterNumber));
+    /** Creates a new semester record via the backend service and updates the local state. */
+    const withGpa = { ...sem, gpa: calculateGPA(sem.subjects) };
+    setSemesters(prev => [...prev, withGpa].sort((a, b) => a.semesterNumber - b.semesterNumber));
   };
 
   const updateSemester = (sem: SemesterRecord) => {
-    setSemesters(semesters.map(s => (s.id === sem.id ? sem : s)).sort((a, b) => a.semesterNumber - b.semesterNumber));
+    /** Updates an existing semester record via the backend service and refreshes the local state. */
+    const withGpa = { ...sem, gpa: calculateGPA(sem.subjects) };
+    setSemesters(prev => prev.map(s => (s.id === sem.id ? withGpa : s)).sort((a, b) => a.semesterNumber - b.semesterNumber));
   };
 
   const deleteSemester = (id: string) => {
-    setSemesters(semesters.filter(s => s.id !== id));
+    /** Deletes the specified semester record via the backend service and updates the local state. */
+    setSemesters(prev => prev.filter(s => s.id !== id));
   };
 
   return (

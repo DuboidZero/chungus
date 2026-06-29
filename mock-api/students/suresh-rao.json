@@ -1,0 +1,110 @@
+{
+  "_meta": {
+    "tier": "Underperforming",
+    "completion": 20
+  },
+  "user": {
+    "id": "e5a0b6c9-2d1f-4a7c-a13e-0f9a4d5c7e82",
+    "prn": "1032210009",
+    "name": "Suresh Rao",
+    "email": "suresh.rao@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2022-2026"
+  },
+  "profile": {
+    "id": "prf-e5a0b6c9",
+    "userId": "e5a0b6c9-2d1f-4a7c-a13e-0f9a4d5c7e82",
+    "aboutMe": "",
+    "email": "suresh.rao@student.mitwpu.edu.in",
+    "phone": "+91 9890123456",
+    "location": "Pune, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 5km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "Mobile"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 4.8,
+      "percentage": 48.0,
+      "totalCredits": 90,
+      "projectCount": 0,
+      "achievementCount": 0,
+      "skillCount": 0
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 5.5,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 5.2,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 5.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 4.5,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 4.2,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 4.8,
+        "projected": null
+      }
+    ],
+    "upcomingDeadlines": [
+      {
+        "id": "dl-suresh-1",
+        "title": "Remedial Class Assignment",
+        "subject": "Design and Analysis of Algorithms",
+        "dueDate": "2026-07-10T23:59:00Z",
+        "urgencyLabel": "3 Days",
+        "urgency": "urgent"
+      }
+    ]
+  },
+  "academic": [
+    {
+      "id": "sem-suresh-6",
+      "semesterNumber": 6,
+      "gpa": 4.8,
+      "totalCredits": 12,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-suresh-6-1",
+          "name": "Design and Analysis of Algorithms",
+          "marksObtained": 35,
+          "maxMarks": 100,
+          "grade": "F",
+          "credits": 0
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [],
+    "soft": [],
+    "languages": []
+  },
+  "projects": [],
+  "experience": [],
+  "achievements": []
+}

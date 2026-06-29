@@ -1,18 +1,21 @@
-export interface SubjectMark {
-  id: string;
-  name: string;
-  marksObtained: number;
-  maxMarks: number;
-  grade: string;
-  credits: number;
-}
+/**
+ * Academic types — re-exported from the canonical API entities.
+ * Local grade/GPA calculation utilities remain here.
+ */
 
+export type { Semester, SubjectMark } from '../../api/entities/semester';
+
+/**
+ * Local form state for academic records.
+ * Omits server-generated fields (createdAt, updatedAt).
+ * Used by AcademicContext for local state management.
+ */
 export interface SemesterRecord {
   id: string;
   semesterNumber: number;
   gpa: number;
   totalCredits: number;
-  subjects: SubjectMark[];
+  subjects: import('../../api/entities/semester').SubjectMark[];
 }
 
 export function getGradeAndPoints(marksObtained: number, maxMarks: number): { grade: string; points: number } {
@@ -29,7 +32,7 @@ export function getGradeAndPoints(marksObtained: number, maxMarks: number): { gr
   return { grade: 'F', points: 0 };
 }
 
-export function calculateGPA(subjects: SubjectMark[]): number {
+export function calculateGPA(subjects: { marksObtained: number; maxMarks: number; credits: number }[]): number {
   if (subjects.length === 0) return 0;
   
   let totalPoints = 0;
@@ -45,7 +48,7 @@ export function calculateGPA(subjects: SubjectMark[]): number {
   return Number((totalPoints / totalCredits).toFixed(2));
 }
 
-export function calculateCGPA(semesters: SemesterRecord[]): number {
+export function calculateCGPA(semesters: { gpa: number; totalCredits: number }[]): number {
   if (semesters.length === 0) return 0;
   
   let totalPoints = 0;

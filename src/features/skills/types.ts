@@ -1,24 +1,11 @@
-export interface TechnicalSkill {
-  id: string;
-  domain: string;
-  name: string;
-  proficiency: number; // 1 to 5
-}
+/**
+ * Skill types — re-exported from the canonical API entities.
+ */
 
-export interface SoftSkill {
-  id: string;
-  name: string;
-  proficiency?: number; // 1 to 5, optional
-}
-
-export interface LanguageSkill {
-  id: string;
-  name: string;
-  proficiency: 'Basic' | 'Conversational' | 'Proficient' | 'Fluent' | 'Native';
-}
+export type { TechnicalSkill, SoftSkill, LanguageSkill, LanguageProficiency } from '../../api/entities/skill';
 
 export interface SkillsData {
-  technical: TechnicalSkill[];
-  soft: SoftSkill[];
-  languages: LanguageSkill[];
+  technical: import('../../api/entities/skill').TechnicalSkill[];
+  soft: import('../../api/entities/skill').SoftSkill[];
+  languages: import('../../api/entities/skill').LanguageSkill[];
 }

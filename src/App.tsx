@@ -11,19 +11,25 @@ import { teacherNavigation } from './shared/layout/navigation/teacher';
 import { adminNavigation } from './shared/layout/navigation/admin';
 
 import { LoginPage } from './features/auth/LoginPage';
+import { TeacherDashboard } from './features/dashboard/TeacherDashboard';
 import { Dashboard } from './features/dashboard/Dashboard';
+import { AnalyticsDashboard } from './features/analytics/AnalyticsDashboard';
+import { MyStudentsView } from './features/teacher/MyStudentsView';
+import { StudentDetailView } from './features/teacher/StudentDetailView';
+import { AssessmentsView } from './features/teacher/AssessmentsView';
 import { Profile } from './features/profile/Profile';
 import { AcademicRecords } from './features/academic/AcademicRecords';
 import { Skills } from './features/skills/Skills';
 import { Projects } from './features/projects/Projects';
 import { ProjectForm } from './features/projects/ProjectForm';
+import { ProjectDetail } from './features/projects/ProjectDetail';
 import { WorkExperience } from './features/experience/WorkExperience';
 import { Achievements } from './features/achievements/Achievements';
 import { AcademicProvider } from './features/academic/AcademicContext';
 import { ProjectsProvider } from './features/projects/ProjectsContext';
 import { EmptyState } from './shared/ui/empty-state';
 import {
-  User, Users, BookOpen, BarChart3, Building2, Shield,
+  User, Users, BarChart3, Building2, Shield,
 } from 'lucide-react';
 
 /** Placeholder components for unfinished feature routes. */
@@ -55,10 +61,12 @@ function RoleRouter() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Dashboard />} />
-          <Route path="students"    element={<Stub icon={Users}    title="My Students" />} />
-          <Route path="assessments" element={<Stub icon={BookOpen} title="Assessments" />} />
-          <Route path="analytics"   element={<Stub icon={BarChart3} title="Analytics" />} />
+          <Route index element={<TeacherDashboard user={user!} />} />
+          <Route path="students"    element={<MyStudentsView />} />
+          <Route path="students/:id" element={<StudentDetailView />} />
+          <Route path="students/:studentId/projects/:projectId" element={<ProjectDetail />} />
+          <Route path="assessments" element={<AssessmentsView />} />
+          <Route path="analytics"   element={<AnalyticsDashboard />} />
           <Route path="settings"    element={<Stub icon={User}     title="Settings" />} />
           <Route path="*"           element={<Navigate to="/" replace />} />
         </Route>
@@ -102,6 +110,7 @@ function RoleRouter() {
           <Route path="skills"          element={<Skills />} />
           <Route path="projects"        element={<Projects />} />
           <Route path="projects/new"    element={<ProjectForm />} />
+          <Route path="projects/:id"    element={<ProjectDetail />} />
           <Route path="projects/:id/edit" element={<ProjectForm />} />
           <Route path="work-experience" element={<WorkExperience />} />
           <Route path="achievements"    element={<Achievements />} />

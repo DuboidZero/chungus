@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "tier": "Average - Guidable",
+    "completion": 50
+  },
+  "user": {
+    "id": "b2d7e3f6-9a8c-4d4f-de0b-7c6d1a2f4b59",
+    "prn": "1032210006",
+    "name": "Pooja Nair",
+    "email": "pooja.nair@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2023-2027"
+  },
+  "profile": {
+    "id": "prf-b2d7e3f6",
+    "userId": "b2d7e3f6-9a8c-4d4f-de0b-7c6d1a2f4b59",
+    "aboutMe": "Exploring different domains.",
+    "email": "pooja.nair@student.mitwpu.edu.in",
+    "phone": "+91 9567890123",
+    "location": "Pune, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 20km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "Cloud & DevOps"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 6.9,
+      "percentage": 65.0,
+      "totalCredits": 120,
+      "projectCount": 0,
+      "achievementCount": 0,
+      "skillCount": 2
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 6.8,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 7.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 6.9,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 6.8,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 7.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 6.9,
+        "projected": null
+      }
+    ],
+    "upcomingDeadlines": []
+  },
+  "academic": [
+    {
+      "id": "sem-pooja-6",
+      "semesterNumber": 6,
+      "gpa": 6.9,
+      "totalCredits": 22,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-pooja-6-1",
+          "name": "Web Technology",
+          "marksObtained": 69,
+          "maxMarks": 100,
+          "grade": "B",
+          "credits": 4
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [
+      {
+        "id": "ts-pooja-1",
+        "domain": "Programming",
+        "name": "Java",
+        "proficiency": 3
+      },
+      {
+        "id": "ts-pooja-2",
+        "domain": "Database",
+        "name": "SQL",
+        "proficiency": 2
+      }
+    ],
+    "soft": [],
+    "languages": []
+  },
+  "projects": [],
+  "experience": [],
+  "achievements": []
+}

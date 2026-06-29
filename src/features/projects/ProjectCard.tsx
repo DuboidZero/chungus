@@ -5,8 +5,8 @@ import type { ProjectEntry } from './types';
 
 interface Props {
   project: ProjectEntry;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit?: (e: React.MouseEvent) => void;
+  onDelete?: (e: React.MouseEvent) => void;
 }
 
 export function ProjectCard({ project, onEdit, onDelete }: Props) {

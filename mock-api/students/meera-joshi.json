@@ -1,0 +1,101 @@
+{
+  "_meta": {
+    "tier": "Needs Guidance",
+    "completion": 35
+  },
+  "user": {
+    "id": "d4f9a5b8-1c0e-4f6b-f02d-9e8f3c4b6d71",
+    "prn": "1032210008",
+    "name": "Meera Joshi",
+    "email": "meera.joshi@student.mitwpu.edu.in",
+    "role": "student",
+    "department": "Computer Engineering",
+    "createdAt": "2023-08-01T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "batch": "2023-2027"
+  },
+  "profile": {
+    "id": "prf-d4f9a5b8",
+    "userId": "d4f9a5b8-1c0e-4f6b-f02d-9e8f3c4b6d71",
+    "aboutMe": "",
+    "email": "meera.joshi@student.mitwpu.edu.in",
+    "phone": "+91 9789012345",
+    "location": "Pune, Maharashtra",
+    "internshipPreference": "offline",
+    "preferredRadius": "Within 5km",
+    "createdAt": "2023-08-01T10:05:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z",
+    "domainInterest": "Cybersecurity"
+  },
+  "dashboard": {
+    "stats": {
+      "cgpa": 5.9,
+      "percentage": 55.0,
+      "totalCredits": 110,
+      "projectCount": 0,
+      "achievementCount": 0,
+      "skillCount": 0
+    },
+    "cgpaTrend": [
+      {
+        "semester": "Sem 1",
+        "cgpa": 6.5,
+        "projected": null
+      },
+      {
+        "semester": "Sem 2",
+        "cgpa": 6.2,
+        "projected": null
+      },
+      {
+        "semester": "Sem 3",
+        "cgpa": 6.0,
+        "projected": null
+      },
+      {
+        "semester": "Sem 4",
+        "cgpa": 5.8,
+        "projected": null
+      },
+      {
+        "semester": "Sem 5",
+        "cgpa": 5.7,
+        "projected": null
+      },
+      {
+        "semester": "Sem 6",
+        "cgpa": 5.9,
+        "projected": null
+      }
+    ],
+    "upcomingDeadlines": []
+  },
+  "academic": [
+    {
+      "id": "sem-meera-6",
+      "semesterNumber": 6,
+      "gpa": 5.9,
+      "totalCredits": 16,
+      "createdAt": "2026-05-15T10:00:00Z",
+      "updatedAt": "2026-05-15T10:00:00Z",
+      "subjects": [
+        {
+          "id": "sub-meera-6-1",
+          "name": "Web Technology",
+          "marksObtained": 52,
+          "maxMarks": 100,
+          "grade": "C",
+          "credits": 4
+        }
+      ]
+    }
+  ],
+  "skills": {
+    "technical": [],
+    "soft": [],
+    "languages": []
+  },
+  "projects": [],
+  "experience": [],
+  "achievements": []
+}

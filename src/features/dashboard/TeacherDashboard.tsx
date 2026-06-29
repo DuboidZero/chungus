@@ -1,119 +1,108 @@
 /** 
  * Teacher Dashboard View.
- * Provides insights into cohort health, students needing attention, and recent activity.
+ * Implements case management layout for assigned students.
  */
-import { Card, CardHeader, CardTitle, CardContent } from '../../shared/ui/card';
-import { Users, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
-} from 'recharts';
-import { useTheme } from '../../shared/providers/ThemeProvider';
+import { useState, useEffect } from 'react';
+import { getTeacherDashboard } from '../../api/services/dashboard';
+import { Card, CardContent } from '../../shared/ui/card';
+
 import type { User } from '../../shared/permissions/roles';
+import type { TeacherDashboardResponse } from '../../api/contracts/dashboard';
+import { Skeleton } from '../../shared/ui/loading-skeleton';
+import { useNavigate } from 'react-router-dom';
 
-const cohortCgpaDistribution = [
-  { range: '< 6.0', count: 2 },
-  { range: '6.0–7.0', count: 8 },
-  { range: '7.0–8.0', count: 24 },
-  { range: '8.0–9.0', count: 35 },
-  { range: '9.0–10', count: 12 },
-];
-
-const atRiskStudents = [
-  { name: 'Ankit Desai',   cgpa: 5.8, issue: 'CGPA below threshold' },
-  { name: 'Sneha Patil',   cgpa: 6.1, issue: '2 missed submissions' },
-  { name: 'Rohan Kulkarni', cgpa: 6.4, issue: 'No portfolio activity' },
-];
+import { SearchFilterBar, type FilterState } from '../teacher/components/SearchFilterBar';
+import { SupportNeededPanel } from '../teacher/components/SupportNeededPanel';
+import { GuidanceCasesPanel } from '../teacher/components/GuidanceCasesPanel';
+import { Users, TrendingUp, AlertTriangle } from 'lucide-react';
 
 interface Props { user: User }
 
 export function TeacherDashboard({ user }: Props) {
-  const { theme } = useTheme();
-  const chartColors = {
-    grid:  theme === 'dark' ? '#29315A' : '#e2e8f0',
-    axis:  theme === 'dark' ? '#94a3b8' : '#64748b',
-    tooltip: {
-      bg:     theme === 'dark' ? '#1a1e3a' : '#ffffff',
-      border: theme === 'dark' ? '#29315A' : '#e2e8f0',
-      color:  theme === 'dark' ? '#f1f5f9' : '#0f172a',
-    },
+  const navigate = useNavigate();
+
+  const [data, setData] = useState<TeacherDashboardResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getTeacherDashboard()
+      .then(setData)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleFilterChange = (filters: FilterState) => {
+    // Navigate to My Students when dropdown filters change
+    const params = new URLSearchParams();
+    if (filters.batch) params.append('batch', filters.batch);
+    if (filters.department) params.append('department', filters.department);
+    if (filters.performanceTier) params.append('performanceTier', filters.performanceTier);
+    if (filters.guidanceStatus) params.append('guidanceStatus', filters.guidanceStatus);
+    if (Array.from(params.keys()).length > 0) {
+      navigate(`/students?${params.toString()}`);
+    }
   };
 
+  const handleSearch = (query: string) => {
+    if (query.trim()) {
+      navigate(`/students?search=${encodeURIComponent(query.trim())}`);
+    }
+  };
+
+  const handleViewStudent = (studentId: string) => {
+    navigate(`/students/${studentId}`);
+  };
+
+  if (loading || !data) {
+    return (
+      <div className="space-y-8">
+        <Skeleton className="h-9 w-72 mb-2" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-12">
       <div>
         <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
           Good morning, {user.name.split(' ').slice(0, 2).join(' ')}
         </h1>
         <p className="text-slate-500 dark:text-slate-400 mt-1">
-          Here's an overview of your cohort's progress.
+          Here's an overview of your assigned students and active cases.
         </p>
       </div>
 
-      {/* Cohort stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Total Students" value="81"  icon={Users}         color="text-brand-600 dark:text-brand-400"   bg="bg-brand-50 dark:bg-brand-800" />
-        <StatCard label="At Risk"        value="3"   icon={AlertTriangle} color="text-red-600 dark:text-red-400"       bg="bg-red-50 dark:bg-red-900/20" />
-        <StatCard label="On Track"       value="71"  icon={CheckCircle}   color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-900/20" />
-        <StatCard label="Pending Reviews" value="12" icon={Clock}         color="text-amber-600 dark:text-amber-400"  bg="bg-amber-50 dark:bg-amber-900/20" />
-      </div>
+      {/* 1. Search & Filters */}
+      <SearchFilterBar onFilterChange={handleFilterChange} onSearch={handleSearch} />
+
+      {/* 2. Support Needed Panel (Priority Intervention) */}
+      <SupportNeededPanel signals={data.supportNeeded} onViewStudent={handleViewStudent} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
-          {/* CGPA Distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Cohort CGPA Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={cohortCgpaDistribution} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} vertical={false} />
-                    <XAxis dataKey="range" stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} />
-                    <YAxis stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} />
-                    <Tooltip contentStyle={{ backgroundColor: chartColors.tooltip.bg, borderColor: chartColors.tooltip.border, color: chartColors.tooltip.color }} />
-                    <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Students" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+        {/* 3. Guidance Cases (Case Management) */}
+        <div className="lg:col-span-2">
+          <GuidanceCasesPanel cases={data.guidanceCases} onViewStudent={handleViewStudent} />
         </div>
 
-        {/* Right: at risk */}
-        <div>
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-500" />
-                Students Needing Attention
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
-                {atRiskStudents.map((s, i) => (
-                  <li key={i} className={`pb-4 ${i < atRiskStudents.length - 1 ? 'border-b border-slate-100 dark:border-brand-800' : ''}`}>
-                    <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-medium text-slate-900 dark:text-slate-200">{s.name}</p>
-                      <span className="text-xs font-bold text-red-600 dark:text-red-400">CGPA {s.cgpa}</span>
-                    </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">{s.issue}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+        {/* 4. Performance Summary */}
+        <div className="space-y-4">
+          <StatCard label="Assigned Students" value={data.stats.totalAssignedStudents.toString()} icon={Users} color="text-brand-600 dark:text-brand-400" bg="bg-brand-50 dark:bg-brand-900/20" onClick={() => navigate('/students')} />
+          <StatCard label="High Performing" value={data.stats.highPerformingCount.toString()} icon={TrendingUp} color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-900/20" onClick={() => navigate('/students?performanceTier=High+Performing')} />
+          <StatCard label="Needs Guidance" value={data.stats.midTierCount.toString()} icon={Users} color="text-amber-600 dark:text-amber-400" bg="bg-amber-50 dark:bg-amber-900/20" onClick={() => navigate('/students?performanceTier=Average+-+Guidable')} />
+          <StatCard label="Underperforming" value={data.stats.underperformingCount.toString()} icon={AlertTriangle} color="text-red-600 dark:text-red-400" bg="bg-red-50 dark:bg-red-900/20" onClick={() => navigate('/students?performanceTier=Underperforming')} />
         </div>
       </div>
     </div>
   );
 }
 
-function StatCard({ label, value, icon: Icon, color, bg }: {
-  label: string; value: string; icon: typeof Users; color: string; bg: string;
+function StatCard({ label, value, icon: Icon, color, bg, onClick }: {
+  label: string; value: string; icon: typeof Users; color: string; bg: string; onClick?: () => void;
 }) {
   return (
-    <Card>
+    <Card className={`transition-all ${onClick ? 'cursor-pointer hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700' : ''}`} onClick={onClick}>
       <CardContent className="pt-6 pb-5 px-6 flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{label}</p>

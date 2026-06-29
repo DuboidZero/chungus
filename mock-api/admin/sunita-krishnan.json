@@ -1,0 +1,41 @@
+{
+  "user": {
+    "id": "b8d3e9f2-5a4c-4d0f-d46b-3c2d7a8f0b15",
+    "prn": "A1001001",
+    "name": "Ms. Sunita Krishnan",
+    "email": "sunita.krishnan@mitwpu.edu.in",
+    "role": "admin",
+    "department": "Administration",
+    "createdAt": "2018-05-10T10:00:00Z",
+    "updatedAt": "2026-06-25T14:30:00Z"
+  },
+  "dashboard": {
+    "stats": {
+      "totalStudents": 1500,
+      "totalTeachers": 120,
+      "activeCohorts": 12,
+      "avgCompletion": 78.5
+    },
+    "enrollmentTrend": [
+      { "month": "Jan", "students": 1400 },
+      { "month": "Feb", "students": 1450 },
+      { "month": "Mar", "students": 1500 }
+    ],
+    "cohorts": [
+      {
+        "id": "cohort-1",
+        "name": "B.Tech CE 2026",
+        "students": 240,
+        "avgCgpa": 7.8,
+        "completionPercentage": 85
+      },
+      {
+        "id": "cohort-2",
+        "name": "B.Tech IT 2026",
+        "students": 180,
+        "avgCgpa": 7.5,
+        "completionPercentage": 82
+      }
+    ]
+  }
+}
