@@ -26,3 +26,13 @@ class UserSummary(CamelModel):
     role: str
     is_active: bool
     must_change_password: bool
+
+class MentorAssignmentRequest(CamelModel):
+    teacher_id: str
+    student_id: str
+
+
+class MentorAssignmentResponse(CamelModel):
+    id: str
+    teacher_id: str
+    student_id: str

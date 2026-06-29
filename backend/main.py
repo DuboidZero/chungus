@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.routes import auth, profile, achievement, experience, project, skill, academic, dashboard, admin
+from app.routes import auth, profile, achievement, experience, project, skill, academic, dashboard, admin, teacher
 
 app = FastAPI(title="MIT WPU Portfolio System")
 
@@ -77,6 +77,7 @@ app.include_router(skill.router, prefix="/api/v1")
 app.include_router(academic.router, prefix="/api/v1")
 app.include_router(dashboard.router, prefix="/api/v1")
 app.include_router(admin.router, prefix="/api/v1")
+app.include_router(teacher.router, prefix="/api/v1")
 
 
 @app.get("/api/v1/health")

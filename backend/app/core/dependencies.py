@@ -58,3 +58,22 @@ def get_current_admin(current_user: User = Depends(get_current_user)) -> User:
             detail="Admin access required",
         )
     return current_user
+
+def assert_mentors_student(db, teacher_id: str, student_id: str):
+    """Raise 403 if the teacher is not the mentor of this student."""
+    from app.models.mentor import MentorAssignment
+    link = db.query(MentorAssignment).filter(
+        MentorAssignment.teacher_id == teacher_id,
+        MentorAssignment.student_id == student_id,
+    ).first()
+    if link is None:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not your assigned student")
+
+def get_current_teacher(current_user: User = Depends(get_current_user)) -> User:
+    """Requires the teacher role. Protects all /teacher endpoints."""
+    if current_user.role != "teacher":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Teacher access required",
+        )
+    return current_user

@@ -1,5 +1,5 @@
 from io import BytesIO
-
+from app.models.mentor import MentorAssignment
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -7,7 +7,7 @@ from openpyxl import load_workbook
 
 from app.models.user import User
 from app.models.academic import Semester, Subject
-from app.schemas.admin import BulkUploadResult, SeededStudent, TeacherCreate, UserSummary
+from app.schemas.admin import BulkUploadResult, SeededStudent, TeacherCreate, UserSummary, MentorAssignmentRequest, MentorAssignmentResponse
 from app.core.dependencies import get_current_admin, get_db
 from app.core.security import hash_password, generate_initial_password
 
@@ -208,3 +208,32 @@ async def set_user_active(
     db.commit()
     db.refresh(user)
     return user
+
+
+@router.post("/assignments", response_model=MentorAssignmentResponse, status_code=status.HTTP_201_CREATED)
+async def assign_mentor(
+    payload: MentorAssignmentRequest,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    # validate both users exist and have correct roles
+    teacher = db.query(User).filter(User.id == payload.teacher_id, User.role == "teacher").first()
+    if not teacher:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Teacher not found")
+    student = db.query(User).filter(User.id == payload.student_id, User.role == "student").first()
+    if not student:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+
+    # one mentor per student: replace existing assignment if any
+    existing = db.query(MentorAssignment).filter(MentorAssignment.student_id == payload.student_id).first()
+    if existing:
+        existing.teacher_id = payload.teacher_id
+        db.commit()
+        db.refresh(existing)
+        return existing
+
+    assignment = MentorAssignment(teacher_id=payload.teacher_id, student_id=payload.student_id)
+    db.add(assignment)
+    db.commit()
+    db.refresh(assignment)
+    return assignment
