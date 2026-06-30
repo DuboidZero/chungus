@@ -4,7 +4,7 @@ import { DeleteConfirmModal } from '../../shared/ui/modal';
 import { AchievementCard } from './AchievementCard';
 import { AchievementFormModal } from './AchievementFormModal';
 import type { AchievementEntry } from './types';
-import { getAchievements } from '../../api/services/achievements';
+import { getAchievements, createAchievement, updateAchievement, deleteAchievement } from '../../api/services/achievements';
 import { Skeleton } from '../../shared/ui/loading-skeleton';
 
 /** Fetches the certified achievements and awards from the backend service. */
@@ -23,20 +23,31 @@ export function Achievements() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleSave = (entry: AchievementEntry) => {
-    if (editingId) {
-      setEntries(entries.map(e => e.id === entry.id ? entry : e));
-    } else {
-      /** Enforce reverse chronological ordering when inserting new achievements. */
-      const newEntries = [...entries, entry].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      setEntries(newEntries);
+  const handleSave = async (entry: AchievementEntry) => {
+    try {
+      if (editingId) {
+        const saved = await updateAchievement(entry.id, entry as any);
+        setEntries(entries.map(e => e.id === entry.id ? (saved as unknown as AchievementEntry) : e));
+      } else {
+        const created = await createAchievement(entry as any);
+        const newEntries = [...entries, created as unknown as AchievementEntry]
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        setEntries(newEntries);
+      }
+    } catch (err) {
+      console.error('Failed to save achievement', err);
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (deletingId) {
-      setEntries(entries.filter(e => e.id !== deletingId));
-      setDeletingId(null);
+      try {
+        await deleteAchievement(deletingId);
+        setEntries(entries.filter(e => e.id !== deletingId));
+        setDeletingId(null);
+      } catch (err) {
+        console.error('Failed to delete achievement', err);
+      }
     }
   };
 

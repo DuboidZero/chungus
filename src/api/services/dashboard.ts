@@ -1,7 +1,6 @@
 /**
  * Dashboard service.
  * Wraps API calls for dashboard data aggregation endpoints.
- * TODO: Implement when backend is ready.
  */
 
 import { apiClient } from '../client';
@@ -9,7 +8,7 @@ import { API } from '../endpoints';
 import type { StudentDashboardResponse, TeacherDashboardResponse, AdminDashboardResponse } from '../contracts/dashboard';
 import { USE_MOCK, mockDriver } from '../mock';
 
-/** GET /me/dashboard */
+/** GET /me/dashboard (own) OR /teacher/students/:id/overview (teacher viewing a student) */
 export async function getStudentDashboard(targetUserId?: string): Promise<StudentDashboardResponse> {
   if (USE_MOCK) {
     const userId = targetUserId || mockDriver.getCurrentUserId();
@@ -20,11 +19,13 @@ export async function getStudentDashboard(targetUserId?: string): Promise<Studen
     await new Promise(resolve => setTimeout(resolve, 500));
     return data;
   }
-  const response = await apiClient.get<StudentDashboardResponse>(API.DASHBOARD);
+  const response = await apiClient.get<StudentDashboardResponse>(
+    targetUserId ? API.TEACHER.STUDENT_OVERVIEW(targetUserId) : API.DASHBOARD
+  );
   return response.data;
 }
 
-/** GET /teacher/dashboard (future endpoint) */
+/** GET /teacher/dashboard */
 export async function getTeacherDashboard(): Promise<TeacherDashboardResponse> {
   if (USE_MOCK) {
     const userId = mockDriver.getCurrentUserId();

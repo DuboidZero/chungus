@@ -47,6 +47,9 @@ export function AnalyticsDashboard() {
     );
   }
 
+  const stats = data.stats ?? ({} as any);
+  const domainInterests = data.domainInterests ?? [];
+
   return (
     <div className="space-y-8 pb-12">
       <div>
@@ -58,16 +61,16 @@ export function AnalyticsDashboard() {
 
       {/* ── Performance Summary Cards ────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Assigned Students"  value={data.stats.totalAssignedStudents.toString()} icon={Users}         color="text-brand-600 dark:text-brand-400"   bg="bg-brand-50 dark:bg-brand-900/20"   onClick={() => navigate('/students')} />
-        <StatCard label="High Performing"    value={data.stats.highPerformingCount.toString()}   icon={TrendingUp}    color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-900/20" onClick={() => navigate('/students?performanceTier=High+Performing')} />
-        <StatCard label="Needs Guidance"     value={data.stats.midTierCount.toString()}          icon={Users}         color="text-amber-600 dark:text-amber-400"   bg="bg-amber-50 dark:bg-amber-900/20"   onClick={() => navigate('/students?performanceTier=Average+-+Guidable')} />
-        <StatCard label="Underperforming"    value={data.stats.underperformingCount.toString()}  icon={AlertTriangle} color="text-red-600 dark:text-red-400"       bg="bg-red-50 dark:bg-red-900/20"       onClick={() => navigate('/students?performanceTier=Underperforming')} />
+        <StatCard label="Assigned Students"  value={(stats.totalAssignedStudents ?? 0).toString()} icon={Users}         color="text-brand-600 dark:text-brand-400"   bg="bg-brand-50 dark:bg-brand-900/20"   onClick={() => navigate('/students')} />
+        <StatCard label="High Performing"    value={(stats.highPerformingCount ?? 0).toString()}   icon={TrendingUp}    color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-900/20" onClick={() => navigate('/students?performanceTier=High+Performing')} />
+        <StatCard label="Needs Guidance"     value={(stats.midTierCount ?? 0).toString()}          icon={Users}         color="text-amber-600 dark:text-amber-400"   bg="bg-amber-50 dark:bg-amber-900/20"   onClick={() => navigate('/students?performanceTier=Average+-+Guidable')} />
+        <StatCard label="Underperforming"    value={(stats.underperformingCount ?? 0).toString()}  icon={AlertTriangle} color="text-red-600 dark:text-red-400"       bg="bg-red-50 dark:bg-red-900/20"       onClick={() => navigate('/students?performanceTier=Underperforming')} />
       </div>
 
       {/* ── Row 1: Skill Heatmap + Domain Interests ──────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <SkillHeatmap
-          data={data.skillHeatmap}
+          data={data.skillHeatmap ?? []}
           onSkillClick={skill => navigate(`/students?skill=${encodeURIComponent(skill)}`)}
         />
 
@@ -75,11 +78,11 @@ export function AnalyticsDashboard() {
           <CardHeader><CardTitle>Domain Interests</CardTitle></CardHeader>
           <CardContent>
             <div className="h-80">
-              {data.domainInterests.length > 0 ? (
+              {domainInterests.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={data.domainInterests}
+                      data={domainInterests}
                       cx="50%" cy="50%"
                       innerRadius={70} outerRadius={110}
                       paddingAngle={4}
@@ -88,7 +91,7 @@ export function AnalyticsDashboard() {
                       onClick={(entry: any) => navigate(`/students?domain=${encodeURIComponent(entry.domain)}`)}
                       className="cursor-pointer"
                     >
-                      {data.domainInterests.map((_, i) => (
+                      {domainInterests.map((_, i) => (
                         <Cell key={i} fill={PALETTE[i % PALETTE.length]} className="hover:opacity-75 transition-opacity" />
                       ))}
                     </Pie>

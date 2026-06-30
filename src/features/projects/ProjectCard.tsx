@@ -23,14 +23,21 @@ export function ProjectCard({ project, onEdit, onDelete }: Props) {
         )}
         
         {/* Hover Actions */}
-        <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px]">
-          <button onClick={onEdit} className="p-2 bg-white text-slate-900 rounded-full hover:bg-brand-50 hover:text-brand-600 transition-colors shadow-lg">
-            <Edit2 className="w-4 h-4" />
-          </button>
-          <button onClick={onDelete} className="p-2 bg-white text-slate-900 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors shadow-lg">
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
+        {/* Hover Actions — only when edit/delete handlers are provided (i.e. the owner's view, not the teacher's read-only view) */}
+        {(onEdit || onDelete) && (
+          <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px]">
+            {onEdit && (
+              <button onClick={onEdit} className="p-2 bg-white text-slate-900 rounded-full hover:bg-brand-50 hover:text-brand-600 transition-colors shadow-lg">
+                <Edit2 className="w-4 h-4" />
+              </button>
+            )}
+            {onDelete && (
+              <button onClick={onDelete} className="p-2 bg-white text-slate-900 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors shadow-lg">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       <CardContent className="p-6 flex flex-col flex-1">

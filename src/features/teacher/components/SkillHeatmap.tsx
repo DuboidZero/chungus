@@ -47,7 +47,7 @@ export function SkillHeatmap({ data, onSkillClick }: Props) {
             <div key={domain.domain}>
               <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">{domain.domain}</h4>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                {domain.skills.map(skill => {
+                {(domain.skills ?? []).map(skill => {
                   return (
                     <button 
                       key={skill.name}

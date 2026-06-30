@@ -6,6 +6,7 @@ import { Textarea } from '../../shared/ui/textarea';
 import { Progress } from '../../shared/ui/progress';
 import type { StudentProfileData, InternshipPreference } from './types';
 import { calcCompletion, DOMAIN_OPTIONS } from './types';
+import { uploadFile } from '../../api/services/upload';
 
 interface Props {
   initial: StudentProfileData;
@@ -22,17 +23,29 @@ const PREF_OPTIONS: { value: InternshipPreference; label: string }[] = [
 
 export function ProfileForm({ initial, name, department, onSave }: Props) {
   const [data, setData] = useState<StudentProfileData>(initial);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const completion = calcCompletion(data);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const set = <K extends keyof StudentProfileData>(key: K, val: StudentProfileData[K]) =>
     setData(prev => ({ ...prev, [key]: val }));
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Image must be under 2MB.');
+      return;
+    }
+    setUploadingAvatar(true);
+    try {
+      const url = await uploadFile(file);   // real Supabase URL
       set('avatarUrl', url);
+    } catch (err) {
+      console.error('Avatar upload failed', err);
+      alert('Photo upload failed. Try again.');
+    } finally {
+      setUploadingAvatar(false);
     }
   };
 
@@ -83,9 +96,10 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
               <button 
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="mt-2 text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium"
+                disabled={uploadingAvatar}
+                className="mt-2 text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium disabled:opacity-50"
               >
-                Upload photo
+                {uploadingAvatar ? 'Uploading...' : 'Upload photo'}
               </button>
               <input
                 type="file"
@@ -104,11 +118,11 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
               id="aboutMe"
               rows={4}
               placeholder="Write a short bio — your interests, goals, and what drives you..."
-              value={data.aboutMe}
+              value={data.aboutMe ?? ''}
               onChange={e => set('aboutMe', e.target.value.slice(0, 500))}
             />
-            <p className={`text-xs mt-1 text-right transition-colors ${data.aboutMe.length >= 450 ? 'text-amber-500' : 'text-slate-400 dark:text-slate-500'}`}>
-              {data.aboutMe.length} / 500
+            <p className={`text-xs mt-1 text-right transition-colors ${(data.aboutMe ?? '').length >= 450 ? 'text-amber-500' : 'text-slate-400 dark:text-slate-500'}`}>
+              {(data.aboutMe ?? '').length} / 500
             </p>
           </div>
         </CardContent>
@@ -141,7 +155,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 id="phone"
                 type="tel"
                 placeholder="+91 98765 43210"
-                value={data.phone}
+                value={data.phone ?? ''}
                 onChange={e => set('phone', e.target.value)}
                 className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
               />
@@ -157,7 +171,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 id="location"
                 type="text"
                 placeholder="Pune, Maharashtra"
-                value={data.location}
+                value={data.location ?? ''}
                 onChange={e => set('location', e.target.value)}
                 className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
               />
@@ -240,7 +254,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                 <select
                   id="radius"
-                  value={data.preferredRadius}
+                  value={data.preferredRadius ?? ''}
                   onChange={e => set('preferredRadius', e.target.value)}
                   className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
                 >
@@ -260,7 +274,8 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
       {/* Save */}
       <button
         onClick={() => onSave(data)}
-        className="w-full flex items-center justify-center gap-2 py-3 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-brand-900/20"
+        disabled={uploadingAvatar}
+        className="w-full flex items-center justify-center gap-2 py-3 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-brand-900/20 disabled:opacity-50"
       >
         <Save className="w-4 h-4" />
         Save Profile

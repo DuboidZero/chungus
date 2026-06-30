@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Save, Upload } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Save, Upload, FileText, X } from 'lucide-react';
 import { Modal } from '../../shared/ui/modal';
 import { Label } from '../../shared/ui/label';
 import { Select } from '../../shared/ui/select';
 import { Textarea } from '../../shared/ui/textarea';
 import type { AchievementEntry, AchievementCategory, AchievementType, AchievementLevel } from './types';
+import { uploadFile } from '../../api/services/upload';
 
 const generateId = () => Math.random().toString(36).substring(2, 9);
 
@@ -25,6 +26,8 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
     level: 'College',
     date: ''
   });
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -48,7 +51,30 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
     setData(prev => ({ ...prev, [key]: value }));
   };
 
+  const handleCertificateChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File must be under 5MB.');
+      return;
+    }
+    setUploading(true);
+    try {
+      const url = await uploadFile(file);
+      setField('certificateUrl', url);
+    } catch (err) {
+      console.error('Certificate upload failed', err);
+      alert('Upload failed. Try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSave = () => {
+    if (uploading) {
+      alert('Please wait for the file to finish uploading.');
+      return;
+    }
     if (!data.title.trim() || !data.date) {
       alert('Please fill out Title and Date.');
       return;
@@ -121,27 +147,56 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
           <Textarea
             rows={3}
             placeholder="Briefly describe the achievement, the competition, or your contribution..."
-            value={data.description}
+            value={data.description ?? ''}
             onChange={e => setField('description', e.target.value.slice(0, 300))}
           />
           <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 text-right">
-            {data.description.length} / 300
+            {(data.description ?? '').length} / 300
           </p>
         </div>
 
-        {/* Certificate Upload Placeholder */}
+        {/* Certificate Upload */}
         <div>
           <Label>Certificate / Proof</Label>
-          <div className="mt-1 w-full py-4 rounded-xl border border-dashed border-slate-300 dark:border-brand-700 bg-slate-50 dark:bg-brand-900/50 flex flex-col items-center justify-center hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors cursor-pointer group">
-            <Upload className="w-5 h-5 text-slate-400 mb-2 group-hover:text-brand-500 transition-colors" />
-            <span className="text-sm text-slate-600 dark:text-slate-400 font-medium">Upload PDF or Image</span>
-            <span className="text-[10px] text-slate-400 mt-0.5">Optional (Phase 2 feature)</span>
-          </div>
+          {data.certificateUrl ? (
+            <div className="mt-1 w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-brand-700 bg-slate-50 dark:bg-brand-900/50 flex items-center gap-3">
+              <FileText className="w-5 h-5 text-brand-500 shrink-0" />
+              <a href={data.certificateUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-brand-600 dark:text-brand-400 hover:underline truncate flex-1">
+                View uploaded file
+              </a>
+              <button
+                type="button"
+                onClick={() => setField('certificateUrl', undefined)}
+                className="text-slate-400 hover:text-red-500 transition-colors"
+                aria-label="Remove file"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <div
+              className="mt-1 w-full py-4 rounded-xl border border-dashed border-slate-300 dark:border-brand-700 bg-slate-50 dark:bg-brand-900/50 flex flex-col items-center justify-center hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors cursor-pointer group"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="w-5 h-5 text-slate-400 mb-2 group-hover:text-brand-500 transition-colors" />
+              <span className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+                {uploading ? 'Uploading...' : 'Upload PDF or Image'}
+              </span>
+              <span className="text-[10px] text-slate-400 mt-0.5">PDF, JPG, PNG (max 5MB)</span>
+            </div>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="application/pdf,image/jpeg,image/png"
+            className="hidden"
+            onChange={handleCertificateChange}
+          />
         </div>
 
         <div className="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-brand-800">
           <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-brand-700 hover:bg-slate-50 dark:hover:bg-brand-800 transition-colors">Cancel</button>
-          <button onClick={handleSave} className="px-5 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-bold rounded-lg flex items-center gap-2"><Save className="w-4 h-4"/> Save</button>
+          <button onClick={handleSave} disabled={uploading} className="px-5 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-bold rounded-lg flex items-center gap-2 disabled:opacity-50"><Save className="w-4 h-4"/> Save</button>
         </div>
       </div>
     </Modal>

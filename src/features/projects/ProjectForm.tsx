@@ -1,4 +1,7 @@
+import { useProjects } from './ProjectsContext';
+import { uploadFile } from '../../api/services/upload';
 import { useState, useEffect, useRef } from 'react';
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { Save, ArrowLeft, Image as ImageIcon, X, AlertCircle } from 'lucide-react';
 import { Card, CardContent } from '../../shared/ui/card';
@@ -6,7 +9,7 @@ import { Label } from '../../shared/ui/label';
 import { Select } from '../../shared/ui/select';
 import { Textarea } from '../../shared/ui/textarea';
 import type { ProjectEntry, ProjectType, ProjectStatus } from './types';
-import { useProjects } from './ProjectsContext';
+
 
 type Errors = Partial<Record<keyof ProjectEntry | 'techStack', string>>;
 
@@ -30,6 +33,7 @@ export function ProjectForm() {
   const [techInput, setTechInput] = useState('');
   const [errors, setErrors] = useState<Errors>({});
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -70,17 +74,33 @@ export function ProjectForm() {
     setField('techStack', data.techStack.filter(t => t !== tech));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 2 * 1024 * 1024) {
       setErrors(prev => ({ ...prev, imageUrl: 'Image must be under 2MB.' }));
       return;
     }
-    const url = URL.createObjectURL(file);
-    setImagePreview(url);
-    setField('imageUrl', url);
+
+    // Show a local preview immediately using a temporary blob URL
+    const objectUrl = URL.createObjectURL(file);
+    setImagePreview(objectUrl);
     setErrors(prev => ({ ...prev, imageUrl: undefined }));
+    setIsUploading(true);
+
+    try {
+      const url = await uploadFile(file); // real Supabase URL
+      setField('imageUrl', url);
+      setImagePreview(url);        // swap preview to the durable real URL
+      URL.revokeObjectURL(objectUrl); // free the blob now that it's no longer needed
+    } catch (err) {
+      console.error('Image upload failed', err);
+      setErrors(prev => ({ ...prev, imageUrl: 'Upload failed. Try again.' }));
+      setImagePreview(null);       // don't leave a dead/broken blob displayed
+      URL.revokeObjectURL(objectUrl);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const validate = (): boolean => {
@@ -95,14 +115,22 @@ export function ProjectForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = () => {
-    if (!validate()) return;
-    if (isEditing) {
-      updateProject(data);
-    } else {
-      addProject(data);
+  const handleSave = async () => {
+    if (isUploading) {
+      setErrors(prev => ({ ...prev, imageUrl: 'Please wait for the image to finish uploading.' }));
+      return;
     }
-    navigate('/projects');
+    if (!validate()) return;
+    try {
+      if (isEditing) {
+        await updateProject(data);
+      } else {
+        await addProject(data);
+      }
+      navigate('/projects');
+    } catch (err) {
+      console.error('Failed to save project', err);
+    }
   };
 
   const FieldError = ({ field }: { field: keyof Errors }) =>
@@ -141,6 +169,11 @@ export function ProjectForm() {
               {imagePreview ? (
                 <>
                   <img src={imagePreview} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
+                  {isUploading && (
+                    <div className="absolute inset-0 bg-slate-900/40 flex items-center justify-center">
+                      <span className="text-white text-xs font-medium">Uploading...</span>
+                    </div>
+                  )}
                   <button
                     type="button"
                     onClick={e => { e.stopPropagation(); setImagePreview(null); setField('imageUrl', undefined); }}
@@ -213,11 +246,11 @@ export function ProjectForm() {
               id="proj-desc"
               rows={4}
               placeholder="Briefly describe the project goals and your role..."
-              value={data.description}
+              value={data.description ?? ''}
               onChange={e => setField('description', e.target.value.slice(0, 300))}
             />
-            <p className={`text-xs mt-1 text-right transition-colors ${data.description.length >= 280 ? 'text-amber-500' : 'text-slate-400 dark:text-slate-500'}`}>
-              {data.description.length} / 300
+            <p className={`text-xs mt-1 text-right transition-colors ${(data.description ?? '').length >= 280 ? 'text-amber-500' : 'text-slate-400 dark:text-slate-500'}`}>
+              {(data.description ?? '').length} / 300
             </p>
           </div>
 
@@ -315,7 +348,8 @@ export function ProjectForm() {
       <div className="flex justify-end pt-4">
         <button
           onClick={handleSave}
-          className="flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl transition-colors shadow-lg shadow-brand-900/20"
+          disabled={isUploading}
+          className="flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl transition-colors shadow-lg shadow-brand-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Save className="w-5 h-5" />
           {isEditing ? 'Save Changes' : 'Create Project'}

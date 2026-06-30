@@ -6,7 +6,7 @@ import { Badge } from '../../shared/ui/badge';
 import { DeleteConfirmModal } from '../../shared/ui/modal';
 import { AddTechnicalSkillModal, AddSoftSkillModal, AddLanguageModal } from './SkillForms';
 import type { SkillsData } from './types';
-import { getSkills } from '../../api/services/skills';
+import { getSkills, createTechnicalSkill, createSoftSkill, createLanguageSkill, deleteSkill } from '../../api/services/skills';
 import { Skeleton } from '../../shared/ui/loading-skeleton';
 
 /** Fetches the skill taxonomy and proficiency levels from the backend service. */
@@ -29,14 +29,19 @@ export function Skills() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!deleting) return;
-    setData(prev => ({
-      ...prev,
-      [deleting.type]: (prev[deleting.type] as any[]).filter(s => s.id !== deleting.id)
-    }));
+    try {
+      await deleteSkill(deleting.type, deleting.id);
+      setData(prev => ({
+        ...prev,
+        [deleting.type]: (prev[deleting.type] as any[]).filter(s => s.id !== deleting.id)
+      }));
+      setDeleting(null);
+    } catch (err) {
+      console.error('Failed to delete skill', err);
+    }
   };
-
   /** Extract unique domains to group technical skills categorically. */
   const domains = Array.from(new Set(data.technical.map(t => t.domain)));
 
@@ -161,19 +166,33 @@ export function Skills() {
       <AddTechnicalSkillModal
         isOpen={modals.tech}
         onClose={() => setModals({ ...modals, tech: false })}
-        onSave={(s) => setData(prev => ({ ...prev, technical: [...prev.technical, s] }))}
+        onSave={async (s) => {
+          try {
+            const created = await createTechnicalSkill(s);
+            setData(prev => ({ ...prev, technical: [...prev.technical, created] }));
+          } catch (err) { console.error('Failed to add technical skill', err); }
+        }}
       />
       <AddSoftSkillModal
         isOpen={modals.soft}
         onClose={() => setModals({ ...modals, soft: false })}
-        onSave={(s) => setData(prev => ({ ...prev, soft: [...prev.soft, s] }))}
+        onSave={async (s) => {
+          try {
+            const created = await createSoftSkill(s);
+            setData(prev => ({ ...prev, soft: [...prev.soft, created] }));
+          } catch (err) { console.error('Failed to add soft skill', err); }
+        }}
       />
       <AddLanguageModal
         isOpen={modals.lang}
         onClose={() => setModals({ ...modals, lang: false })}
-        onSave={(s) => setData(prev => ({ ...prev, languages: [...prev.languages, s] }))}
+        onSave={async (s) => {
+          try {
+            const created = await createLanguageSkill(s);
+            setData(prev => ({ ...prev, languages: [...prev.languages, created] }));
+          } catch (err) { console.error('Failed to add language', err); }
+        }}
       />
-      
       <DeleteConfirmModal
         isOpen={deleting !== null}
         onClose={() => setDeleting(null)}

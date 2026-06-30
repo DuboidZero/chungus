@@ -135,8 +135,12 @@ function StudentCard({ student, onClick }: { student: StudentSummary, onClick: (
     <Card className="hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700 transition-all cursor-pointer group" onClick={onClick}>
       <CardContent className="p-4 sm:p-5 flex items-center justify-between">
         <div className="flex items-center gap-4 min-w-0">
-          <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/50 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold shrink-0">
-            {student.name.charAt(0)}
+          <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/50 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold shrink-0 overflow-hidden">
+            {student.avatar ? (
+              <img src={student.avatar} alt={student.name} className="w-full h-full object-cover" />
+            ) : (
+              student.name.charAt(0)
+            )}
           </div>
           <div className="min-w-0">
             <h4 className="text-base font-bold text-slate-900 dark:text-slate-100 truncate">{student.name}</h4>

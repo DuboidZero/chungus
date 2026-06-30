@@ -6,16 +6,22 @@ import { Skeleton } from '../../shared/ui/loading-skeleton';
 
 import type { Project } from '../../api/entities/project';
 import type { AssessmentMark, ProjectMilestone, MilestoneStatus } from '../../api/entities/teacher';
+import {
+  getTeacherProjectDetail,
+  getProjectMarks,
+  getProjectMilestones,
+  createProjectMark,
+  createProjectMilestone,
+} from '../../api/services/teacher';
 
 export function ProjectAssessmentView() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
-  /** Initial UI states bound to the component view. */
   const [project, setProject] = useState<Project | null>(null);
-  const [marks] = useState<AssessmentMark[]>([]);
-  const [milestones] = useState<ProjectMilestone[]>([]);
+  const [marks, setMarks] = useState<AssessmentMark[]>([]);
+  const [milestones, setMilestones] = useState<ProjectMilestone[]>([]);
 
   const [isMarkFormOpen, setIsMarkFormOpen] = useState(false);
   const [markForm, setMarkForm] = useState({ title: '', score: '', maxScore: '', comments: '' });
@@ -24,33 +30,50 @@ export function ProjectAssessmentView() {
   const [milestoneForm, setMilestoneForm] = useState<{description: string, status: MilestoneStatus, date: string}>({ description: '', status: 'On Track', date: new Date().toISOString().split('T')[0] });
 
   useEffect(() => {
-    /** Fetches all project relationships including metadata, assessments, and milestones. */
-    setLoading(false);
-    setProject({
-      id: id!,
-      name: 'Portfolio System',
-      description: 'A comprehensive academic portfolio.',
-      domain: 'Web Development',
-      techStack: ['React', 'TypeScript'],
-      type: 'College Project',
-      status: 'Ongoing',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    });
+    if (!id) return;
+    setLoading(true);
+    Promise.all([
+      getTeacherProjectDetail(id).then(setProject),
+      getProjectMarks(id).then(setMarks).catch(() => setMarks([])),
+      getProjectMilestones(id).then(setMilestones).catch(() => setMilestones([])),
+    ])
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [id]);
 
-  const handleMarkSubmit = (e: React.FormEvent) => {
+  const handleMarkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submit project mark', markForm);
-    setIsMarkFormOpen(false);
-    setMarkForm({ title: '', score: '', maxScore: '', comments: '' });
+    if (!id) return;
+    try {
+      const created = await createProjectMark(id, {
+        assessmentTitle: markForm.title,
+        score: Number(markForm.score),
+        maxScore: Number(markForm.maxScore),
+        comments: markForm.comments,
+      } as any);
+      setMarks(prev => [created as unknown as AssessmentMark, ...prev]);
+      setIsMarkFormOpen(false);
+      setMarkForm({ title: '', score: '', maxScore: '', comments: '' });
+    } catch (err) {
+      console.error('Failed to save project mark', err);
+    }
   };
 
-  const handleMilestoneSubmit = (e: React.FormEvent) => {
+  const handleMilestoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submit project milestone', milestoneForm);
-    setIsMilestoneFormOpen(false);
-    setMilestoneForm({ description: '', status: 'On Track', date: new Date().toISOString().split('T')[0] });
+    if (!id) return;
+    try {
+      const created = await createProjectMilestone(id, {
+        description: milestoneForm.description,
+        status: milestoneForm.status,
+        date: milestoneForm.date,
+      } as any);
+      setMilestones(prev => [created as unknown as ProjectMilestone, ...prev]);
+      setIsMilestoneFormOpen(false);
+      setMilestoneForm({ description: '', status: 'On Track', date: new Date().toISOString().split('T')[0] });
+    } catch (err) {
+      console.error('Failed to save milestone', err);
+    }
   };
 
   if (loading || !project) {

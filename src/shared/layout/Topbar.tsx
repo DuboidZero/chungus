@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../providers/ThemeProvider';
 import { useAuth } from '../../auth/useAuth';
 
-function getInitials(name: string): string {
+function getInitials(name: string | null | undefined): string {
+  if (!name) return '?';
   return name
     .split(' ')
     .map((n) => n[0])
@@ -72,11 +73,16 @@ export function Topbar() {
         </button>
 
         {/* Avatar */}
+        {/* Avatar */}
         <div
-          className="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center border border-brand-400 shrink-0 cursor-pointer"
+          className="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center border border-brand-400 shrink-0 cursor-pointer overflow-hidden"
           title={user?.name}
         >
-          <span className="text-xs font-semibold text-white">{initials}</span>
+          {user?.avatar ? (
+            <img src={user.avatar} alt={user.name ?? ''} className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-xs font-semibold text-white">{initials}</span>
+          )}
         </div>
       </div>
     </header>
