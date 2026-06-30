@@ -16,3 +16,4 @@ class Profile(Base, TimestampMixin):
     location = Column(String, nullable=True)
     internship_preference = Column(String, default="none", nullable=False)
     preferred_radius = Column(String, nullable=True)
+    domain_interest = Column(String, nullable=True)

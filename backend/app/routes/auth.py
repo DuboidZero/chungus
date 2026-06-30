@@ -15,14 +15,14 @@ me_router = APIRouter(tags=["user"])
 
 @router.post("/login", response_model=LoginResponse)
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
-    # 1. Look up the user by PRN or email
-    user = db.query(User).filter(or_(User.prn == payload.prn, User.email == payload.prn)).first()
+    # 1. Look up the user by PRN or email (frontend sends "identifier")
+    user = db.query(User).filter(or_(User.prn == payload.identifier, User.email == payload.identifier)).first()
 
     # 2. If no user, or password is wrong -> reject (same message for both, on purpose)
     if not user or not verify_password(payload.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid PRN or password",
+            detail="Invalid credentials",
         )
 
     # 3. Make sure the account is active
@@ -39,28 +39,51 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
         "user": user,
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "must_change_password": user.must_change_password,
+        "first_login": user.must_change_password,
     }
 
 
 # Contract path: GET /me
 @me_router.get("/me", response_model=UserResponse)
-def get_me(current_user: User = Depends(get_current_user)):
-    return current_user
+def get_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    from app.models.profile import Profile
+    profile = db.query(Profile).filter(Profile.user_id == current_user.id).first()
+    return {
+        "id": current_user.id,
+        "prn": current_user.prn,
+        "name": current_user.name,
+        "email": current_user.email,
+        "role": current_user.role,
+        "department": current_user.department,
+        "avatar": profile.avatar if profile else None,
+        "created_at": current_user.created_at,
+        "updated_at": current_user.updated_at,
+    }
 
 
 # Kept for backwards-compat: GET /auth/me
 @router.get("/me", response_model=UserResponse)
-def me(current_user: User = Depends(get_current_user)):
-    return current_user
-
+def me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    from app.models.profile import Profile
+    profile = db.query(Profile).filter(Profile.user_id == current_user.id).first()
+    return {
+        "id": current_user.id,
+        "prn": current_user.prn,
+        "name": current_user.name,
+        "email": current_user.email,
+        "role": current_user.role,
+        "department": current_user.department,
+        "avatar": profile.avatar if profile else None,
+        "created_at": current_user.created_at,
+        "updated_at": current_user.updated_at,
+    }
 
 @router.post("/token", include_in_schema=False)
 def login_for_docs(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """Helper endpoint so the /docs 'Authorize' button works. Not for the frontend."""
     user = db.query(User).filter(or_(User.prn == form_data.username, User.email == form_data.username)).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid PRN or password")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     access_token = create_access_token({"sub": user.id, "role": user.role})
     return {"access_token": access_token, "token_type": "bearer"}
 

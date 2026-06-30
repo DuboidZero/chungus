@@ -4,7 +4,7 @@ from pydantic import Field
 
 
 class LoginRequest(CamelModel):
-    prn: str
+    identifier: str
     password: str
 
 
@@ -24,7 +24,7 @@ class LoginResponse(CamelModel):
     user: UserResponse
     access_token: str
     refresh_token: str
-    must_change_password: bool
+    first_login: bool
 
 
 class ChangePasswordRequest(CamelModel):

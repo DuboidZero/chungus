@@ -7,12 +7,12 @@ from app.models.academic import Semester, Subject
 from app.models.project import Project
 from app.models.profile import Profile
 from app.models.achievement import Achievement
-from app.models.skill import TechnicalSkill
+from app.models.skill import TechnicalSkill, SoftSkill, Language
 from app.models.teacher_records import PrivateNote, AssessmentMark, ProjectMilestone, GuidanceCase
 from app.schemas.project import ProjectResponse
 from app.schemas.academic import SemesterResponse
 from app.core.dependencies import get_current_teacher, get_db, assert_mentors_student
-from app.core.grading import calculate_sgpa
+from app.core.grading import calculate_sgpa, calculate_cgpa, cgpa_to_percentage
 from app.core.teacher_helpers import student_cgpa, performance_tier
 
 router = APIRouter()
@@ -26,29 +26,52 @@ def list_my_students(db: Session = Depends(get_db), teacher: User = Depends(get_
     result = []
     for s in students:
         cgpa = student_cgpa(db, s.id)
+        profile = db.query(Profile).filter(Profile.user_id == s.id).first()
         result.append({
             "id": s.id, "prn": s.prn, "name": s.name, "cgpa": cgpa,
             "performanceTier": performance_tier(cgpa),
             "guidanceStatus": None, "lastInteractionDate": None,
+            "avatar": profile.avatar if profile else None,
         })
     return result
-
 
 @router.get("/students/{student_id}/overview")
 def student_overview(student_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
     assert_mentors_student(db, teacher.id, student_id)
-    profile = db.query(Profile).filter(Profile.user_id == student_id).first()
-    cgpa = student_cgpa(db, student_id)
+
+    # Counts
+    project_count = db.query(Project).filter(Project.user_id == student_id).count()
+    achievement_count = db.query(Achievement).filter(Achievement.user_id == student_id).count()
+    skill_count = (
+        db.query(TechnicalSkill).filter(TechnicalSkill.user_id == student_id).count()
+        + db.query(SoftSkill).filter(SoftSkill.user_id == student_id).count()
+        + db.query(Language).filter(Language.user_id == student_id).count()
+    )
+
+    # CGPA + trend + credits
     semesters = db.query(Semester).filter(Semester.user_id == student_id).order_by(Semester.semester_number).all()
+    all_subjects = []
     cgpa_trend = []
+    total_credits = 0
     for sem in semesters:
         subs = db.query(Subject).filter(Subject.semester_id == sem.id).all()
-        cgpa_trend.append({"semester": f"Sem {sem.semester_number}", "cgpa": calculate_sgpa(subs)})
-    active_projects = db.query(Project).filter(Project.user_id == student_id, Project.status == "Ongoing").count()
-    total_achievements = db.query(Achievement).filter(Achievement.user_id == student_id).count()
+        all_subjects.extend(subs)
+        total_credits += sum(s.credits for s in subs)
+        cgpa_trend.append({"semester": f"Sem {sem.semester_number}", "cgpa": calculate_sgpa(subs), "projected": None})
+
+    overall_cgpa = calculate_cgpa(all_subjects)
+
     return {
-        "profile": profile, "cgpa": cgpa, "cgpaTrend": cgpa_trend,
-        "radarSkills": [], "activeProjectsCount": active_projects, "totalAchievements": total_achievements,
+        "stats": {
+            "cgpa": overall_cgpa,
+            "percentage": cgpa_to_percentage(overall_cgpa) if overall_cgpa else 0,
+            "totalCredits": total_credits,
+            "projectCount": project_count,
+            "achievementCount": achievement_count,
+            "skillCount": skill_count,
+        },
+        "cgpaTrend": cgpa_trend,
+        "upcomingDeadlines": [],
     }
 
 
@@ -71,15 +94,6 @@ def student_academic_records(student_id: str, db: Session = Depends(get_db), tea
 def student_projects(student_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
     assert_mentors_student(db, teacher.id, student_id)
     return db.query(Project).filter(Project.user_id == student_id).all()
-
-
-@router.get("/projects/{project_id}", response_model=ProjectResponse)
-def project_details(project_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
-    project = db.query(Project).filter(Project.id == project_id).first()
-    if project is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
-    assert_mentors_student(db, teacher.id, project.user_id)
-    return project
 
 
 @router.get("/students/{student_id}/timeline")
@@ -121,3 +135,28 @@ def student_timeline(student_id: str, type: str | None = None, db: Session = Dep
         events = [e for e in events if e["type"] == type]
     events.sort(key=lambda e: e["date"], reverse=True)
     return events
+
+
+@router.get("/students/{student_id}")
+def get_student_basic(student_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
+    assert_mentors_student(db, teacher.id, student_id)
+    student = db.query(User).filter(User.id == student_id).first()
+    if student is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    profile = db.query(Profile).filter(Profile.user_id == student_id).first()
+    return {
+        "id": student.id,
+        "name": student.name,
+        "prn": student.prn,
+        "role": student.role,
+        "avatar": profile.avatar if profile else None,
+    }
+
+
+@router.get("/projects/{project_id}", response_model=ProjectResponse)
+def project_details(project_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+    assert_mentors_student(db, teacher.id, project.user_id)
+    return project

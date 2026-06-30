@@ -105,3 +105,9 @@ def add_milestone(project_id: str, payload: MilestoneCreate, db: Session = Depen
 @router.get("/projects/{project_id}/milestones", response_model=list[MilestoneResponse])
 def get_milestones(project_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
     return db.query(ProjectMilestone).filter(ProjectMilestone.project_id == project_id).all()
+
+@router.get("/students/{student_id}/notes", response_model=list[NoteResponse])
+def get_student_notes(student_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
+    assert_mentors_student(db, teacher.id, student_id)
+    notes = db.query(PrivateNote).filter(PrivateNote.student_id == student_id).all()
+    return [note_out(n, teacher.name) for n in notes]

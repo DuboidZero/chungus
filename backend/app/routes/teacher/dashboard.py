@@ -86,15 +86,30 @@ def teacher_dashboard(db: Session = Depends(get_db), teacher: User = Depends(get
     gpa_trend = [{"semester": f"Sem {n}", "averageGpa": round(t[0] / t[1], 2) if t[1] else 0}
                  for n, t in sorted(sem_totals.items())]
 
-    skill_map = {}
+    # Build skill heatmap grouped by domain → skills[{name, avgProficiency, studentCount}]
+    # heat[domain][skill_name] = [student_count, proficiency_sum]
+    heat = {}
     for s in students:
         for sk in db.query(TechnicalSkill).filter(TechnicalSkill.user_id == s.id).all():
-            skill_map.setdefault(sk.name, [0, 0])
-            skill_map[sk.name][0] += 1
-            skill_map[sk.name][1] += sk.proficiency
-    skill_heatmap = [{"skill": name, "studentCount": v[0],
-                      "averageProficiency": round(v[1] / v[0], 1) if v[0] else 0}
-                     for name, v in skill_map.items()]
+            domain = sk.domain or "Other"
+            heat.setdefault(domain, {})
+            heat[domain].setdefault(sk.name, [0, 0])
+            heat[domain][sk.name][0] += 1
+            heat[domain][sk.name][1] += sk.proficiency
+    skill_heatmap = [
+        {
+            "domain": domain,
+            "skills": [
+                {
+                    "name": name,
+                    "avgProficiency": round(v[1] / v[0], 1) if v[0] else 0,
+                    "studentCount": v[0],
+                }
+                for name, v in skills.items()
+            ],
+        }
+        for domain, skills in heat.items()
+    ]
 
     domain_map = {}
     for s in students:

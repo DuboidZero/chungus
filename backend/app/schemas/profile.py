@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import Field
+from pydantic import Field, field_validator
 from app.schemas.base import CamelModel
 
 
@@ -13,8 +13,14 @@ class ProfileResponse(CamelModel):
     location: str | None
     internship_preference: str
     preferred_radius: str | None
+    domain_interest: str | None          # ← THIS LINE must be present
     created_at: datetime
     updated_at: datetime
+
+    @field_validator("about_me", "phone", "location", "preferred_radius", "email", "domain_interest", mode="before")
+    @classmethod
+    def none_to_empty(cls, v):
+        return v if v is not None else ""
 
 
 class ProfileUpdate(CamelModel):
@@ -25,3 +31,4 @@ class ProfileUpdate(CamelModel):
     location: str | None = None
     internship_preference: str | None = None
     preferred_radius: str | None = None
+    domain_interest: str | None
