@@ -38,10 +38,15 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     /** Execute token refresh flow to acquire a new valid session token. */
-    // if (error.response?.status === 401) {
-    //   localStorage.removeItem('mit_access_token');
-    //   window.location.href = '/login';
-    // }
+    if (error.response?.status === 401) {
+      const originalUrl = error.config?.url;
+      if (originalUrl !== '/auth/login' && originalUrl !== '/auth/forgot-password') {
+        localStorage.removeItem('mit_access_token');
+        localStorage.removeItem('mit_refresh_token');
+        localStorage.removeItem('mit_mock_session');
+        window.location.href = '/login';
+      }
+    }
     return Promise.reject(error);
   },
 );

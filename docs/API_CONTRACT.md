@@ -28,7 +28,7 @@ All endpoints return JSON. All timestamps are ISO 8601 strings.
 
 **Request**
 ```json
-{ "prn": "1032210001", "password": "..." }
+{ "identifier": "1032210001", "password": "..." }
 ```
 
 **Response** `200 OK`
@@ -47,9 +47,33 @@ All endpoints return JSON. All timestamps are ISO 8601 strings.
     "updatedAt": "2026-06-28T06:00:00.000Z"
   },
   "accessToken": "eyJ...",
-  "refreshToken": "eyJ..."
+  "refreshToken": "eyJ...",
+  "firstLogin": true
 }
 ```
+
+### `POST /auth/change-password`
+
+**Request**
+```json
+{
+  "currentPassword": "oldPassword123",
+  "newPassword": "newSecurePassword456"
+}
+```
+
+**Response** `204 No Content`
+
+### `POST /auth/forgot-password`
+
+**Request**
+```json
+{
+  "identifier": "1032210001"
+}
+```
+
+**Response** `204 No Content`
 
 ### `POST /auth/logout`
 **Response** `204 No Content`

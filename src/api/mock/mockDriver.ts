@@ -21,6 +21,16 @@ const allAdmins:   any[] = getMockData(adminModules).map(a => JSON.parse(JSON.st
 
 const mockMilestones: any[] = [];
 
+// Track auth states in memory: { [userId]: { password, firstLogin } }
+const mockAuthStates: Record<string, { password: string; firstLogin: boolean }> = {};
+
+function getAuthState(userId: string) {
+  if (!mockAuthStates[userId]) {
+    mockAuthStates[userId] = { password: 'password123', firstLogin: false };
+  }
+  return mockAuthStates[userId];
+}
+
 /** UUID Generation Utility */
 function mockUuid(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -38,6 +48,48 @@ export const mockDriver = {
   },
 
   /** Authorization and User Context */
+  login(identifier: string, password: string) {
+    const user = allStudents.find(s => s.user.prn === identifier)?.user ||
+                 allTeachers.find(t => t.user.email === identifier)?.user ||
+                 allAdmins.find(a => a.user.email === identifier)?.user;
+
+    if (!user) throw new Error('Invalid credentials');
+    
+    const authState = getAuthState(user.id);
+    if (authState.password !== password) throw new Error('Invalid credentials');
+
+    return {
+      user,
+      accessToken: `mock-access-token-${user.id}`,
+      refreshToken: `mock-refresh-token-${user.id}`,
+      firstLogin: authState.firstLogin
+    };
+  },
+
+  changePassword(userId: string, current: string, newPass: string) {
+    const authState = getAuthState(userId);
+    if (authState.password !== current) throw new Error('Invalid current password');
+    authState.password = newPass;
+    authState.firstLogin = false;
+  },
+
+  forgotPassword(identifier: string) {
+    const user = allStudents.find(s => s.user.prn === identifier)?.user ||
+                 allTeachers.find(t => t.user.email === identifier)?.user ||
+                 allAdmins.find(a => a.user.email === identifier)?.user;
+
+    if (!user) throw new Error('User not found');
+    if (user.role === 'student') {
+      throw new Error('Password reset is unavailable for student accounts. Please contact your administrator.');
+    }
+    // Simulate sending email
+    return true;
+  },
+
+  getMe(userId: string) {
+    return this.getUserById(userId);
+  },
+
   getUsersByRole(role: 'student' | 'teacher' | 'admin') {
     if (role === 'student') return allStudents.map(s => s.user);
     if (role === 'teacher') return allTeachers.map(t => t.user);

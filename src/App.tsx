@@ -4,13 +4,17 @@ import { ThemeProvider } from './shared/providers/ThemeProvider';
 import { AuthProvider } from './auth/AuthContext';
 import { useAuth } from './auth/useAuth';
 import { ProtectedRoute } from './auth/ProtectedRoute';
+import { FirstLoginGuard } from './auth/FirstLoginGuard';
 
 import { AppLayout } from './shared/layout/AppLayout';
 import { studentNavigation } from './shared/layout/navigation/student';
 import { teacherNavigation } from './shared/layout/navigation/teacher';
 import { adminNavigation } from './shared/layout/navigation/admin';
 
-import { LoginPage } from './features/auth/LoginPage';
+import { LoginPage } from './features/auth/pages/LoginPage';
+import { ChangePasswordPage } from './features/auth/pages/ChangePasswordPage';
+import { ForgotPasswordPage } from './features/auth/pages/ForgotPasswordPage';
+import { UnauthorizedPage } from './features/auth/pages/UnauthorizedPage';
 import { TeacherDashboard } from './features/dashboard/TeacherDashboard';
 import { Dashboard } from './features/dashboard/Dashboard';
 import { AnalyticsDashboard } from './features/analytics/AnalyticsDashboard';
@@ -45,19 +49,21 @@ const Stub = ({ icon: I, title }: { icon: typeof User; title: string }) => (
 function RoleRouter() {
   const { user } = useAuth();
 
-  /** Redirect authenticated users away from the login screen. */
-  const loginElement = user ? <Navigate to="/" replace /> : <LoginPage />;
-
   return (
     <Routes>
-      <Route path="/login" element={loginElement} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/change-password" element={<ChangePasswordPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
       {/* Teacher Portal Routes */}
       {user?.role === 'teacher' && (
         <Route
           element={
-            <ProtectedRoute>
-              <AppLayout navigation={teacherNavigation} role="teacher" />
+            <ProtectedRoute roles={['teacher']}>
+              <FirstLoginGuard>
+                <AppLayout navigation={teacherNavigation} role="teacher" />
+              </FirstLoginGuard>
             </ProtectedRoute>
           }
         >
@@ -76,8 +82,10 @@ function RoleRouter() {
       {user?.role === 'admin' && (
         <Route
           element={
-            <ProtectedRoute>
-              <AppLayout navigation={adminNavigation} role="admin" />
+            <ProtectedRoute roles={['admin']}>
+              <FirstLoginGuard>
+                <AppLayout navigation={adminNavigation} role="admin" />
+              </FirstLoginGuard>
             </ProtectedRoute>
           }
         >
@@ -95,12 +103,14 @@ function RoleRouter() {
       {(!user || user.role === 'student') && (
         <Route
           element={
-            <ProtectedRoute>
-              <AcademicProvider>
-                <ProjectsProvider>
-                  <AppLayout navigation={studentNavigation} role="student" />
-                </ProjectsProvider>
-              </AcademicProvider>
+            <ProtectedRoute roles={['student']}>
+              <FirstLoginGuard>
+                <AcademicProvider>
+                  <ProjectsProvider>
+                    <AppLayout navigation={studentNavigation} role="student" />
+                  </ProjectsProvider>
+                </AcademicProvider>
+              </FirstLoginGuard>
             </ProtectedRoute>
           }
         >
