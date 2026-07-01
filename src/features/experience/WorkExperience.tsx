@@ -3,7 +3,7 @@ import { Plus, Edit2, Trash2, Briefcase } from 'lucide-react';
 import { DeleteConfirmModal } from '../../shared/ui/modal';
 import { ExperienceFormModal } from './ExperienceFormModal';
 import type { WorkExperienceEntry } from './types';
-import { getExperience } from '../../api/services/experience';
+import { getExperience, createExperience, updateExperience, deleteExperience } from '../../api/services/experience';
 import { Skeleton } from '../../shared/ui/loading-skeleton';
 
 export function WorkExperience() {
@@ -20,20 +20,31 @@ export function WorkExperience() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleSave = (entry: WorkExperienceEntry) => {
-    if (editingId) {
-      setEntries(entries.map(e => e.id === entry.id ? entry : e));
-    } else {
-      /** Enforce reverse chronological ordering when adding new experiences */
-      const newEntries = [...entries, entry].sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
-      setEntries(newEntries);
+  const handleSave = async (entry: WorkExperienceEntry) => {
+    try {
+      if (editingId) {
+        const saved = await updateExperience(entry.id, entry as any);
+        setEntries(entries.map(e => e.id === entry.id ? (saved as unknown as WorkExperienceEntry) : e));
+      } else {
+        const created = await createExperience(entry as any);
+        const newEntries = [...entries, created as unknown as WorkExperienceEntry]
+          .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+        setEntries(newEntries);
+      }
+    } catch (err) {
+      console.error('Failed to save experience', err);
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (deletingId) {
-      setEntries(entries.filter(e => e.id !== deletingId));
-      setDeletingId(null);
+      try {
+        await deleteExperience(deletingId);
+        setEntries(entries.filter(e => e.id !== deletingId));
+        setDeletingId(null);
+      } catch (err) {
+        console.error('Failed to delete experience', err);
+      }
     }
   };
 

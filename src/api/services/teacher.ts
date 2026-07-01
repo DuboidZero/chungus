@@ -23,7 +23,8 @@ export async function getStudentUser(studentId: string): Promise<{ id: string; n
     return user as any;
   }
   // Real backend: GET /users/:id — for teacher context
-  return null;
+  const response = await apiClient.get<{ id: string; name: string; prn: string; role: string; avatar?: string | null }>(`/teacher/students/${studentId}`);
+  return response.data;
 }
 
 export async function getAssignedStudents(params?: GetAssignedStudentsRequest): Promise<GetAssignedStudentsResponse> {

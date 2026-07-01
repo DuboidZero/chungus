@@ -30,6 +30,7 @@ interface StudentUser {
   name: string;
   prn: string;
   role: string;
+  avatar?: string | null;
 }
 
 export function StudentDetailView() {
@@ -119,10 +120,14 @@ export function StudentDetailView() {
       <Card className="border-slate-200 dark:border-brand-800">
         <CardContent className="p-5 flex flex-wrap items-center gap-6">
           {/* Avatar */}
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-2xl font-bold shrink-0">
-            {studentUser?.name?.charAt(0) ?? <User className="w-6 h-6" />}
+          {/* Avatar */}
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden">
+            {studentUser?.avatar ? (
+              <img src={studentUser.avatar} alt={studentUser.name} className="w-full h-full object-cover" />
+            ) : (
+              studentUser?.name?.charAt(0) ?? <User className="w-6 h-6" />
+            )}
           </div>
-
           {/* Core Info */}
           <div className="flex-1 min-w-0">
             <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">

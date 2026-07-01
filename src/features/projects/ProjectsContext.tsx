@@ -7,14 +7,18 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { ProjectEntry } from './types';
-import { generateId } from '../../shared/lib/id';
-import { getProjects } from '../../api/services/projects';
+import {
+  getProjects,
+  createProject,
+  updateProject as apiUpdateProject,
+  deleteProject as apiDeleteProject,
+} from '../../api/services/projects';
 
 interface ProjectsContextType {
   projects: ProjectEntry[];
-  addProject: (p: ProjectEntry) => void;
-  updateProject: (p: ProjectEntry) => void;
-  deleteProject: (id: string) => void;
+  addProject: (p: ProjectEntry) => Promise<void>;
+  updateProject: (p: ProjectEntry) => Promise<void>;
+  deleteProject: (id: string) => Promise<void>;
   getProject: (id: string) => ProjectEntry | undefined;
 }
 
@@ -29,18 +33,18 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
       .catch(console.error);
   }, []);
 
-  const addProject = (p: ProjectEntry) => {
-    /** Registers a new project via the backend service and synchronizes the local context. */
-    setProjects(prev => [{ ...p, id: generateId() }, ...prev]);
+  const addProject = async (p: ProjectEntry) => {
+    const created = await createProject(p as any);
+    setProjects(prev => [created as unknown as ProjectEntry, ...prev]);
   };
 
-  const updateProject = (p: ProjectEntry) => {
-    /** Updates the project details via the backend service and refreshes the context. */
-    setProjects(prev => prev.map(x => (x.id === p.id ? p : x)));
+  const updateProject = async (p: ProjectEntry) => {
+    const saved = await apiUpdateProject(p.id, p as any);
+    setProjects(prev => prev.map(x => (x.id === p.id ? (saved as unknown as ProjectEntry) : x)));
   };
 
-  const deleteProject = (id: string) => {
-    /** Removes the project via the backend service and drops it from the local context. */
+  const deleteProject = async (id: string) => {
+    await apiDeleteProject(id);
     setProjects(prev => prev.filter(x => x.id !== id));
   };
 

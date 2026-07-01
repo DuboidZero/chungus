@@ -3,7 +3,7 @@ import { useAuth } from '../../auth/useAuth';
 import { ProfileForm } from './ProfileForm';
 import { ProfileView } from './ProfileView';
 import type { StudentProfileData } from './types';
-import { getProfile } from '../../api/services/profile';
+import { getProfile, updateProfile } from '../../api/services/profile';
 import { Skeleton } from '../../shared/ui/loading-skeleton';
 
 /**
@@ -51,10 +51,15 @@ export function Profile() {
     );
   }
 
-  const handleSave = (data: StudentProfileData) => {
-    setProfileData(data);
-    setIsEditing(false);
-  };
+  const handleSave = async (data: StudentProfileData) => {
+      try {
+        const saved = await updateProfile(data);
+        setProfileData(saved as unknown as StudentProfileData);
+        setIsEditing(false);
+      } catch (err) {
+        console.error('Failed to save profile', err);
+      }
+    };
 
   return isEditing ? (
     <ProfileForm

@@ -17,6 +17,7 @@ export interface StudentSummary {
   performanceTier: PerformanceTier;
   guidanceStatus: GuidanceCaseStatus | null;
   lastInteractionDate: string | null;
+  avatar?: string | null;
 }
 
 export interface PrivateNote {
