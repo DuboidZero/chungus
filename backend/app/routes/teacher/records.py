@@ -82,9 +82,12 @@ def add_project_mark(project_id: str, payload: MarkCreate, db: Session = Depends
     db.add(mark); db.commit(); db.refresh(mark)
     return mark_out(mark, teacher.name)
 
-
 @router.get("/projects/{project_id}/marks", response_model=list[MarkResponse])
 def get_project_marks(project_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+    assert_mentors_student(db, teacher.id, project.user_id)
     marks = db.query(AssessmentMark).filter(AssessmentMark.project_id == project_id).all()
     return [mark_out(m, teacher.name) for m in marks]
 
@@ -104,6 +107,10 @@ def add_milestone(project_id: str, payload: MilestoneCreate, db: Session = Depen
 
 @router.get("/projects/{project_id}/milestones", response_model=list[MilestoneResponse])
 def get_milestones(project_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+    assert_mentors_student(db, teacher.id, project.user_id)
     return db.query(ProjectMilestone).filter(ProjectMilestone.project_id == project_id).all()
 
 @router.get("/students/{student_id}/notes", response_model=list[NoteResponse])

@@ -3,6 +3,9 @@ import os
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from dotenv import load_dotenv
+import secrets
+import string
+
 
 
 
@@ -56,3 +59,15 @@ def create_refresh_token(data: dict) -> str:
     expire = datetime.now(timezone.utc) + timedelta(days=7)  # 7-day refresh
     to_encode.update({"exp": expire, "type": "refresh"})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+def generate_temp_password(length: int = 10) -> str:
+    """Generate a cryptographically secure random temporary password.
+    Used for admin-initiated password resets."""
+    alphabet = string.ascii_letters + string.digits
+    # ensure at least one lowercase, one uppercase, one digit
+    while True:
+        pwd = "".join(secrets.choice(alphabet) for _ in range(length))
+        if (any(c.islower() for c in pwd)
+                and any(c.isupper() for c in pwd)
+                and any(c.isdigit() for c in pwd)):
+            return pwd
