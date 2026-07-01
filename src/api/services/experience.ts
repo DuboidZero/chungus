@@ -1,7 +1,6 @@
 /**
  * Work experience service.
  * Wraps API calls for experience CRUD endpoints.
- * TODO: Implement when backend is ready.
  */
 
 import { apiClient } from '../client';

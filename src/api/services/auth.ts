@@ -1,7 +1,6 @@
 /**
  * Auth service.
  * Wraps API calls for authentication endpoints.
- * TODO: Implement when backend auth is ready.
  */
 
 import { apiClient } from '../client';

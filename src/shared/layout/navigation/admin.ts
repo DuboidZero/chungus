@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, Users, Building2, BarChart3, Shield, type LucideIcon
+  LayoutDashboard, Users, Building2, UploadCloud, type LucideIcon
 } from 'lucide-react';
 
 export interface NavItem {
@@ -26,8 +26,7 @@ export const adminNavigation: NavGroup[] = [
     items: [
       { label: 'Users', path: '/users', icon: Users },
       { label: 'Cohorts', path: '/cohorts', icon: Building2 },
-      { label: 'Analytics', path: '/analytics', icon: BarChart3 },
-      { label: 'Roles & Permissions', path: '/permissions', icon: Shield },
+      { label: 'Bulk Upload', path: '/bulk-upload', icon: UploadCloud },
     ],
   },
 ];

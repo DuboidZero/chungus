@@ -68,6 +68,9 @@ export function Profile() {
       data={profileData}
       name={user.name}
       department={user.department ?? ''}
+      batch={user.batch}
+      academicYear={user.academicYear}
+      academicMentorName={user.academicMentorName}
       onEdit={() => setIsEditing(true)}
     />
   );

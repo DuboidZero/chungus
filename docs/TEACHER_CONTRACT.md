@@ -252,6 +252,10 @@ Only the creating teacher or Admin may delete.
 
 Returns all projects created by a specific student. Response is a list of Project objects.
 
+### `GET /teacher/projects`
+
+Returns all projects where `mentorId` matches the authenticated teacher. Response is a list of Project objects.
+
 ### `GET /teacher/projects/:projectId`
 
 Returns full details for a specific project. Response is a single Project object.

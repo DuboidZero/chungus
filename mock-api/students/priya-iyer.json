@@ -12,7 +12,8 @@
     "department": "Computer Engineering",
     "createdAt": "2023-08-01T10:00:00Z",
     "updatedAt": "2026-06-25T14:30:00Z",
-    "batch": "2023-2027"
+    "batch": "2023-2027",
+    "academicYear": "SY"
   },
   "profile": {
     "id": "prf-d8f3a9b2",
@@ -39,7 +40,7 @@
     "cgpaTrend": [
       {
         "semester": "Sem 1",
-        "cgpa": 8.0,
+        "cgpa": 8,
         "projected": null
       },
       {
@@ -59,7 +60,7 @@
       },
       {
         "semester": "Sem 5",
-        "cgpa": 9.0,
+        "cgpa": 9,
         "projected": null
       },
       {

@@ -1,7 +1,6 @@
 /**
  * Academic records service.
  * Wraps API calls for semester CRUD endpoints.
- * TODO: Implement when backend is ready.
  */
 
 import { apiClient } from '../client';

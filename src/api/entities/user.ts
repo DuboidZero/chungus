@@ -12,7 +12,14 @@ export interface User {
   email: string;
   role: Role;
   department?: string;
+  batch?: string;
+  academicYear?: string;
   avatar?: string;
+  cohortId?: string;
+  academicMentorId?: string | null;
+  academicMentorName?: string | null;
+  deactivated?: boolean;
+  firstLogin?: boolean;
   createdAt: string;
   updatedAt: string;
 }

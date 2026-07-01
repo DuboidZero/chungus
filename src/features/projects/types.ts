@@ -18,7 +18,8 @@ export interface ProjectEntry {
   techStack: string[];
   imageUrl?: string;
   type: 'College Project' | 'Personal Project' | 'Internship Project';
-  mentorName?: string;
+  mentorId?: string | null;
+  mentorName?: string | null;
   status: 'Ongoing' | 'Completed';
   startDate?: string;
   endDate?: string;

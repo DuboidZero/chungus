@@ -1,7 +1,6 @@
 /**
  * Skills service.
  * Wraps API calls for skills CRUD endpoints.
- * TODO: Implement when backend is ready.
  */
 
 import { apiClient } from '../client';

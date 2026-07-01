@@ -12,7 +12,8 @@
     "department": "Computer Engineering",
     "createdAt": "2023-08-01T10:00:00Z",
     "updatedAt": "2026-06-25T14:30:00Z",
-    "batch": "2022-2026"
+    "batch": "2022-2026",
+    "academicYear": "SY"
   },
   "profile": {
     "id": "prf-e5a0b6c9",
@@ -30,7 +31,7 @@
   "dashboard": {
     "stats": {
       "cgpa": 4.8,
-      "percentage": 48.0,
+      "percentage": 48,
       "totalCredits": 90,
       "projectCount": 0,
       "achievementCount": 0,
@@ -49,7 +50,7 @@
       },
       {
         "semester": "Sem 3",
-        "cgpa": 5.0,
+        "cgpa": 5,
         "projected": null
       },
       {

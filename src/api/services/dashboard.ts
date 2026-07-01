@@ -1,7 +1,6 @@
 /**
  * Dashboard service.
  * Wraps API calls for dashboard data aggregation endpoints.
- * TODO: Implement when backend is ready.
  */
 
 import { apiClient } from '../client';

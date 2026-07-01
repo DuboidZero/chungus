@@ -7,6 +7,7 @@ import { Select } from '../../shared/ui/select';
 import { Textarea } from '../../shared/ui/textarea';
 import type { ProjectEntry, ProjectType, ProjectStatus } from './types';
 import { useProjects } from './ProjectsContext';
+import { getTeachers } from '../../api/services/users';
 
 type Errors = Partial<Record<keyof ProjectEntry | 'techStack', string>>;
 
@@ -30,7 +31,12 @@ export function ProjectForm() {
   const [techInput, setTechInput] = useState('');
   const [errors, setErrors] = useState<Errors>({});
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [teachers, setTeachers] = useState<{id: string, name: string}[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    getTeachers().then(setTeachers).catch(console.error);
+  }, []);
 
   useEffect(() => {
     if (isEditing && id) {
@@ -268,15 +274,23 @@ export function ProjectForm() {
 
             {/* Progressive Disclosure: Mentor only for College Project */}
             <div className={`transition-all duration-300 ${data.type === 'College Project' ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-              <Label htmlFor="proj-mentor">Mentor Name</Label>
-              <input
-                id="proj-mentor"
-                type="text"
-                placeholder="e.g. Prof. Sharma"
-                value={data.mentorName || ''}
-                onChange={e => setField('mentorName', e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-950 text-sm focus:outline-none focus:border-brand-500"
-              />
+              <Label htmlFor="proj-mentor">Project Mentor</Label>
+              <Select 
+                value={data.mentorId || ''} 
+                onChange={e => {
+                  const selectedTeacher = teachers.find(t => t.id === e.target.value);
+                  setData(prev => ({
+                    ...prev,
+                    mentorId: selectedTeacher?.id || null,
+                    mentorName: selectedTeacher?.name || null
+                  }));
+                }}
+              >
+                <option value="">Select a Mentor...</option>
+                {teachers.map(t => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
+              </Select>
             </div>
           </div>
 

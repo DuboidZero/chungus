@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Settings, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { NavGroup } from './navigation/student';
 import type { Role } from '../../shared/permissions/roles';
 
@@ -82,19 +82,6 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarPr
 
       {/* Footer */}
       <div className="p-3 border-t border-brand-800 space-y-1">
-        <NavLink
-          to="/settings"
-          title="Settings"
-          className={({ isActive }) =>
-            `flex items-center space-x-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${
-              isActive ? 'bg-brand-800 text-white' : 'text-slate-300 hover:bg-brand-800 hover:text-white'
-            } ${collapsed ? 'justify-center' : ''}`
-          }
-        >
-          <Settings className="w-5 h-5 shrink-0" />
-          {!collapsed && <span>Settings</span>}
-        </NavLink>
-
         <button
           onClick={() => setCollapsed(!collapsed)}
           title={collapsed ? 'Expand' : 'Collapse'}

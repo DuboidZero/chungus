@@ -2,7 +2,6 @@
  * Student Dashboard — personal academic + portfolio view.
  *
  * All data is sourced from the API contract.
- * TODO: Call getStudentDashboard() when backend is ready.
  */
 import { useState, useEffect } from 'react';
 import { getStudentDashboard } from '../../api/services/dashboard';

@@ -17,6 +17,10 @@ import { ForgotPasswordPage } from './features/auth/pages/ForgotPasswordPage';
 import { UnauthorizedPage } from './features/auth/pages/UnauthorizedPage';
 import { TeacherDashboard } from './features/dashboard/TeacherDashboard';
 import { Dashboard } from './features/dashboard/Dashboard';
+import { AdminDashboard } from './features/admin/pages/AdminDashboard';
+import { UsersPage } from './features/admin/pages/UsersPage';
+import { CohortsPage } from './features/admin/pages/CohortsPage';
+import { BulkUploadPage } from './features/admin/pages/BulkUploadPage';
 import { AnalyticsDashboard } from './features/analytics/AnalyticsDashboard';
 import { MyStudentsView } from './features/teacher/MyStudentsView';
 import { StudentDetailView } from './features/teacher/StudentDetailView';
@@ -31,15 +35,6 @@ import { WorkExperience } from './features/experience/WorkExperience';
 import { Achievements } from './features/achievements/Achievements';
 import { AcademicProvider } from './features/academic/AcademicContext';
 import { ProjectsProvider } from './features/projects/ProjectsContext';
-import { EmptyState } from './shared/ui/empty-state';
-import {
-  User, Users, BarChart3, Building2, Shield,
-} from 'lucide-react';
-
-/** Placeholder components for unfinished feature routes. */
-const Stub = ({ icon: I, title }: { icon: typeof User; title: string }) => (
-  <EmptyState icon={I} title={title} description="Coming soon." />
-);
 
 /**
  * Role-based routing component.
@@ -73,7 +68,6 @@ function RoleRouter() {
           <Route path="students/:studentId/projects/:projectId" element={<ProjectDetail />} />
           <Route path="assessments" element={<AssessmentsView />} />
           <Route path="analytics"   element={<AnalyticsDashboard />} />
-          <Route path="settings"    element={<Stub icon={User}     title="Settings" />} />
           <Route path="*"           element={<Navigate to="/" replace />} />
         </Route>
       )}
@@ -89,12 +83,10 @@ function RoleRouter() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Dashboard />} />
-          <Route path="users"       element={<Stub icon={Users}     title="Users" />} />
-          <Route path="cohorts"     element={<Stub icon={Building2} title="Cohorts" />} />
-          <Route path="analytics"   element={<Stub icon={BarChart3} title="Analytics" />} />
-          <Route path="permissions" element={<Stub icon={Shield}    title="Roles & Permissions" />} />
-          <Route path="settings"    element={<Stub icon={User}      title="Settings" />} />
+          <Route index element={<AdminDashboard />} />
+          <Route path="users"       element={<UsersPage />} />
+          <Route path="cohorts"     element={<CohortsPage />} />
+          <Route path="bulk-upload" element={<BulkUploadPage />} />
           <Route path="*"           element={<Navigate to="/" replace />} />
         </Route>
       )}
@@ -124,7 +116,6 @@ function RoleRouter() {
           <Route path="projects/:id/edit" element={<ProjectForm />} />
           <Route path="work-experience" element={<WorkExperience />} />
           <Route path="achievements"    element={<Achievements />} />
-          <Route path="settings"        element={<Stub icon={User}          title="Settings" />} />
           <Route path="*"               element={<Navigate to="/" replace />} />
         </Route>
       )}

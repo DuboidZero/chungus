@@ -3,7 +3,6 @@
  * Provides semester records state management.
  *
  * Mock data (INITIAL_SEMESTERS) has been removed.
- * TODO: Fetch from API via getAcademicRecords() when backend is ready.
  */
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';

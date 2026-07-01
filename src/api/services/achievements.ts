@@ -1,7 +1,6 @@
 /**
  * Achievements service.
  * Wraps API calls for achievement CRUD endpoints.
- * TODO: Implement when backend is ready.
  */
 
 import { apiClient } from '../client';

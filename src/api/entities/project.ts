@@ -14,7 +14,8 @@ export interface Project {
   techStack: string[];
   imageUrl?: string;
   type: ProjectType;
-  mentorName?: string;
+  mentorId?: string | null;
+  mentorName?: string | null;
   status: ProjectStatus;
   startDate?: string;
   endDate?: string;

@@ -4,6 +4,7 @@
  */
 import { useState, useEffect } from 'react';
 import { getTeacherDashboard } from '../../api/services/dashboard';
+import { getMentoredProjects } from '../../api/services/teacher';
 import { Card, CardContent } from '../../shared/ui/card';
 
 import type { User } from '../../shared/permissions/roles';
@@ -14,7 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import { SearchFilterBar, type FilterState } from '../teacher/components/SearchFilterBar';
 import { SupportNeededPanel } from '../teacher/components/SupportNeededPanel';
 import { GuidanceCasesPanel } from '../teacher/components/GuidanceCasesPanel';
-import { Users, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Users, TrendingUp, AlertTriangle, FileCode2 } from 'lucide-react';
+import type { Project } from '../../api/entities/project';
 
 interface Props { user: User }
 
@@ -22,11 +24,18 @@ export function TeacherDashboard({ user }: Props) {
   const navigate = useNavigate();
 
   const [data, setData] = useState<TeacherDashboardResponse | null>(null);
+  const [mentoredProjects, setMentoredProjects] = useState<(Project & { studentName: string; studentPrn: string })[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getTeacherDashboard()
-      .then(setData)
+    Promise.all([
+      getTeacherDashboard(),
+      getMentoredProjects()
+    ])
+      .then(([dashData, projects]) => {
+        setData(dashData);
+        setMentoredProjects(projects);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -94,6 +103,58 @@ export function TeacherDashboard({ user }: Props) {
           <StatCard label="Underperforming" value={data.stats.underperformingCount.toString()} icon={AlertTriangle} color="text-red-600 dark:text-red-400" bg="bg-red-50 dark:bg-red-900/20" onClick={() => navigate('/students?performanceTier=Underperforming')} />
         </div>
       </div>
+
+      {/* 5. Mentored Projects */}
+      <Card>
+        <div className="px-6 py-5 border-b border-slate-100 dark:border-brand-800 flex items-center gap-3">
+          <div className="p-2 bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 rounded-lg">
+            <FileCode2 className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Mentored Projects</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">College projects where you are the assigned Project Mentor.</p>
+          </div>
+        </div>
+        <div className="p-0 overflow-x-auto">
+          {mentoredProjects.length > 0 ? (
+            <table className="w-full text-left border-collapse min-w-[600px]">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-brand-900/50 border-b border-slate-200 dark:border-brand-800 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
+                  <th className="p-4">Project Name</th>
+                  <th className="p-4">Student</th>
+                  <th className="p-4">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mentoredProjects.map((p, i) => (
+                  <tr key={p.id || i} className="border-b border-slate-100 dark:border-brand-800/50 hover:bg-slate-50 dark:hover:bg-brand-900/30 transition-colors">
+                    <td className="p-4 font-medium text-slate-900 dark:text-slate-100">{p.name}</td>
+                    <td className="p-4 text-slate-600 dark:text-slate-400">
+                      <div className="flex flex-col">
+                        <span className="font-medium text-slate-900 dark:text-slate-100">{p.studentName}</span>
+                        <span className="text-xs">{p.studentPrn}</span>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
+                        p.status === 'Completed' 
+                          ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' 
+                          : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                      }`}>
+                        {p.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="p-8 text-center text-slate-500">
+              No mentored projects currently assigned.
+            </div>
+          )}
+        </div>
+      </Card>
     </div>
   );
 }

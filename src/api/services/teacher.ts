@@ -167,6 +167,18 @@ export async function getTeacherProjectDetail(projectId: string): Promise<Projec
   return response.data;
 }
 
+export async function getMentoredProjects(): Promise<(Project & { studentName: string; studentPrn: string })[]> {
+  if (USE_MOCK) {
+    const teacherId = mockDriver.getCurrentUserId();
+    if (!teacherId) throw new Error("No mocked teacher session");
+    const projects = mockDriver.getMentoredProjects(teacherId);
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return projects as any;
+  }
+  const response = await apiClient.get<(Project & { studentName: string; studentPrn: string })[]>(API.TEACHER.PROJECTS);
+  return response.data;
+}
+
 export async function createProjectMark(projectId: string, data: CreateProjectMarkRequest): Promise<CreateMarkResponse> {
   if (USE_MOCK) {
     const teacherId = mockDriver.getCurrentUserId();

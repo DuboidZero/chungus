@@ -1,7 +1,6 @@
 /**
  * Projects service.
  * Wraps API calls for project CRUD endpoints.
- * TODO: Implement when backend is ready.
  */
 
 import { apiClient } from '../client';

@@ -3,7 +3,6 @@
  * Provides system-wide statistics, global cohort overview, and platform activity logs.
  *
  * All data is sourced from the API contract.
- * TODO: Call getAdminDashboard() when backend is ready.
  */
 import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../shared/ui/card';

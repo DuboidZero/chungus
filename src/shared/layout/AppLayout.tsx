@@ -23,7 +23,7 @@ export function AppLayout({ navigation, role }: AppLayoutProps) {
       />
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar />
-        <main className="flex-1 p-8 overflow-y-auto">
+        <main className="flex-1 p-6 md:p-8 lg:p-10 pt-10 md:pt-12 lg:pt-16 overflow-y-auto">
           <div className="max-w-6xl mx-auto">
             <Outlet />
           </div>

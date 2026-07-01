@@ -9,10 +9,13 @@ interface Props {
   data: StudentProfileData;
   name: string;
   department: string;
+  batch?: string;
+  academicYear?: string;
+  academicMentorName?: string | null;
   onEdit: () => void;
 }
 
-export function ProfileView({ data, name, department, onEdit }: Props) {
+export function ProfileView({ data, name, department, batch, academicYear, academicMentorName, onEdit }: Props) {
   const completion = calcCompletion(data);
   const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2);
 
@@ -39,7 +42,16 @@ export function ProfileView({ data, name, department, onEdit }: Props) {
               )}
               <div>
                 <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{name}</h1>
-                <p className="text-slate-500 dark:text-slate-400 mt-0.5">{department}</p>
+                <p className="text-slate-500 dark:text-slate-400 mt-0.5">
+                  {department}
+                  {batch && ` • Batch ${batch}`}
+                  {academicYear && ` • ${academicYear}`}
+                </p>
+                {academicMentorName && (
+                  <p className="text-brand-600 dark:text-brand-400 mt-1 text-sm font-medium">
+                    Academic Mentor: {academicMentorName}
+                  </p>
+                )}
 
                 {/* Quick contact chips */}
                 <div className="flex flex-wrap items-center gap-2 mt-3">

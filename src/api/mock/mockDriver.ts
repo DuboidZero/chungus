@@ -21,6 +21,26 @@ const allAdmins:   any[] = getMockData(adminModules).map(a => JSON.parse(JSON.st
 
 const mockMilestones: any[] = [];
 
+// Admin Cohorts
+const allCohorts: any[] = [
+  {
+    id: 'cohort-1',
+    academicYear: 'FY',
+    department: 'Computer Engineering',
+    studentCount: 82,
+    academicMentorId: null,
+    academicMentorName: null
+  },
+  {
+    id: 'cohort-2',
+    academicYear: 'SY',
+    department: 'Computer Engineering',
+    studentCount: 75,
+    academicMentorId: '1032210000',
+    academicMentorName: 'Dr. Anand Patel'
+  }
+];
+
 // Track auth states in memory: { [userId]: { password, firstLogin } }
 const mockAuthStates: Record<string, { password: string; firstLogin: boolean }> = {};
 
@@ -54,6 +74,7 @@ export const mockDriver = {
                  allAdmins.find(a => a.user.email === identifier)?.user;
 
     if (!user) throw new Error('Invalid credentials');
+    if (user.deactivated) throw new Error('This account has been deactivated. Please contact the administrator.');
     
     const authState = getAuthState(user.id);
     if (authState.password !== password) throw new Error('Invalid credentials');
@@ -97,12 +118,42 @@ export const mockDriver = {
   },
 
   getUserById(id: string) {
-    return (
+    const user = (
       allStudents.find(s => s.user.id === id)?.user ||
       allTeachers.find(t => t.user.id === id)?.user ||
       allAdmins.find(a => a.user.id === id)?.user ||
       null
     );
+    if (user?.role === 'student') {
+      const cohort = allCohorts[1]; // mock assign SY
+      return { ...user, cohortId: cohort.id, academicMentorId: cohort.academicMentorId, academicMentorName: cohort.academicMentorName };
+    }
+    return user;
+  },
+
+  updateUser(id: string, data: any) {
+    const user = allStudents.find(s => s.user.id === id)?.user ||
+                 allTeachers.find(t => t.user.id === id)?.user ||
+                 allAdmins.find(a => a.user.id === id)?.user;
+    if (!user) throw new Error('User not found');
+    Object.assign(user, data);
+    return this.getUserById(id);
+  },
+
+  resetUserPassword(id: string) {
+    const authState = getAuthState(id);
+    authState.password = 'password123'; // DEFAULT_PASSWORD
+    authState.firstLogin = true;
+    return true;
+  },
+
+  toggleUserStatus(id: string) {
+    const user = allStudents.find(s => s.user.id === id)?.user ||
+                 allTeachers.find(t => t.user.id === id)?.user ||
+                 allAdmins.find(a => a.user.id === id)?.user;
+    if (!user) throw new Error('User not found');
+    user.deactivated = !user.deactivated;
+    return this.getUserById(id);
   },
 
   /** Student Entity Read Operations */
@@ -120,6 +171,34 @@ export const mockDriver = {
   },
   getProjects(userId: string) {
     return allStudents.find(s => s.user.id === userId)?.projects ?? [];
+  },
+  
+  createProject(userId: string, data: any) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    const newProject = {
+      id: `proj-${mockUuid()}`,
+      ...data,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    if (!student.projects) student.projects = [];
+    student.projects.push(newProject);
+    return newProject;
+  },
+
+  updateProject(userId: string, projectId: string, data: any) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    const idx = student.projects.findIndex((p: any) => p.id === projectId);
+    if (idx === -1) throw new Error('Project not found');
+    const updated = {
+      ...student.projects[idx],
+      ...data,
+      updatedAt: new Date().toISOString(),
+    };
+    student.projects[idx] = updated;
+    return updated;
   },
   getExperience(userId: string) {
     return allStudents.find(s => s.user.id === userId)?.experience ?? [];
@@ -459,6 +538,36 @@ export const mockDriver = {
     return ms;
   },
 
+  /** Global Data Accessors */
+  getAllTeachers() {
+    return allTeachers.map(t => ({
+      id: t.user.id,
+      name: t.user.name,
+      email: t.user.email,
+      role: t.user.role
+    }));
+  },
+
+  getAllCohorts() {
+    return [...allCohorts];
+  },
+
+  updateCohortMentor(cohortId: string, teacherId: string | null) {
+    const cohort = allCohorts.find(c => c.id === cohortId);
+    if (!cohort) throw new Error('Cohort not found');
+    
+    if (teacherId === null) {
+      cohort.academicMentorId = null;
+      cohort.academicMentorName = null;
+    } else {
+      const teacher = allTeachers.find(t => t.user.id === teacherId);
+      if (!teacher) throw new Error('Teacher not found');
+      cohort.academicMentorId = teacher.user.id;
+      cohort.academicMentorName = teacher.user.name;
+    }
+    return { ...cohort };
+  },
+
   getProjectMilestones(projectId: string) {
     return mockMilestones.filter(m => m.projectId === projectId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   },
@@ -475,4 +584,22 @@ export const mockDriver = {
     }
     return projectMarks.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   },
+
+  getMentoredProjects(teacherId: string) {
+    const mentoredProjects: any[] = [];
+    for (const student of allStudents) {
+      if (student.projects) {
+        for (const p of student.projects) {
+          if (p.mentorId === teacherId) {
+            mentoredProjects.push({
+              ...p,
+              studentName: student.user.name,
+              studentPrn: student.user.prn
+            });
+          }
+        }
+      }
+    }
+    return mentoredProjects.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  }
 };

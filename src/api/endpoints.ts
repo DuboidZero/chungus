@@ -17,6 +17,8 @@ export const API = {
 
   // ─── Student-owned resources (under /me) ─────────────
   ME: '/me',
+  
+  TEACHERS: '/teachers',
 
   DASHBOARD: '/me/dashboard',
 
@@ -49,14 +51,16 @@ export const API = {
     STUDENT_NOTES: (id: string) => `/teacher/students/${id}/notes` as const,
     STUDENT_MARKS: (id: string) => `/teacher/students/${id}/marks` as const,
     STUDENT_PROJECTS: (id: string) => `/teacher/students/${id}/projects` as const,
+    PROJECTS: '/teacher/projects',
     PROJECT_DETAIL: (id: string) => `/teacher/projects/${id}` as const,
     PROJECT_MARKS: (id: string) => `/teacher/projects/${id}/marks` as const,
     PROJECT_MILESTONES: (id: string) => `/teacher/projects/${id}/milestones` as const,
     GUIDANCE_CASE: (id: string) => `/teacher/guidance-cases/${id}` as const,
   },
 
-  // ─── Admin endpoints (future) ────────────────────────
-  // ADMIN_DASHBOARD: '/admin/dashboard',
-  // USERS:           '/users',
-  // COHORTS:         '/cohorts',
+  // ─── Admin endpoints ────────────────────────
+  ADMIN: {
+    COHORTS: '/admin/cohorts',
+    COHORT: (id: string) => `/admin/cohorts/${id}` as const,
+  }
 } as const;

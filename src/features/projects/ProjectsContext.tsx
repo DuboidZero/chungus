@@ -3,7 +3,6 @@
  * Provides project portfolio state management.
  *
  * Mock data (INITIAL_PROJECTS) has been removed.
- * TODO: Fetch from API via getProjects() when backend is ready.
  */
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';

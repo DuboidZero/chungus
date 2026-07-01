@@ -12,7 +12,8 @@
     "department": "Computer Engineering",
     "createdAt": "2023-08-01T10:00:00Z",
     "updatedAt": "2026-06-25T14:30:00Z",
-    "batch": "2022-2026"
+    "batch": "2022-2026",
+    "academicYear": "SY"
   },
   "profile": {
     "id": "prf-c7e2f8a1-4b3d-4e9a-8f5c-2d1e6b7a9c04",

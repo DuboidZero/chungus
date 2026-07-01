@@ -1,7 +1,6 @@
 /**
  * Profile service.
  * Wraps API calls for student profile endpoints.
- * TODO: Implement when backend is ready.
  */
 
 import { apiClient } from '../client';
