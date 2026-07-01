@@ -9,7 +9,6 @@ import { Label } from '../../shared/ui/label';
 import { Select } from '../../shared/ui/select';
 import { Textarea } from '../../shared/ui/textarea';
 import type { ProjectEntry, ProjectType, ProjectStatus } from './types';
-import { useProjects } from './ProjectsContext';
 import { getTeachers } from '../../api/services/users';
 
 type Errors = Partial<Record<keyof ProjectEntry | 'techStack', string>>;
@@ -35,6 +34,7 @@ export function ProjectForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [teachers, setTeachers] = useState<{id: string, name: string}[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
