@@ -6,6 +6,7 @@ from app.models.mentor import MentorAssignment
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
+from sqlalchemy.exc import SQLAlchemyError
 from openpyxl import load_workbook
 
 from app.models.user import User
@@ -22,6 +23,40 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 # ============================================================
+#  Shared import helpers
+# ============================================================
+def _open_sheet(contents: bytes):
+    try:
+        wb = load_workbook(BytesIO(contents))
+    except Exception:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Excel file")
+    return wb.active
+
+
+def _student_by_prn(db: Session, prn) -> User | None:
+    if prn is None:
+        return None
+    return db.query(User).filter(User.prn == str(prn).strip(), User.role == "student").first()
+
+
+def _parse_date(v):
+    """Accept a date, 'YYYY-MM-DD', or 'YYYY-MM'. Return a date or None."""
+    if v is None or v == "":
+        return None
+    if hasattr(v, "date"):        # datetime -> date
+        return v.date()
+    if isinstance(v, str):
+        s = v.strip()
+        if len(s) == 7 and s[4] == "-":   # YYYY-MM
+            s = s + "-01"
+        try:
+            return datetime.strptime(s, "%Y-%m-%d").date()
+        except ValueError:
+            raise ValueError(f"invalid date '{v}' (use YYYY-MM-DD)")
+    raise ValueError(f"invalid date '{v}'")
+
+
+# ============================================================
 #  Bulk student account upload
 #  Columns: A=PRN  B=Full Name  C=Year of Birth  D=Batch  E=Branch
 # ============================================================
@@ -31,18 +66,13 @@ async def bulk_upload_students(
     db: Session = Depends(get_db),
     admin: User = Depends(get_current_admin),
 ):
-    contents = await file.read()
-    try:
-        workbook = load_workbook(BytesIO(contents))
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Excel file")
-
-    sheet = workbook.active
+    sheet = _open_sheet(await file.read())
 
     created = 0
     skipped = 0
     errors = []
     seeded_students = []
+    seen_prns = set()   # track PRNs within THIS upload to catch in-file duplicates
 
     for row_num, row in enumerate(sheet.iter_rows(min_row=2, values_only=True), start=2):
         if row is None or all(cell is None for cell in row):
@@ -56,7 +86,8 @@ async def bulk_upload_students(
 
         prn = str(prn).strip()
 
-        if db.query(User).filter(User.prn == prn).first():
+        # Skip if PRN already in DB OR already seen earlier in this same file
+        if prn in seen_prns or db.query(User).filter(User.prn == prn).first():
             skipped += 1
             continue
 
@@ -72,13 +103,16 @@ async def bulk_upload_students(
                 must_change_password=True,
             )
             db.add(user)
+            db.flush()  # surface any DB error now, on this row
+            seen_prns.add(prn)
             created += 1
             seeded_students.append(SeededStudent(
                 prn=prn,
                 full_name=str(full_name),
                 initial_password=initial_password,
             ))
-        except Exception as e:
+        except (ValueError, TypeError, SQLAlchemyError) as e:
+            db.rollback()
             errors.append(f"Row {row_num}: {str(e)}")
 
     db.commit()
@@ -102,14 +136,9 @@ async def bulk_upload_marks(
     db: Session = Depends(get_db),
     admin: User = Depends(get_current_admin),
 ):
-    contents = await file.read()
-    try:
-        workbook = load_workbook(BytesIO(contents))
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Excel file")
-
-    sheet = workbook.active
-    subjects_added = 0
+    sheet = _open_sheet(await file.read())
+    created = 0
+    skipped = 0
     errors = []
     semester_cache = {}  # (user_id, semester_number) -> Semester
 
@@ -154,12 +183,16 @@ async def bulk_upload_marks(
                 grade=None,  # derived from marks % by the grading calculator
                 credits=int(credits) if credits else 0,
             ))
-            subjects_added += 1
-        except Exception as e:
+            db.flush()
+            created += 1
+        except (ValueError, TypeError, SQLAlchemyError) as e:
+            db.rollback()
+            semester_cache.clear()  # cached semester objects are invalid after rollback
             errors.append(f"Row {row_num}: {str(e)}")
 
     db.commit()
-    return {"subjectsAdded": subjects_added, "errors": errors}
+    # keep subjectsAdded for backwards-compat, add created for consistency with other imports
+    return {"created": created, "subjectsAdded": created, "skipped": 0, "errors": errors}
 
 
 # ============================================================
@@ -325,7 +358,6 @@ async def toggle_user_status(
     return ToggleStatusResponse(id=user.id, deactivated=not user.is_active)
 
 
-
 # ============================================================
 #  Admin: Academic Records CRUD (per admin contract)
 #  POST/PATCH/DELETE /admin/students/:id/academic-records
@@ -435,43 +467,14 @@ async def admin_delete_academic_record(
     db.commit()
 
 
-    # ============================================================
+# ============================================================
 #  Bulk imports — Skills, Projects, Achievements, Experience
 #  Every Excel's first column is PRN (links row to a student).
 #  Remaining columns mirror the manual-entry API fields.
 #  All return {created, skipped, errors[]}.
+#  Each row is flushed independently so one bad row does not
+#  sink the whole upload (per-row resilience).
 # ============================================================
-
-def _open_sheet(contents: bytes):
-    try:
-        wb = load_workbook(BytesIO(contents))
-    except Exception:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Excel file")
-    return wb.active
-
-
-def _student_by_prn(db: Session, prn) -> User | None:
-    if prn is None:
-        return None
-    return db.query(User).filter(User.prn == str(prn).strip(), User.role == "student").first()
-
-
-def _parse_date(v):
-    """Accept a date, 'YYYY-MM-DD', or 'YYYY-MM'. Return a date or None."""
-    if v is None or v == "":
-        return None
-    if hasattr(v, "date"):        # datetime -> date
-        return v.date()
-    if isinstance(v, str):
-        s = v.strip()
-        if len(s) == 7 and s[4] == "-":   # YYYY-MM
-            s = s + "-01"
-        try:
-            return datetime.strptime(s, "%Y-%m-%d").date()
-        except ValueError:
-            raise ValueError(f"invalid date '{v}' (use YYYY-MM-DD)")
-    raise ValueError(f"invalid date '{v}'")
-
 
 # ---------- Skills ----------
 # Columns: A=PRN  B=Skill Type(Technical/Soft/Language)  C=Name  D=Domain  E=Proficiency
@@ -516,8 +519,10 @@ async def import_skills(file: UploadFile = File(...), db: Session = Depends(get_
                 db.add(Language(user_id=student.id, name=str(name).strip(), proficiency=pv))
             else:
                 errors.append(f"Row {row_num}: skill type must be Technical, Soft, or Language"); continue
+            db.flush()
             created += 1
-        except (ValueError, TypeError) as e:
+        except (ValueError, TypeError, SQLAlchemyError) as e:
+            db.rollback()
             errors.append(f"Row {row_num}: {e}")
 
     db.commit()
@@ -567,8 +572,10 @@ async def import_projects(file: UploadFile = File(...), db: Session = Depends(ge
                 mentor_name=str(mentor).strip() if mentor else None,
                 status=pstatus, start_date=sd, end_date=ed,
             ))
+            db.flush()
             created += 1
-        except ValueError as e:
+        except (ValueError, TypeError, SQLAlchemyError) as e:
+            db.rollback()
             errors.append(f"Row {row_num}: {e}")
 
     db.commit()
@@ -612,8 +619,10 @@ async def import_achievements(file: UploadFile = File(...), db: Session = Depend
                 description=str(desc).strip() if desc else None,
                 category=cat, type=atype, level=level, date=_parse_date(adate),
             ))
+            db.flush()
             created += 1
-        except ValueError as e:
+        except (ValueError, TypeError, SQLAlchemyError) as e:
+            db.rollback()
             errors.append(f"Row {row_num}: {e}")
 
     db.commit()
@@ -654,9 +663,27 @@ async def import_work_experience(file: UploadFile = File(...), db: Session = Dep
                 type=etype, start_date=sd, end_date=ed,
                 description=str(desc).strip() if desc else None,
             ))
+            db.flush()
             created += 1
-        except ValueError as e:
+        except (ValueError, TypeError, SQLAlchemyError) as e:
+            db.rollback()
             errors.append(f"Row {row_num}: {e}")
 
     db.commit()
     return {"created": created, "skipped": skipped, "errors": errors}
+
+
+# ============================================================
+#  Full user list for admin UI (name, department, status)
+# ============================================================
+@router.get("/users-list", response_model=list[AdminUserResponse])
+async def list_users_full(
+    role: str | None = None,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    """List users with full details (name, department) for admin UI."""
+    query = db.query(User)
+    if role:
+        query = query.filter(User.role == role)
+    return query.all()
