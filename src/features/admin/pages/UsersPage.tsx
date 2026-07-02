@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { UserPlus, UserX, UserCheck, KeyRound, Pencil, ChevronUp, ChevronDown } from 'lucide-react';
+import { UserX, UserCheck, KeyRound, Pencil, ChevronUp, ChevronDown } from 'lucide-react';
 import { Card, CardContent } from '../../../shared/ui/card';
 import { Button } from '../../../shared/ui/button';
 import { Modal } from '../../../shared/ui/modal';
 import { Input } from '../../../shared/ui/input';
 import { Label } from '../../../shared/ui/label';
 import { Select } from '../../../shared/ui/select';
-import { getTeachers, updateUser, resetUserPassword, toggleUserStatus } from '../../../api/services/users';
+import { getTeachers, getStudents, updateUser, resetUserPassword, toggleUserStatus } from '../../../api/services/users';
 import { getCohorts, updateCohortMentor } from '../../../api/services/admin';
-import { mockDriver } from '../../../api/mock';
 import { useSortableTable } from '../../../shared/hooks/useSortableTable';
 import type { User } from '../../../api/entities/user';
 
@@ -38,9 +37,10 @@ export function UsersPage() {
     try {
       const t = await getTeachers();
       setTeachers(t as any);
-      const s = mockDriver.getUsersByRole('student');
-      setStudents(s);
-      const c = await getCohorts();
+      const s = await getStudents();
+      setStudents(s as any);
+      let c: any[] = [];
+      try { c = await getCohorts(); } catch { c = []; }
       setCohorts(c);
     } catch (err) {
       console.error(err);
@@ -112,9 +112,9 @@ export function UsersPage() {
     try {
       const updated = await toggleUserStatus(deactivatingUser.id);
       if (deactivatingUser.role === 'student') {
-        setStudents(prev => prev.map(s => s.id === updated.id ? updated : s));
+        setStudents(prev => prev.map(s => s.id === updated.id ? { ...s, ...updated } : s));
       } else {
-        setTeachers(prev => prev.map(t => t.id === updated.id ? updated : t));
+        setTeachers(prev => prev.map(t => t.id === updated.id ? { ...t, ...updated } : t));
       }
     } catch (err) {
       console.error(err);
@@ -172,10 +172,7 @@ export function UsersPage() {
             Manage students and teacher accounts across the institution.
           </p>
         </div>
-        <Button>
-          <UserPlus className="w-4 h-4 mr-2" />
-          Add User
-        </Button>
+        {/* Add User deferred — students onboard via Bulk Import; single-user add TBD */}
       </div>
 
       <div className="flex gap-4 border-b border-slate-200 dark:border-brand-800 pb-2">

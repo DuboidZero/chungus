@@ -46,6 +46,7 @@ export const API = {
   TEACHER: {
     DASHBOARD: '/teacher/dashboard',
     STUDENTS: '/teacher/students',
+    
     STUDENT_OVERVIEW: (id: string) => `/teacher/students/${id}/overview` as const,
     STUDENT_TIMELINE: (id: string) => `/teacher/students/${id}/timeline` as const,
     STUDENT_NOTES: (id: string) => `/teacher/students/${id}/notes` as const,
@@ -62,5 +63,12 @@ export const API = {
   ADMIN: {
     COHORTS: '/admin/cohorts',
     COHORT: (id: string) => `/admin/cohorts/${id}` as const,
+    USERS_LIST: '/admin/users-list',
+    IMPORT_STUDENTS: '/admin/import/students',
+    IMPORT_MARKS: '/admin/import/academic-records',
+    IMPORT_SKILLS: '/admin/import/skills',
+    IMPORT_PROJECTS: '/admin/import/projects',
+    IMPORT_ACHIEVEMENTS: '/admin/import/achievements',
+    IMPORT_WORK_EXPERIENCE: '/admin/import/work-experience',
   }
 } as const;

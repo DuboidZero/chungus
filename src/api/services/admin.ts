@@ -26,33 +26,41 @@ export async function updateCohortMentor(id: string, data: UpdateCohortRequest):
   return response.data;
 }
 
-// Bulk Upload Mock Services
+// Bulk Upload Services — real backend calls
+async function postImport(url: string, file: File): Promise<{ success: boolean; message: string }> {
+  const formData = new FormData();
+  formData.append('file', file);
+  const response = await apiClient.post(url, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  const { created = 0, skipped = 0, errors = [] } = response.data || {};
+  const errorMsg = errors.length ? ` ${errors.length} row(s) had errors.` : '';
+  return {
+    success: true,
+    message: `Imported ${created} row(s). ${skipped} skipped.${errorMsg}`,
+  };
+}
+
 export async function uploadStudents(file: File): Promise<{ success: boolean; message: string }> {
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  return { success: true, message: `Successfully imported students from ${file.name}` };
+  return postImport(API.ADMIN.IMPORT_STUDENTS, file);
 }
 
 export async function uploadMarks(file: File): Promise<{ success: boolean; message: string }> {
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  return { success: true, message: `Successfully imported marks from ${file.name}` };
+  return postImport(API.ADMIN.IMPORT_MARKS, file);
 }
 
 export async function uploadSkills(file: File): Promise<{ success: boolean; message: string }> {
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  return { success: true, message: `Successfully imported skills from ${file.name}` };
+  return postImport(API.ADMIN.IMPORT_SKILLS, file);
 }
 
 export async function uploadProjects(file: File): Promise<{ success: boolean; message: string }> {
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  return { success: true, message: `Successfully imported projects from ${file.name}` };
+  return postImport(API.ADMIN.IMPORT_PROJECTS, file);
 }
 
 export async function uploadAchievements(file: File): Promise<{ success: boolean; message: string }> {
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  return { success: true, message: `Successfully imported achievements from ${file.name}` };
+  return postImport(API.ADMIN.IMPORT_ACHIEVEMENTS, file);
 }
 
 export async function uploadWorkExperience(file: File): Promise<{ success: boolean; message: string }> {
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  return { success: true, message: `Successfully imported work experience from ${file.name}` };
+  return postImport(API.ADMIN.IMPORT_WORK_EXPERIENCE, file);
 }

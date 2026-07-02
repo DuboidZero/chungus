@@ -3,10 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Users, Building2, UploadCloud, UsersRound, BookOpen, AlertCircle } from 'lucide-react';
 import { Card, CardContent } from '../../../shared/ui/card';
 import { getCohorts } from '../../../api/services/admin';
-import { getTeachers } from '../../../api/services/users';
-
-// Quick mock for total students until a user endpoint exists
-import { mockDriver } from '../../../api/mock';
+import { getTeachers, getStudents } from '../../../api/services/users';
 
 export function AdminDashboard() {
   const navigate = useNavigate();
@@ -18,16 +15,15 @@ export function AdminDashboard() {
     const fetchStats = async () => {
       try {
         const teachers = await getTeachers();
-        const cohorts = await getCohorts();
-        
-        // Mocking student count since we don't have a GET /students yet
-        const students = mockDriver.getAllTeachers().length * 15; // mock number
-        
+        const students = await getStudents();
+        let cohorts: any[] = [];
+        try { cohorts = await getCohorts(); } catch { cohorts = []; }
+
         setStats({
-          students: students,
+          students: students.length,
           teachers: teachers.length,
           cohorts: cohorts.length,
-          cases: 5 // Placeholder for Active Guidance Cases
+          cases: 0,
         });
       } catch (err) {
         console.error('Failed to load stats', err);
