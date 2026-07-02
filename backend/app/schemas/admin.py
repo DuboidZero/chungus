@@ -88,3 +88,6 @@ class ResetPasswordResponse(CamelModel):
 class ToggleStatusResponse(CamelModel):
     id: str
     deactivated: bool
+
+class CohortMentorUpdate(CamelModel):
+    academic_mentor_id: str | None = None

@@ -9,6 +9,7 @@ from app.models.project import Project
 from app.models.skill import TechnicalSkill, SoftSkill, Language
 from app.models.academic import Semester, Subject
 from app.models.mentor import MentorAssignment
+from app.models.cohort import Cohort
 from app.models.teacher_records import PrivateNote, AssessmentMark, ProjectMilestone, GuidanceCase
 from logging.config import fileConfig
 
