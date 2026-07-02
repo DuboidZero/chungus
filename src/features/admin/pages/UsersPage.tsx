@@ -22,6 +22,8 @@ export function UsersPage() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [resettingUser, setResettingUser] = useState<User | null>(null);
   const [deactivatingUser, setDeactivatingUser] = useState<User | null>(null);
+  const [tempPassword, setTempPassword] = useState<string | null>(null);
+  const [isResetting, setIsResetting] = useState(false);
 
   // Edit form state
   const [formData, setFormData] = useState<any>({});
@@ -71,9 +73,9 @@ export function UsersPage() {
     try {
       const updated = await updateUser(editingUser.id, formData);
       if (editingUser.role === 'student') {
-        setStudents(prev => prev.map(s => s.id === updated.id ? updated : s));
+        setStudents(prev => prev.map(s => s.id === updated.id ? { ...s, ...updated } : s));
       } else {
-        setTeachers(prev => prev.map(t => t.id === updated.id ? updated : t));
+        setTeachers(prev => prev.map(t => t.id === updated.id ? { ...t, ...updated } : t));
         // Update cohorts
         for (const c of cohorts) {
           const wasAssigned = c.academicMentorId === editingUser.id;
@@ -84,8 +86,8 @@ export function UsersPage() {
             await updateCohortMentor(c.id, { academicMentorId: editingUser.id });
           }
         }
-        const c = await getCohorts();
-        setCohorts(c);
+        const refreshed = await getCohorts();
+        setCohorts(refreshed);
       }
       setEditingUser(null);
     } catch (err) {
@@ -97,14 +99,22 @@ export function UsersPage() {
 
   const confirmReset = async () => {
     if (!resettingUser) return;
+    setIsResetting(true);
     try {
-      await resetUserPassword(resettingUser.id);
-      alert('Password reset successfully!');
+      const temp = await resetUserPassword(resettingUser.id);
+      setTempPassword(temp);   // keep modal open, show the password
     } catch (err) {
       console.error(err);
-    } finally {
+      alert('Failed to reset password.');
       setResettingUser(null);
+    } finally {
+      setIsResetting(false);
     }
+  };
+
+  const closeResetModal = () => {
+    setResettingUser(null);
+    setTempPassword(null);
   };
 
   const confirmDeactivate = async () => {
@@ -127,8 +137,8 @@ export function UsersPage() {
 
   const { sortedData, sortConfig, requestSort } = useSortableTable<User>(currentData, [
     { key: 'name' },
-    { 
-      key: 'identifier', 
+    {
+      key: 'identifier',
       sortFn: (a, b) => {
         if (activeTab === 'students') {
           return (a.prn || '').localeCompare(b.prn || '');
@@ -136,7 +146,7 @@ export function UsersPage() {
         return (a.email || '').localeCompare(b.email || '');
       }
     },
-    { 
+    {
       key: 'department',
       sortFn: (a, b) => {
         const deptA = a.department || '';
@@ -179,8 +189,8 @@ export function UsersPage() {
         <button
           onClick={() => setActiveTab('students')}
           className={`pb-2 px-4 font-medium transition-colors border-b-2 ${
-            activeTab === 'students' 
-              ? 'border-brand-500 text-brand-600 dark:text-brand-400' 
+            activeTab === 'students'
+              ? 'border-brand-500 text-brand-600 dark:text-brand-400'
               : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
           }`}
         >
@@ -189,8 +199,8 @@ export function UsersPage() {
         <button
           onClick={() => setActiveTab('teachers')}
           className={`pb-2 px-4 font-medium transition-colors border-b-2 ${
-            activeTab === 'teachers' 
-              ? 'border-brand-500 text-brand-600 dark:text-brand-400' 
+            activeTab === 'teachers'
+              ? 'border-brand-500 text-brand-600 dark:text-brand-400'
               : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
           }`}
         >
@@ -206,20 +216,20 @@ export function UsersPage() {
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
                 <tr className="bg-slate-50 dark:bg-brand-900/50 border-b border-slate-200 dark:border-brand-800 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
-                  <th 
+                  <th
                     className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
                     onClick={() => requestSort('name')}
                   >
                     Name {renderSortIcon('name')}
                   </th>
-                  <th 
+                  <th
                     className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
                     onClick={() => requestSort('identifier')}
                   >
                     {activeTab === 'students' ? 'PRN / Email' : 'Email'} {renderSortIcon('identifier')}
                   </th>
                   {activeTab === 'students' && (
-                    <th 
+                    <th
                       className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
                       onClick={() => requestSort('department')}
                     >
@@ -227,14 +237,14 @@ export function UsersPage() {
                     </th>
                   )}
                   {activeTab === 'teachers' && (
-                    <th 
+                    <th
                       className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
                       onClick={() => requestSort('department')}
                     >
                       Department {renderSortIcon('department')}
                     </th>
                   )}
-                  <th 
+                  <th
                     className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
                     onClick={() => requestSort('status')}
                   >
@@ -283,19 +293,19 @@ export function UsersPage() {
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button 
+                        <button
                           onClick={() => handleEditClick(u)}
                           className="p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/50 rounded-lg transition-colors" title="Edit"
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button 
+                        <button
                           onClick={() => setResettingUser(u)}
                           className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/50 rounded-lg transition-colors" title="Reset Password"
                         >
                           <KeyRound className="w-4 h-4" />
                         </button>
-                        <button 
+                        <button
                           onClick={() => setDeactivatingUser(u)}
                           className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-lg transition-colors" title={u.deactivated ? "Reactivate" : "Deactivate"}
                         >
@@ -328,12 +338,12 @@ export function UsersPage() {
           <div className="space-y-4">
             <div>
               <Label>Name</Label>
-              <Input 
-                value={formData.name} 
+              <Input
+                value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
-            
+
             {editingUser.role === 'student' && (
               <>
                 <div>
@@ -342,30 +352,30 @@ export function UsersPage() {
                 </div>
                 <div>
                   <Label>Email</Label>
-                  <Input 
-                    value={formData.email} 
+                  <Input
+                    value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                 </div>
                 <div>
                   <Label>Department</Label>
-                  <Input 
-                    value={formData.department} 
+                  <Input
+                    value={formData.department}
                     onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label>Batch</Label>
-                    <Input 
-                      value={formData.batch} 
+                    <Input
+                      value={formData.batch}
                       onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
                     />
                   </div>
                   <div>
                     <Label>Academic Year</Label>
-                    <Select 
-                      value={formData.academicYear} 
+                    <Select
+                      value={formData.academicYear}
                       onChange={(e) => setFormData({ ...formData, academicYear: e.target.value })}
                     >
                       <option value="">Select Year...</option>
@@ -386,8 +396,8 @@ export function UsersPage() {
                 </div>
                 <div>
                   <Label>Department</Label>
-                  <Input 
-                    value={formData.department} 
+                  <Input
+                    value={formData.department}
                     onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                   />
                 </div>
@@ -396,7 +406,7 @@ export function UsersPage() {
                   <div className="space-y-2 border border-slate-200 dark:border-brand-800 rounded-md p-3 max-h-[150px] overflow-y-auto">
                     {cohorts.map(c => (
                       <label key={c.id} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                        <input 
+                        <input
                           type="checkbox"
                           checked={teacherCohorts.includes(c.id)}
                           onChange={(e) => {
@@ -431,18 +441,39 @@ export function UsersPage() {
       {resettingUser && (
         <Modal
           isOpen={true}
-          onClose={() => setResettingUser(null)}
+          onClose={closeResetModal}
           title="Reset Password"
         >
           <div className="space-y-4">
-            <p className="text-slate-600 dark:text-slate-300">
-              Are you sure you want to reset the password for <strong>{resettingUser.name}</strong>? 
-              This will reset their password to the system default and force them to change it on their next login.
-            </p>
-            <div className="flex justify-end gap-3 mt-6">
-              <Button variant="outline" onClick={() => setResettingUser(null)}>Cancel</Button>
-              <Button variant="danger" onClick={confirmReset}>Reset Password</Button>
-            </div>
+            {tempPassword ? (
+              <>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Password for <strong>{resettingUser.name}</strong> has been reset. Share this temporary
+                  password with them — it won't be shown again:
+                </p>
+                <div className="flex items-center gap-2 p-3 bg-slate-100 dark:bg-brand-950 border border-slate-300 dark:border-brand-700 rounded-lg">
+                  <code className="flex-1 text-lg font-mono text-slate-900 dark:text-slate-100 break-all">{tempPassword}</code>
+                  <Button variant="outline" onClick={() => navigator.clipboard.writeText(tempPassword)}>Copy</Button>
+                </div>
+                <p className="text-xs text-slate-500">The user will be asked to change it on their next login.</p>
+                <div className="flex justify-end mt-6">
+                  <Button onClick={closeResetModal}>Done</Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-slate-600 dark:text-slate-300">
+                  Are you sure you want to reset the password for <strong>{resettingUser.name}</strong>?
+                  A new temporary password will be generated and shown to you once.
+                </p>
+                <div className="flex justify-end gap-3 mt-6">
+                  <Button variant="outline" onClick={closeResetModal}>Cancel</Button>
+                  <Button variant="danger" onClick={confirmReset} disabled={isResetting}>
+                    {isResetting ? 'Resetting...' : 'Reset Password'}
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         </Modal>
       )}
@@ -456,7 +487,7 @@ export function UsersPage() {
         >
           <div className="space-y-4">
             <p className="text-slate-600 dark:text-slate-300">
-              {deactivatingUser.deactivated 
+              {deactivatingUser.deactivated
                 ? `Are you sure you want to reactivate ${deactivatingUser.name}? They will be able to sign in again.`
                 : `Are you sure you want to deactivate ${deactivatingUser.name}? This user will no longer be able to sign in.`}
             </p>

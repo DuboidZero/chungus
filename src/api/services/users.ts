@@ -33,14 +33,14 @@ export async function updateUser(userId: string, data: any): Promise<any> {
   return response.data;
 }
 
-export async function resetUserPassword(userId: string): Promise<boolean> {
+export async function resetUserPassword(userId: string): Promise<string | null> {
   if (USE_MOCK) {
     mockDriver.resetUserPassword(userId);
     await new Promise(resolve => setTimeout(resolve, 500));
-    return true;
+    return 'MockPass123';
   }
-  await apiClient.post(`/admin/users/${userId}/reset-password`);
-  return true;
+  const response = await apiClient.post(`/admin/users/${userId}/reset-password`);
+  return response.data?.temporaryPassword ?? null;
 }
 
 export async function toggleUserStatus(userId: string): Promise<any> {
