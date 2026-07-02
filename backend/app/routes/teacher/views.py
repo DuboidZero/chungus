@@ -35,6 +35,38 @@ def list_my_students(db: Session = Depends(get_db), teacher: User = Depends(get_
         })
     return result
 
+@router.get("/projects")
+def list_mentored_projects(db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
+    """All projects across the teacher's mentored students, each tagged with student name + PRN."""
+    links = db.query(MentorAssignment).filter(MentorAssignment.teacher_id == teacher.id).all()
+    student_ids = [l.student_id for l in links]
+    if not student_ids:
+        return []
+
+    students = db.query(User).filter(User.id.in_(student_ids)).all()
+    student_map = {s.id: s for s in students}
+
+    projects = db.query(Project).filter(Project.user_id.in_(student_ids)).all()
+    result = []
+    for p in projects:
+        student = student_map.get(p.user_id)
+        result.append({
+            "id": p.id,
+            "name": p.name,
+            "description": p.description,
+            "domain": p.domain,
+            "techStack": p.tech_stack,
+            "type": p.type,
+            "mentorName": p.mentor_name,
+            "status": p.status,
+            "startDate": p.start_date.isoformat() if p.start_date else None,
+            "endDate": p.end_date.isoformat() if p.end_date else None,
+            "imageUrl": p.image_url,
+            "studentName": student.name if student else None,
+            "studentPrn": student.prn if student else None,
+        })
+    return result
+
 @router.get("/students/{student_id}/overview")
 def student_overview(student_id: str, db: Session = Depends(get_db), teacher: User = Depends(get_current_teacher)):
     assert_mentors_student(db, teacher.id, student_id)
