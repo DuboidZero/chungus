@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -6,6 +6,7 @@ from app.models.user import User
 from app.schemas.auth import LoginRequest, LoginResponse, UserResponse, ChangePasswordRequest, RefreshRequest, TokenPairResponse
 from app.core.security import verify_password, create_access_token, create_refresh_token, hash_password, decode_access_token
 from app.core.dependencies import get_current_user, get_db
+from app.core.rate_limit import check_not_locked, record_failure, record_success
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -14,16 +15,21 @@ me_router = APIRouter(tags=["user"])
 
 
 @router.post("/login", response_model=LoginResponse)
-def login(payload: LoginRequest, db: Session = Depends(get_db)):
+def login(payload: LoginRequest, request: Request, db: Session = Depends(get_db)):
+    client_ip = request.client.host if request.client else "unknown"
+    check_not_locked(client_ip, payload.identifier)
+
     # 1. Look up the user by PRN or email (frontend sends "identifier")
     user = db.query(User).filter(or_(User.prn == payload.identifier, User.email == payload.identifier)).first()
 
     # 2. If no user, or password is wrong -> reject (same message for both, on purpose)
     if not user or not verify_password(payload.password, user.hashed_password):
+        record_failure(client_ip, payload.identifier)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",
         )
+    record_success(client_ip, payload.identifier)
 
     # 3. Make sure the account is active
     if not user.is_active:
@@ -79,11 +85,15 @@ def me(current_user: User = Depends(get_current_user), db: Session = Depends(get
     }
 
 @router.post("/token", include_in_schema=False)
-def login_for_docs(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+def login_for_docs(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """Helper endpoint so the /docs 'Authorize' button works. Not for the frontend."""
+    client_ip = request.client.host if request.client else "unknown"
+    check_not_locked(client_ip, form_data.username)
     user = db.query(User).filter(or_(User.prn == form_data.username, User.email == form_data.username)).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
+        record_failure(client_ip, form_data.username)
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    record_success(client_ip, form_data.username)
     access_token = create_access_token({"sub": user.id, "role": user.role})
     return {"access_token": access_token, "token_type": "bearer"}
 

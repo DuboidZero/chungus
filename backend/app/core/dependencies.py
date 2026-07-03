@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
@@ -8,6 +8,16 @@ from app.core.security import decode_access_token
 
 # Tells FastAPI to look for the token in the "Authorization: Bearer <token>" header
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
+
+# Endpoints a user may still call while their password change is pending.
+# Everything else is blocked until they change the temp password, so the
+# first-login flow can't be bypassed by calling the API directly.
+_ALLOWED_BEFORE_PASSWORD_CHANGE = {
+    "/api/v1/auth/change-password",
+    "/api/v1/auth/me",
+    "/api/v1/me",
+    "/api/v1/auth/logout",
+}
 
 
 def get_db():
@@ -19,6 +29,7 @@ def get_db():
 
 
 def get_current_user(
+    request: Request,
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db),
 ) -> User:
@@ -46,6 +57,13 @@ def get_current_user(
     # 4. Make sure the account is still active
     if not user.is_active:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is deactivated")
+
+    # 5. Temp/initial password must be changed before using the rest of the API
+    if user.must_change_password and request.url.path not in _ALLOWED_BEFORE_PASSWORD_CHANGE:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Password change required before accessing this resource",
+        )
 
     return user
 

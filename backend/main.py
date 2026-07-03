@@ -32,6 +32,7 @@ _CODE_MAP = {
     404: "NOT_FOUND",
     409: "CONFLICT",
     422: "VALIDATION_ERROR",
+    429: "RATE_LIMITED",
     500: "INTERNAL_ERROR",
 }
 
@@ -46,6 +47,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
             "requestId": str(uuid.uuid4()),
             "errors": [],
         },
+        headers=getattr(exc, "headers", None),  # keep Retry-After / WWW-Authenticate
     )
 
 

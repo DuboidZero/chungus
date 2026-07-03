@@ -46,13 +46,6 @@ def decode_access_token(token: str) -> dict | None:
     except JWTError:
         return None
 
-def generate_initial_password(full_name: str, year_of_birth: int) -> str:
-    """SRS 3.1.2: first 4 letters of name (lowercase) + year of birth.
-    'Rahul Sharma' born 2004 -> 'rahu2004'. If name < 4 letters, use whole name."""
-    letters = "".join(c for c in full_name if c.isalpha()).lower()
-    prefix = letters[:4] if len(letters) >= 4 else letters
-    return f"{prefix}{year_of_birth}"
-
 def create_refresh_token(data: dict) -> str:
     """Longer-lived token used only to get new access tokens."""
     to_encode = data.copy()

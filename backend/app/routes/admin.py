@@ -20,7 +20,7 @@ from app.schemas.admin import (
     CohortMentorUpdate,
 )
 from app.core.dependencies import get_current_admin, get_db
-from app.core.security import hash_password, generate_initial_password, generate_temp_password
+from app.core.security import hash_password, generate_temp_password
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -110,7 +110,10 @@ async def bulk_upload_students(
             year = int(year_of_birth)
             dept = str(branch).strip() if branch else None
             ac_year = str(academic_year).strip() if academic_year else None
-            initial_password = generate_initial_password(str(full_name), year)
+            # Random temp password (returned to the admin for private distribution).
+            # Name+YOB passwords are guessable, so anyone could hijack an account
+            # before the student's first login.
+            initial_password = generate_temp_password()
             user = User(
                 role="student",
                 prn=prn,
