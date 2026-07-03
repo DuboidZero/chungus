@@ -47,7 +47,7 @@ export function ChangePasswordPage() {
   return (
     <AuthCard
       title="Set New Password"
-      subtitle="For security reasons, you must change your password on first login."
+      subtitle="Choose a strong new password for your account."
     >
       {error && (
         <div className="p-3 bg-red-900/30 border border-red-800 rounded-lg text-sm text-red-400">

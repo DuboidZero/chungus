@@ -136,13 +136,19 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Contact</h2>
           </div>
 
-          {/* Email (read-only — from auth) */}
+          {/* Email */}
           <div>
-            <Label>Email</Label>
-            <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-slate-200 dark:border-brand-700 bg-slate-50 dark:bg-brand-950 text-sm text-slate-500 dark:text-slate-400">
-              <Mail className="w-4 h-4 shrink-0" />
-              {data.email}
-              <span className="ml-auto text-xs bg-slate-200 dark:bg-brand-700 text-slate-500 dark:text-slate-400 px-1.5 py-0.5 rounded">Verified</span>
+            <Label htmlFor="email">Email</Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                id="email"
+                type="email"
+                placeholder="your.email@mitwpu.edu.in"
+                value={data.email ?? ''}
+                onChange={e => set('email', e.target.value)}
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
+              />
             </div>
           </div>
 

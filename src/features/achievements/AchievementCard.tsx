@@ -78,7 +78,21 @@ export function AchievementCard({ achievement, onEdit, onDelete }: Props) {
 
         <div className="pt-4 mt-auto border-t border-slate-100 dark:border-brand-800 flex justify-between items-center text-xs font-medium text-slate-500 dark:text-slate-400">
           <span>{new Date(achievement.date).toLocaleDateString('default', { month: 'long', year: 'numeric' })}</span>
-          <span>{achievement.category}</span>
+          <div className="flex items-center gap-3">
+            {achievement.certificateUrl && (
+              <a
+                href={achievement.certificateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-brand-600 dark:text-brand-400 hover:underline font-semibold"
+                onClick={e => e.stopPropagation()}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+                Certificate
+              </a>
+            )}
+            <span>{achievement.category}</span>
+          </div>
         </div>
       </CardContent>
     </Card>

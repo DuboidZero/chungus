@@ -15,7 +15,11 @@ export function WorkExperience() {
 
   useEffect(() => {
     getExperience()
-      .then(res => setEntries(res as unknown as WorkExperienceEntry[]))
+      .then(res => {
+        const sorted = (res as unknown as WorkExperienceEntry[])
+          .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+        setEntries(sorted);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -83,24 +87,23 @@ export function WorkExperience() {
             <p className="text-slate-500 dark:text-slate-400">No work experience added yet.</p>
           </div>
         ) : (
-          <div className="space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-brand-500 before:to-slate-200 dark:before:to-brand-900">
+          <div className="relative pl-8 space-y-8 before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-brand-500 before:to-slate-200 dark:before:to-brand-900">
             {entries.map((entry) => (
-              <div key={entry.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                
+              <div key={entry.id} className="relative group">
                 {/* Icon Marker */}
-                <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white dark:border-[#0f172a] bg-brand-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-                  <Briefcase className="w-4 h-4" />
+                <div className="absolute -left-8 top-5 flex items-center justify-center w-8 h-8 rounded-full border-2 border-white dark:border-brand-950 bg-brand-500 text-white shadow shrink-0">
+                  <Briefcase className="w-3.5 h-3.5" />
                 </div>
-                
+
                 {/* Content Card */}
-                <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-brand-900/50 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-brand-800 transition-all hover:shadow-md">
+                <div className="bg-white dark:bg-brand-900/50 p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200 dark:border-brand-800 transition-all hover:shadow-md">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">{entry.role}</h3>
-                      <p className="font-medium text-brand-600 dark:text-brand-400">{entry.organisationName}</p>
+                      <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100">{entry.role}</h3>
+                      <p className="font-medium text-brand-600 dark:text-brand-400 text-sm">{entry.organisationName}</p>
                     </div>
                     {/* Hover Actions */}
-                    <div className="flex opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2">
                       <button onClick={() => { setEditingId(entry.id); setIsModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-brand-600 transition-colors">
                         <Edit2 className="w-4 h-4" />
                       </button>
@@ -109,8 +112,8 @@ export function WorkExperience() {
                       </button>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center gap-2 mb-4">
+
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
                     <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-brand-800 text-slate-600 dark:text-slate-300">
                       {entry.type}
                     </span>
@@ -123,7 +126,6 @@ export function WorkExperience() {
                     {entry.description}
                   </p>
                 </div>
-
               </div>
             ))}
           </div>
