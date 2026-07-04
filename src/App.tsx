@@ -25,6 +25,7 @@ import { AnalyticsDashboard } from './features/analytics/AnalyticsDashboard';
 import { MyStudentsView } from './features/teacher/MyStudentsView';
 import { StudentDetailView } from './features/teacher/StudentDetailView';
 import { AssessmentsView } from './features/teacher/AssessmentsView';
+import { ShareProfilesWizard } from './features/teacher/ShareProfilesWizard';
 import { Profile } from './features/profile/Profile';
 import { AcademicRecords } from './features/academic/AcademicRecords';
 import { Skills } from './features/skills/Skills';
@@ -68,6 +69,7 @@ function RoleRouter() {
           <Route path="students/:studentId/projects/:projectId" element={<ProjectDetail />} />
           <Route path="assessments" element={<AssessmentsView />} />
           <Route path="analytics"   element={<AnalyticsDashboard />} />
+          <Route path="share"       element={<ShareProfilesWizard />} />
           <Route path="*"           element={<Navigate to="/" replace />} />
         </Route>
       )}
