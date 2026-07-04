@@ -39,26 +39,27 @@ export function Topbar() {
   };
 
   return (
-    <header className="h-16 flex items-center justify-between px-8 bg-brand-900 dark:bg-brand-950/50 border-b border-brand-800 sticky top-0 z-10">
+    <header className="h-16 flex items-center justify-between px-6 md:px-8 gap-4 bg-surface/70 backdrop-blur-xl border-b border-outline-variant/30 sticky top-0 z-10">
       {/* Search */}
       <div className="flex-1 max-w-md">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
           <input
             type="text"
             placeholder={placeholder}
-            className="w-full h-9 pl-9 pr-4 rounded-md bg-brand-800 dark:bg-brand-900 border border-brand-600 dark:border-brand-800 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-colors"
+            className="w-full h-10 pl-11 pr-4 rounded-full bg-surface-container-low border border-outline-variant/50 text-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
           />
         </div>
       </div>
 
       {/* Right actions */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-2">
         {/* Theme toggle */}
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-brand-800 transition-colors"
+          className="p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          aria-label="Toggle color theme"
         >
           {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
         </button>
@@ -66,22 +67,22 @@ export function Topbar() {
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-brand-800 transition-colors"
+          className="p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
           title="Log out"
+          aria-label="Log out"
         >
           <LogOut className="w-5 h-5" />
         </button>
 
         {/* Avatar */}
-        {/* Avatar */}
         <div
-          className="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center border border-brand-400 shrink-0 cursor-pointer overflow-hidden"
+          className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center border border-outline-variant/40 shrink-0 cursor-pointer overflow-hidden"
           title={user?.name}
         >
           {user?.avatar ? (
             <img src={user.avatar} alt={user.name ?? ''} className="w-full h-full object-cover" />
           ) : (
-            <span className="text-xs font-semibold text-white">{initials}</span>
+            <span className="text-xs font-semibold text-on-primary">{initials}</span>
           )}
         </div>
       </div>

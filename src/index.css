@@ -3,11 +3,74 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  /* MIT WPU ERP Navy Colors */
+  /* ============================================================
+     LUMINOUS ACADEMIC — design system (a.k.a. "Academic Pulse")
+     Source of truth: Context/design.md
+     ============================================================ */
+
+  /* --- Primary --- */
+  --color-primary: #4837B7;
+  --color-primary-container: #6152D1;
+  --color-on-primary: #FFFFFF;
+  --color-on-primary-container: #E6E1FF;
+
+  /* --- Secondary --- */
+  --color-secondary: #5C588D;
+  --color-secondary-container: #C8C3FF;
+
+  /* --- Tertiary --- */
+  --color-tertiary: #5638A8;
+  --color-tertiary-container: #6E52C2;
+
+  /* --- Error --- */
+  --color-error: #BA1A1A;
+  --color-error-container: #FFDAD6;
+  --color-on-error-container: #93000A;
+
+  /* --- Surfaces --- */
+  --color-surface: #FCF8FF;
+  --color-surface-dim: #DBD8E5;
+  --color-surface-bright: #FCF8FF;
+  --color-surface-container-lowest: #FFFFFF;
+  --color-surface-container-low: #F5F2FF;
+  --color-surface-container: #EFECF9;
+  --color-surface-container-high: #E9E6F3;
+  --color-surface-container-highest: #E4E1EE;
+  --color-on-surface: #1B1B24;
+  --color-on-surface-variant: #474553;
+  --color-surface-variant: #E4E1EE;
+
+  /* --- Structure --- */
+  --color-outline: #787585;
+  --color-outline-variant: #C8C4D6;
+  --color-inverse-surface: #302F39;
+  --color-inverse-on-surface: #F2EFFC;
+  --color-inverse-primary: #C6BFFF;
+  --color-surface-tint: #594AC9;
+  --color-background: #FCF8FF;
+  --color-on-background: #1B1B24;
+
+  /* --- Fixed palette --- */
+  --color-primary-fixed: #E4DFFF;
+  --color-primary-fixed-dim: #C6BFFF;
+  --color-on-primary-fixed: #170066;
+  --color-on-primary-fixed-variant: #412EB0;
+  --color-secondary-fixed: #E4DFFF;
+  --color-secondary-fixed-dim: #C5C0FC;
+  --color-on-secondary-fixed: #191446;
+  --color-on-secondary-fixed-variant: #444174;
+  --color-tertiary-fixed: #E8DDFF;
+  --color-tertiary-fixed-dim: #CEBDFF;
+  --color-on-tertiary-fixed: #20005E;
+  --color-on-tertiary-fixed-variant: #4E2FA0;
+
+  /* --- LEGACY navy scale ---
+     Retained so pre-redesign screens keep rendering during the
+     migration. Removed in Phase 3 once no references remain. */
   --color-brand-950: #0f1225;
   --color-brand-900: #1a1e3a;
   --color-brand-800: #21264b;
-  --color-brand-700: #29315A; /* The ERP header navy */
+  --color-brand-700: #29315A;
   --color-brand-600: #333d73;
   --color-brand-500: #424f96;
   --color-brand-400: #5869c9;
@@ -15,14 +78,55 @@
   --color-brand-200: #a1afe8;
   --color-brand-100: #c9d2f2;
   --color-brand-50:  #eff1fc;
-  
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* --- Typography (design.md · Helvetica Neue) --- */
+  --font-sans: 'Helvetica Neue', Helvetica, 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+
+  /* --- Shape · radii ---
+     design.md prescribes an exaggerated scale (2–3rem), but the approved
+     Academic Pulse SCREENS use moderate corners (~12–24px). Screens win. */
+  --radius-sm: 0.5rem;    /* 8px  — chips, small utility */
+  --radius-md: 0.75rem;   /* 12px — buttons, inputs */
+  --radius-lg: 1rem;      /* 16px — nav items, small cards */
+  --radius-xl: 1.5rem;    /* 24px — dashboard cards, panels */
+}
+
+/* ============================================================
+   Glassmorphism utilities (design.md · Elevation & Depth)
+   ============================================================ */
+@utility glass {
+  background-color: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.30);
+  box-shadow: 0 8px 32px rgba(90, 86, 139, 0.10);
+}
+
+@utility glass-subtle {
+  background-color: rgba(255, 255, 255, 0.60);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.30);
+}
+
+/* Soft-focus lavender gradient canvas that glass panes sit on. */
+@utility app-canvas {
+  background-color: var(--color-surface);
+  background-image:
+    radial-gradient(at 12% 0%, rgba(97, 82, 209, 0.10) 0px, transparent 55%),
+    radial-gradient(at 88% 8%, rgba(86, 56, 168, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(198, 191, 255, 0.14) 0px, transparent 60%);
 }
 
 html, body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  @apply bg-slate-50 text-slate-900 antialiased;
-  @apply dark:bg-brand-950 dark:text-slate-100;
+  @apply text-on-background antialiased;
+  background-color: var(--color-surface);
+  background-image:
+    radial-gradient(at 12% 0%, rgba(97, 82, 209, 0.10) 0px, transparent 55%),
+    radial-gradient(at 88% 8%, rgba(86, 56, 168, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(198, 191, 255, 0.14) 0px, transparent 60%);
+  background-attachment: fixed;
 }

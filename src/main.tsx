@@ -6,7 +6,7 @@ import { ThemeProvider } from './shared/providers/ThemeProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="mit-wpu-theme">
+    <ThemeProvider defaultTheme="light" storageKey="mitwpu-theme-2026">
       <App />
     </ThemeProvider>
   </StrictMode>,

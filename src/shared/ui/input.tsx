@@ -11,8 +11,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={`flex h-10 w-full rounded-md border ${
-          error ? 'border-accent-red' : 'border-brand-700'
-        } bg-brand-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+          error ? 'border-error' : 'border-outline-variant'
+        } bg-surface-container-lowest px-3 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/70 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 transition-colors ${className}`}
         ref={ref}
         {...props}
       />

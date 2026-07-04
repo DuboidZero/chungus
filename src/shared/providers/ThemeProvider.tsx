@@ -14,7 +14,7 @@ type ThemeProviderState = {
 };
 
 const initialState: ThemeProviderState = {
-  theme: "dark",
+  theme: "light",
   setTheme: () => null,
 };
 
@@ -22,8 +22,10 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
-  defaultTheme = "dark",
-  storageKey = "mit-wpu-theme",
+  defaultTheme = "light",
+  // Bumped key so any stale "dark" preference from the pre-redesign build
+  // does not override the new light-first Luminous Academic default.
+  storageKey = "mitwpu-theme-2026",
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme

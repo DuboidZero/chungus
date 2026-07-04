@@ -14,7 +14,7 @@ export function AppLayout({ navigation, role }: AppLayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-brand-950 text-slate-900 dark:text-slate-100">
+    <div className="flex min-h-screen text-on-surface">
       <Sidebar
         role={role}
         navigation={navigation}
@@ -23,7 +23,7 @@ export function AppLayout({ navigation, role }: AppLayoutProps) {
       />
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar />
-        <main className="flex-1 p-6 md:p-8 lg:p-10 pt-10 md:pt-12 lg:pt-16 overflow-y-auto">
+        <main className="flex-1 p-6 md:p-8 lg:p-10 pt-8 md:pt-10 lg:pt-12 overflow-y-auto">
           <div className="max-w-6xl mx-auto">
             <Outlet />
           </div>

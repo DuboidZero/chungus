@@ -3,16 +3,10 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { NavGroup } from './navigation/student';
 import type { Role } from '../../shared/permissions/roles';
 
-function getRoleAccent(role: Role | undefined): string {
-  if (role === 'teacher') return 'bg-emerald-500';
-  if (role === 'admin') return 'bg-amber-500';
-  return 'bg-brand-500';
-}
-
 function getRoleLabel(role: Role | undefined): string {
-  if (role === 'teacher') return 'Teacher Portal';
+  if (role === 'teacher') return 'Faculty Portal';
   if (role === 'admin') return 'Admin Console';
-  return 'Portfolio';
+  return 'Student Portal';
 }
 
 interface SidebarProps {
@@ -23,26 +17,28 @@ interface SidebarProps {
 }
 
 export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarProps) {
-  const accent = getRoleAccent(role);
   const label = getRoleLabel(role);
 
   return (
     <aside
-      className={`flex flex-col bg-brand-900 border-r border-brand-800 transition-all duration-300 h-screen sticky top-0 shrink-0 ${
+      className={`flex flex-col bg-surface-container-low/70 backdrop-blur-xl border-r border-outline-variant/40 transition-all duration-300 h-screen sticky top-0 shrink-0 ${
         collapsed ? 'w-20' : 'w-64'
       }`}
     >
       {/* Logo */}
-      <div className="flex items-center p-4 mb-4">
+      <div className="flex items-center p-4 mb-2">
         {!collapsed ? (
           <div className="flex items-center space-x-3 overflow-hidden">
-            <div className={`w-8 h-8 rounded-lg ${accent} flex items-center justify-center font-bold text-white shrink-0`}>
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-container to-tertiary flex items-center justify-center font-bold text-on-primary shrink-0 shadow-sm">
               M
             </div>
-            <h1 className="text-xl font-bold text-white truncate">{label}</h1>
+            <div className="min-w-0">
+              <h1 className="text-base font-bold text-on-surface leading-tight truncate">MIT WPU Portfolio</h1>
+              <p className="text-xs text-on-surface-variant truncate">{label}</p>
+            </div>
           </div>
         ) : (
-          <div className={`w-8 h-8 rounded-lg ${accent} flex items-center justify-center font-bold text-white shrink-0 mx-auto`}>
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-container to-tertiary flex items-center justify-center font-bold text-on-primary shrink-0 mx-auto shadow-sm">
             M
           </div>
         )}
@@ -53,7 +49,7 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarPr
         {navigation.map((group, gi) => (
           <div key={gi} className={gi > 0 ? 'pt-4' : ''}>
             {!collapsed && group.title && (
-              <h3 className="px-3 pb-1 text-xs font-semibold text-brand-400 uppercase tracking-wider">
+              <h3 className="px-3 pb-1 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
                 {group.title}
               </h3>
             )}
@@ -67,8 +63,8 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarPr
                 className={({ isActive }) =>
                   `flex items-center space-x-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${
                     isActive
-                      ? 'bg-brand-800 text-white'
-                      : 'text-slate-300 hover:bg-brand-800 hover:text-white'
+                      ? 'bg-primary-container text-on-primary shadow-sm'
+                      : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                   } ${collapsed ? 'justify-center' : ''}`
                 }
               >
@@ -81,11 +77,11 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarPr
       </nav>
 
       {/* Footer */}
-      <div className="p-3 border-t border-brand-800 space-y-1">
+      <div className="p-3 border-t border-outline-variant/40 space-y-1">
         <button
           onClick={() => setCollapsed(!collapsed)}
           title={collapsed ? 'Expand' : 'Collapse'}
-          className={`flex items-center w-full space-x-3 px-3 py-2.5 rounded-lg font-medium text-slate-300 hover:bg-brand-800 hover:text-white transition-colors ${
+          className={`flex items-center w-full space-x-3 px-3 py-2.5 rounded-lg font-medium text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors ${
             collapsed ? 'justify-center' : ''
           }`}
         >
