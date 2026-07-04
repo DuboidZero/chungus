@@ -30,11 +30,11 @@ export function SupportNeededPanel({ signals, onViewStudent }: Props) {
           Support Needed
         </CardTitle>
       </CardHeader>
-      <div className="divide-y divide-slate-100 dark:divide-brand-800">
+      <div className="divide-y divide-slate-100 dark:divide-outline-variant">
         {signals.map(signal => (
           <div 
             key={signal.id} 
-            className="p-4 hover:bg-slate-50 dark:hover:bg-brand-800/50 transition-colors flex items-center justify-between group cursor-pointer"
+            className="p-4 hover:bg-slate-50 dark:hover:bg-surface-container transition-colors flex items-center justify-between group cursor-pointer"
             onClick={() => onViewStudent(signal.studentId)}
           >
             <div>
@@ -53,7 +53,7 @@ export function SupportNeededPanel({ signals, onViewStudent }: Props) {
                 ))}
               </div>
             </div>
-            <ArrowRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-brand-500 transition-colors" />
+            <ArrowRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors" />
           </div>
         ))}
       </div>

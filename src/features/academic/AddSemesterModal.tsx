@@ -96,7 +96,7 @@ export function AddSemesterModal({ isOpen, onClose, onSave, initialData }: Props
             <Label className="mb-0">Subjects</Label>
             <button
               onClick={handleAddSubject}
-              className="flex items-center gap-1.5 text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline"
+              className="flex items-center gap-1.5 text-xs font-medium text-primary dark:text-primary hover:underline"
             >
               <Plus className="w-3.5 h-3.5" />
               Add Subject
@@ -105,7 +105,7 @@ export function AddSemesterModal({ isOpen, onClose, onSave, initialData }: Props
           
           <div className="space-y-3">
             {subjects.map((sub) => (
-              <div key={sub.id} className="flex items-start gap-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 bg-slate-50 dark:bg-brand-900/50">
+              <div key={sub.id} className="flex items-start gap-3 p-3 rounded-lg border border-slate-200 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low">
                 <div className="flex-1 space-y-3">
                   {/* Row 1: Name & Credits */}
                   <div className="flex gap-3">
@@ -115,7 +115,7 @@ export function AddSemesterModal({ isOpen, onClose, onSave, initialData }: Props
                         placeholder="Subject Name (e.g. Data Structures)"
                         value={sub.name}
                         onChange={e => handleSubjectChange(sub.id, 'name', e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-950 text-sm focus:outline-none focus:border-brand-500 transition-colors"
+                        className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary transition-colors"
                       />
                     </div>
                     <div className="w-24">
@@ -124,7 +124,7 @@ export function AddSemesterModal({ isOpen, onClose, onSave, initialData }: Props
                         placeholder="Credits"
                         value={sub.credits}
                         onChange={e => handleSubjectChange(sub.id, 'credits', Number(e.target.value))}
-                        className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-950 text-sm focus:outline-none focus:border-brand-500 transition-colors"
+                        className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary transition-colors"
                         min="1" max="6"
                       />
                     </div>
@@ -137,7 +137,7 @@ export function AddSemesterModal({ isOpen, onClose, onSave, initialData }: Props
                         placeholder="Obtained"
                         value={sub.marksObtained}
                         onChange={e => handleSubjectChange(sub.id, 'marksObtained', Number(e.target.value))}
-                        className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-950 text-sm focus:outline-none focus:border-brand-500 transition-colors"
+                        className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary transition-colors"
                         min="0"
                         max={sub.maxMarks}
                       />
@@ -147,12 +147,12 @@ export function AddSemesterModal({ isOpen, onClose, onSave, initialData }: Props
                         placeholder="Max"
                         value={sub.maxMarks}
                         onChange={e => handleSubjectChange(sub.id, 'maxMarks', Number(e.target.value))}
-                        className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-950 text-sm focus:outline-none focus:border-brand-500 transition-colors"
+                        className="w-full px-3 py-2 rounded-md border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary transition-colors"
                         min="1"
                       />
                     </div>
                     <div className="w-24">
-                      <div className="flex items-center justify-center w-full px-3 py-2 rounded-md border border-slate-200 dark:border-brand-800 bg-slate-100 dark:bg-brand-900/50 text-sm font-bold text-slate-500 dark:text-slate-400 select-none">
+                      <div className="flex items-center justify-center w-full px-3 py-2 rounded-md border border-slate-200 dark:border-outline-variant bg-slate-100 dark:bg-surface-container-low text-sm font-bold text-slate-500 dark:text-slate-400 select-none">
                         {sub.grade}
                       </div>
                     </div>
@@ -172,16 +172,16 @@ export function AddSemesterModal({ isOpen, onClose, onSave, initialData }: Props
         </div>
 
         {/* Footer */}
-        <div className="pt-4 border-t border-slate-200 dark:border-brand-800 flex justify-end gap-3">
+        <div className="pt-4 border-t border-slate-200 dark:border-outline-variant flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-brand-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-brand-800 transition-colors"
+            className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-outline-variant text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-surface-container transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-container hover:bg-primary text-white text-sm font-semibold rounded-lg transition-colors"
           >
             <Save className="w-4 h-4" />
             Save Semester

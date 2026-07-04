@@ -92,7 +92,7 @@ export function AssessmentsView() {
         </div>
         <button
           onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-lg transition-colors shadow-sm shrink-0"
+          className="flex items-center gap-2 px-4 py-2.5 bg-primary-container hover:bg-primary text-white font-semibold rounded-lg transition-colors shadow-sm shrink-0"
         >
           <Plus className="w-4 h-4" />
           New Assessment
@@ -101,14 +101,14 @@ export function AssessmentsView() {
 
       {/* New Assessment Form */}
       {isFormOpen && (
-        <Card className="border-brand-200 dark:border-brand-700 shadow-md">
+        <Card className="border-outline-variant dark:border-outline-variant shadow-md">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <CheckSquare className="w-5 h-5 text-brand-500" />
+                <CheckSquare className="w-5 h-5 text-primary" />
                 Log New Assessment
               </h2>
-              <button onClick={() => setIsFormOpen(false)} className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-brand-800 text-slate-400">
+              <button onClick={() => setIsFormOpen(false)} className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container text-slate-400">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -120,7 +120,7 @@ export function AssessmentsView() {
                   required
                   value={form.studentId}
                   onChange={e => setForm({ ...form, studentId: e.target.value })}
-                  className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                  className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
                 >
                   <option value="">Select a student…</option>
                   {students.map(s => (
@@ -138,7 +138,7 @@ export function AssessmentsView() {
                     placeholder="e.g. Mid-Semester Viva"
                     value={form.assessmentTitle}
                     onChange={e => setForm({ ...form, assessmentTitle: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
                   />
                 </div>
                 <div>
@@ -148,7 +148,7 @@ export function AssessmentsView() {
                     type="date"
                     value={form.date}
                     onChange={e => setForm({ ...form, date: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
                   />
                 </div>
               </div>
@@ -158,13 +158,13 @@ export function AssessmentsView() {
                   <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Score *</label>
                   <input required type="number" min="0" placeholder="45" value={form.score}
                     onChange={e => setForm({ ...form, score: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100" />
+                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" />
                 </div>
                 <div className="flex-1">
                   <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Max Score *</label>
                   <input required type="number" min="1" placeholder="50" value={form.maxScore}
                     onChange={e => setForm({ ...form, maxScore: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100" />
+                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" />
                 </div>
                 {form.score && form.maxScore && (
                   <div className="pb-2">
@@ -183,16 +183,16 @@ export function AssessmentsView() {
                   placeholder="Feedback and observations…"
                   value={form.comments}
                   onChange={e => setForm({ ...form, comments: e.target.value })}
-                  className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 resize-none"
+                  className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 resize-none"
                 />
               </div>
 
               <div className="flex justify-end gap-3">
-                <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-brand-800 rounded-md transition-colors">
+                <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-surface-container rounded-md transition-colors">
                   Cancel
                 </button>
                 <button type="submit" disabled={saving}
-                  className="flex items-center gap-2 px-5 py-2 bg-brand-600 text-white text-sm font-medium rounded-md hover:bg-brand-700 disabled:opacity-50 transition-colors">
+                  className="flex items-center gap-2 px-5 py-2 bg-primary-container text-white text-sm font-medium rounded-md hover:bg-primary disabled:opacity-50 transition-colors">
                   <CheckSquare className="w-4 h-4" />
                   {saving ? 'Saving…' : 'Save Assessment'}
                 </button>
@@ -210,7 +210,7 @@ export function AssessmentsView() {
           placeholder="Search by student name, assessment title, or comments…"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-brand-900/40 border border-slate-200 dark:border-brand-800 rounded-lg focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 shadow-sm"
+          className="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-lg focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 shadow-sm"
         />
         {search && (
           <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -234,7 +234,7 @@ export function AssessmentsView() {
           {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 w-full" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-20 bg-white dark:bg-brand-900 rounded-xl border border-dashed border-slate-300 dark:border-brand-700">
+        <div className="text-center py-20 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
           <BookOpen className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
           <p className="text-slate-500 dark:text-slate-400 font-medium">
             {search ? 'No assessments match your search.' : 'No assessments logged yet.'}
@@ -262,7 +262,7 @@ export function AssessmentsView() {
                     <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
                       <span className="font-medium text-slate-700 dark:text-slate-300">{mark.studentName}</span>
                       <span>·</span>
-                      <span className="font-mono bg-slate-100 dark:bg-brand-800 px-1.5 py-0.5 rounded">{mark.studentPrn}</span>
+                      <span className="font-mono bg-slate-100 dark:bg-surface-container-high px-1.5 py-0.5 rounded">{mark.studentPrn}</span>
                       <span>·</span>
                       <span>{new Date(mark.date).toLocaleDateString()}</span>
                     </div>
@@ -275,7 +275,7 @@ export function AssessmentsView() {
                       </div>
                       <div className={`text-xs font-semibold mt-0.5 ${scoreColor(pct)}`}>{pct}%</div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
+                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors" />
                   </div>
                 </CardContent>
               </Card>

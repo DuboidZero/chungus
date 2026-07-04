@@ -39,17 +39,17 @@ export function GuidanceCasesPanel({ cases, onViewStudent }: Props) {
 
   return (
     <Card>
-      <CardHeader className="border-b border-slate-100 dark:border-brand-800 pb-4">
+      <CardHeader className="border-b border-slate-100 dark:border-outline-variant pb-4">
         <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
-          <Briefcase className="w-5 h-5 text-brand-500" />
+          <Briefcase className="w-5 h-5 text-primary" />
           Guidance Cases
         </CardTitle>
       </CardHeader>
-      <div className="divide-y divide-slate-100 dark:divide-brand-800">
+      <div className="divide-y divide-slate-100 dark:divide-outline-variant">
         {cases.map(c => (
           <div 
             key={c.id} 
-            className="p-4 hover:bg-slate-50 dark:hover:bg-brand-800/50 transition-colors flex items-center justify-between group cursor-pointer"
+            className="p-4 hover:bg-slate-50 dark:hover:bg-surface-container transition-colors flex items-center justify-between group cursor-pointer"
             onClick={() => onViewStudent(c.studentId)}
           >
             <div>
@@ -63,7 +63,7 @@ export function GuidanceCasesPanel({ cases, onViewStudent }: Props) {
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{c.triggerSignal}</p>
               <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Opened {new Date(c.dateOpened).toLocaleDateString()}</p>
             </div>
-            <ArrowRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-brand-500 transition-colors" />
+            <ArrowRight className="w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-primary transition-colors" />
           </div>
         ))}
       </div>

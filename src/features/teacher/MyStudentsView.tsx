@@ -79,9 +79,9 @@ export function MyStudentsView() {
         {(initialFilters.skill || initialFilters.domain || initialFilters.supportNeeded) && (
           <div className="flex flex-wrap gap-2">
             {initialFilters.skill && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 text-xs font-medium border border-brand-200 dark:border-brand-800">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low dark:bg-surface-container-low text-primary dark:text-on-surface-variant text-xs font-medium border border-outline-variant dark:border-outline-variant">
                 Skill: {initialFilters.skill}
-                <button onClick={() => removeFilter('skill')} className="hover:text-brand-900 dark:hover:text-brand-100">&times;</button>
+                <button onClick={() => removeFilter('skill')} className="hover:text-primary dark:hover:text-on-primary">&times;</button>
               </span>
             )}
             {initialFilters.domain && (
@@ -105,7 +105,7 @@ export function MyStudentsView() {
           {[1, 2, 3, 4, 5, 6].map(i => <Skeleton key={i} className="h-32 w-full rounded-xl" />)}
         </div>
       ) : students.length === 0 ? (
-        <div className="py-20 text-center border border-slate-200 dark:border-brand-800 rounded-xl bg-white dark:bg-brand-900/20">
+        <div className="py-20 text-center border border-slate-200 dark:border-outline-variant rounded-xl bg-white dark:bg-surface-container-low/60">
           <User className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
           <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100">No students found</h3>
           <p className="text-slate-500 dark:text-slate-400">Try adjusting your search or filters.</p>
@@ -132,10 +132,10 @@ function StudentCard({ student, onClick }: { student: StudentSummary, onClick: (
   };
 
   return (
-    <Card className="hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700 transition-all cursor-pointer group" onClick={onClick}>
+    <Card className="hover:shadow-md hover:border-outline-variant dark:hover:border-outline-variant transition-all cursor-pointer group" onClick={onClick}>
       <CardContent className="p-4 sm:p-5 flex items-center justify-between">
         <div className="flex items-center gap-4 min-w-0">
-          <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/50 flex items-center justify-center text-brand-700 dark:text-brand-300 font-bold shrink-0 overflow-hidden">
+          <div className="w-10 h-10 rounded-full bg-primary-fixed dark:bg-surface-container-low flex items-center justify-center text-primary dark:text-on-surface-variant font-bold shrink-0 overflow-hidden">
             {student.avatar ? (
               <img src={student.avatar} alt={student.name} className="w-full h-full object-cover" />
             ) : (
@@ -145,7 +145,7 @@ function StudentCard({ student, onClick }: { student: StudentSummary, onClick: (
           <div className="min-w-0">
             <h4 className="text-base font-bold text-slate-900 dark:text-slate-100 truncate">{student.name}</h4>
             <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mt-1">
-              <span className="font-mono text-xs bg-slate-100 dark:bg-brand-900/50 px-1.5 py-0.5 rounded">{student.prn}</span>
+              <span className="font-mono text-xs bg-slate-100 dark:bg-surface-container-low px-1.5 py-0.5 rounded">{student.prn}</span>
               <span className="flex items-center gap-1 font-medium">
                 {student.cgpa >= 8.5 ? <TrendingUp className="w-3.5 h-3.5 text-emerald-500" /> : <AlertTriangle className={`w-3.5 h-3.5 ${student.cgpa < 6.0 ? 'text-red-500' : 'text-amber-500'}`} />}
                 CGPA {student.cgpa.toFixed(2)}
@@ -156,7 +156,7 @@ function StudentCard({ student, onClick }: { student: StudentSummary, onClick: (
                 {student.performanceTier}
               </span>
               {student.guidanceStatus && (
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-brand-100 text-brand-800 dark:bg-brand-900/50 dark:text-brand-300 border border-brand-200 dark:border-brand-700">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary-fixed text-primary dark:bg-surface-container-low dark:text-on-surface-variant border border-outline-variant dark:border-outline-variant">
                   Case: {student.guidanceStatus}
                 </span>
               )}

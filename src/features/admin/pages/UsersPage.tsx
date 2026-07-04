@@ -185,12 +185,12 @@ export function UsersPage() {
         {/* Add User deferred — students onboard via Bulk Import; single-user add TBD */}
       </div>
 
-      <div className="flex gap-4 border-b border-slate-200 dark:border-brand-800 pb-2">
+      <div className="flex gap-4 border-b border-slate-200 dark:border-outline-variant pb-2">
         <button
           onClick={() => setActiveTab('students')}
           className={`pb-2 px-4 font-medium transition-colors border-b-2 ${
             activeTab === 'students'
-              ? 'border-brand-500 text-brand-600 dark:text-brand-400'
+              ? 'border-primary text-primary dark:text-primary'
               : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
           }`}
         >
@@ -200,7 +200,7 @@ export function UsersPage() {
           onClick={() => setActiveTab('teachers')}
           className={`pb-2 px-4 font-medium transition-colors border-b-2 ${
             activeTab === 'teachers'
-              ? 'border-brand-500 text-brand-600 dark:text-brand-400'
+              ? 'border-primary text-primary dark:text-primary'
               : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
           }`}
         >
@@ -215,22 +215,22 @@ export function UsersPage() {
           ) : (
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-                <tr className="bg-slate-50 dark:bg-brand-900/50 border-b border-slate-200 dark:border-brand-800 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
+                <tr className="bg-slate-50 dark:bg-surface-container-low border-b border-slate-200 dark:border-outline-variant text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
                   <th
-                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
+                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
                     onClick={() => requestSort('name')}
                   >
                     Name {renderSortIcon('name')}
                   </th>
                   <th
-                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
+                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
                     onClick={() => requestSort('identifier')}
                   >
                     {activeTab === 'students' ? 'PRN / Email' : 'Email'} {renderSortIcon('identifier')}
                   </th>
                   {activeTab === 'students' && (
                     <th
-                      className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
+                      className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
                       onClick={() => requestSort('department')}
                     >
                       Department / Cohort {renderSortIcon('department')}
@@ -238,14 +238,14 @@ export function UsersPage() {
                   )}
                   {activeTab === 'teachers' && (
                     <th
-                      className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
+                      className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
                       onClick={() => requestSort('department')}
                     >
                       Department {renderSortIcon('department')}
                     </th>
                   )}
                   <th
-                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors"
+                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
                     onClick={() => requestSort('status')}
                   >
                     Status {renderSortIcon('status')}
@@ -255,7 +255,7 @@ export function UsersPage() {
               </thead>
               <tbody>
                 {sortedData.map((u, i) => (
-                  <tr key={u.id || i} className="border-b border-slate-100 dark:border-brand-800/50 hover:bg-slate-50 dark:hover:bg-brand-900/30 transition-colors">
+                  <tr key={u.id || i} className="border-b border-slate-100 dark:border-outline-variant/50 hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">
                     <td className="p-4 font-medium text-slate-900 dark:text-slate-100">{u.name}</td>
                     <td className="p-4 text-slate-600 dark:text-slate-400">
                       {activeTab === 'students' ? (
@@ -295,7 +295,7 @@ export function UsersPage() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleEditClick(u)}
-                          className="p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/50 rounded-lg transition-colors" title="Edit"
+                          className="p-2 text-slate-400 hover:text-primary hover:bg-surface-container-low dark:hover:bg-surface-container rounded-lg transition-colors" title="Edit"
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
@@ -403,7 +403,7 @@ export function UsersPage() {
                 </div>
                 <div>
                   <Label className="mb-2 block">Assigned Cohorts</Label>
-                  <div className="space-y-2 border border-slate-200 dark:border-brand-800 rounded-md p-3 max-h-[150px] overflow-y-auto">
+                  <div className="space-y-2 border border-slate-200 dark:border-outline-variant rounded-md p-3 max-h-[150px] overflow-y-auto">
                     {cohorts.map(c => (
                       <label key={c.id} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                         <input
@@ -416,7 +416,7 @@ export function UsersPage() {
                               setTeacherCohorts(teacherCohorts.filter(id => id !== c.id));
                             }
                           }}
-                          className="rounded border-slate-300 text-brand-600 focus:ring-brand-600 bg-white dark:bg-brand-950 dark:border-brand-700"
+                          className="rounded border-slate-300 text-primary focus:ring-primary bg-white dark:bg-surface-container-lowest dark:border-outline-variant"
                         />
                         {c.academicYear} - {c.department}
                       </label>
@@ -451,7 +451,7 @@ export function UsersPage() {
                   Password for <strong>{resettingUser.name}</strong> has been reset. Share this temporary
                   password with them — it won't be shown again:
                 </p>
-                <div className="flex items-center gap-2 p-3 bg-slate-100 dark:bg-brand-950 border border-slate-300 dark:border-brand-700 rounded-lg">
+                <div className="flex items-center gap-2 p-3 bg-slate-100 dark:bg-surface-container-lowest border border-slate-300 dark:border-outline-variant rounded-lg">
                   <code className="flex-1 text-lg font-mono text-slate-900 dark:text-slate-100 break-all">{tempPassword}</code>
                   <Button variant="outline" onClick={() => navigator.clipboard.writeText(tempPassword)}>Copy</Button>
                 </div>

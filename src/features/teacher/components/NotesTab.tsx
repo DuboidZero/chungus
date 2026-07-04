@@ -62,7 +62,7 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
   return (
     <div className="space-y-6 max-w-4xl">
       {/* Compose new note */}
-      <Card className="border-brand-200 dark:border-brand-800">
+      <Card className="border-outline-variant dark:border-outline-variant">
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center gap-2 mb-3">
             <Lock className="w-4 h-4 text-amber-500" />
@@ -71,7 +71,7 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
             </p>
           </div>
           <textarea
-            className="w-full min-h-[100px] p-3 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 resize-y"
+            className="w-full min-h-[100px] p-3 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 resize-y"
             placeholder="Write a private note about this student..."
             value={newNote}
             onChange={e => setNewNote(e.target.value)}
@@ -82,7 +82,7 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
             <button
               onClick={handleAdd}
               disabled={!newNote.trim() || saving}
-              className="flex items-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-md hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-container text-white text-sm font-medium rounded-md hover:bg-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <Plus className="w-4 h-4" />
               {saving ? 'Saving…' : 'Add Note'}
@@ -130,7 +130,7 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => { setEditingId(note.id); setEditContent(note.content); }}
-                          className="p-1.5 rounded text-slate-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
+                          className="p-1.5 rounded text-slate-400 hover:text-primary hover:bg-surface-container-low dark:hover:bg-surface-container transition-colors"
                           title="Edit note"
                         >
                           <Pencil className="w-3.5 h-3.5" />
@@ -151,20 +151,20 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
                     <div className="space-y-2">
                       <textarea
                         autoFocus
-                        className="w-full min-h-[80px] p-2 text-sm bg-white dark:bg-brand-950 border border-brand-300 dark:border-brand-700 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 resize-y"
+                        className="w-full min-h-[80px] p-2 text-sm bg-white dark:bg-surface-container-lowest border border-outline-variant dark:border-outline-variant rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 resize-y"
                         value={editContent}
                         onChange={e => setEditContent(e.target.value)}
                       />
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => setEditingId(null)}
-                          className="flex items-center gap-1 px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-brand-700 rounded hover:bg-slate-50 dark:hover:bg-brand-800"
+                          className="flex items-center gap-1 px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-outline-variant rounded hover:bg-slate-50 dark:hover:bg-surface-container"
                         >
                           <X className="w-3 h-3" /> Cancel
                         </button>
                         <button
                           onClick={() => handleEdit(note.id)}
-                          className="flex items-center gap-1 px-3 py-1.5 text-xs bg-brand-600 text-white rounded hover:bg-brand-700"
+                          className="flex items-center gap-1 px-3 py-1.5 text-xs bg-primary-container text-white rounded hover:bg-primary"
                         >
                           <Check className="w-3 h-3" /> Save
                         </button>
@@ -176,7 +176,7 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
                       <div className="flex gap-2">
                         <button
                           onClick={() => setDeletingId(null)}
-                          className="px-3 py-1.5 text-xs border border-slate-200 dark:border-brand-700 rounded text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-brand-800"
+                          className="px-3 py-1.5 text-xs border border-slate-200 dark:border-outline-variant rounded text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-surface-container"
                         >
                           Cancel
                         </button>

@@ -14,7 +14,7 @@ import {
 import { SkillHeatmap } from '../teacher/components/SkillHeatmap';
 import { Users, TrendingUp, AlertTriangle } from 'lucide-react';
 
-const PALETTE = ['#0ea5e9', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#f97316'];
+const PALETTE = ['#6152D1', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#f97316'];
 
 export function AnalyticsDashboard() {
   const { theme } = useTheme();
@@ -31,11 +31,11 @@ export function AnalyticsDashboard() {
 
   const tt = {
     bg:     theme === 'dark' ? '#1a1e3a' : '#ffffff',
-    border: theme === 'dark' ? '#29315A' : '#e2e8f0',
+    border: theme === 'dark' ? '#29315A' : '#E4E1EE',
     color:  theme === 'dark' ? '#f1f5f9' : '#0f172a',
   };
-  const grid  = theme === 'dark' ? '#29315A' : '#e2e8f0';
-  const axis  = theme === 'dark' ? '#94a3b8' : '#64748b';
+  const grid  = theme === 'dark' ? '#29315A' : '#E4E1EE';
+  const axis  = theme === 'dark' ? '#94a3b8' : '#787585';
 
   if (loading || !data) {
     return (
@@ -61,7 +61,7 @@ export function AnalyticsDashboard() {
 
       {/* ── Performance Summary Cards ────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Assigned Students"  value={(stats.totalAssignedStudents ?? 0).toString()} icon={Users}         color="text-brand-600 dark:text-brand-400"   bg="bg-brand-50 dark:bg-brand-900/20"   onClick={() => navigate('/students')} />
+        <StatCard label="Assigned Students"  value={(stats.totalAssignedStudents ?? 0).toString()} icon={Users}         color="text-primary dark:text-primary"   bg="bg-surface-container-low dark:bg-surface-container-low/60"   onClick={() => navigate('/students')} />
         <StatCard label="High Performing"    value={(stats.highPerformingCount ?? 0).toString()}   icon={TrendingUp}    color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-900/20" onClick={() => navigate('/students?performanceTier=High+Performing')} />
         <StatCard label="Needs Guidance"     value={(stats.midTierCount ?? 0).toString()}          icon={Users}         color="text-amber-600 dark:text-amber-400"   bg="bg-amber-50 dark:bg-amber-900/20"   onClick={() => navigate('/students?performanceTier=Average+-+Guidable')} />
         <StatCard label="Underperforming"    value={(stats.underperformingCount ?? 0).toString()}  icon={AlertTriangle} color="text-red-600 dark:text-red-400"       bg="bg-red-50 dark:bg-red-900/20"       onClick={() => navigate('/students?performanceTier=Underperforming')} />
@@ -118,7 +118,7 @@ export function AnalyticsDashboard() {
                     <XAxis dataKey="range" stroke={axis} fontSize={11} tickLine={false} axisLine={false} />
                     <YAxis stroke={axis} fontSize={11} tickLine={false} axisLine={false} />
                     <Tooltip contentStyle={{ backgroundColor: tt.bg, borderColor: tt.border, color: tt.color }} />
-                    <Bar dataKey="count" name="Students" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="count" name="Students" fill="#6152D1" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : <EmptyChart />}
@@ -194,7 +194,7 @@ export function AnalyticsDashboard() {
                       isAnimationActive={false}
                     >
                       {((data as any).internshipPreferences ?? []).map((_: any, i: number) => (
-                        <Cell key={i} fill={['#0ea5e9', '#10b981', '#94a3b8'][i % 3]} />
+                        <Cell key={i} fill={['#6152D1', '#10b981', '#94a3b8'][i % 3]} />
                       ))}
                     </Pie>
                     <Tooltip contentStyle={{ backgroundColor: tt.bg, borderColor: tt.border, color: tt.color }} />
@@ -253,7 +253,7 @@ function StatCard({ label, value, icon: Icon, color, bg, onClick }: {
 }) {
   return (
     <div
-      className={`rounded-xl border border-slate-200 dark:border-brand-800 p-5 flex items-center justify-between shadow-sm transition-all ${onClick ? 'cursor-pointer hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700' : ''}`}
+      className={`rounded-xl border border-slate-200 dark:border-outline-variant p-5 flex items-center justify-between shadow-sm transition-all ${onClick ? 'cursor-pointer hover:shadow-md hover:border-outline-variant dark:hover:border-outline-variant' : ''}`}
       onClick={onClick}
     >
       <div>

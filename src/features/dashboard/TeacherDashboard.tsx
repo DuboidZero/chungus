@@ -97,7 +97,7 @@ export function TeacherDashboard({ user }: Props) {
 
         {/* 4. Performance Summary */}
         <div className="space-y-4">
-          <StatCard label="Assigned Students" value={data.stats.totalAssignedStudents.toString()} icon={Users} color="text-brand-600 dark:text-brand-400" bg="bg-brand-50 dark:bg-brand-900/20" onClick={() => navigate('/students')} />
+          <StatCard label="Assigned Students" value={data.stats.totalAssignedStudents.toString()} icon={Users} color="text-primary dark:text-primary" bg="bg-surface-container-low dark:bg-surface-container-low/60" onClick={() => navigate('/students')} />
           <StatCard label="High Performing" value={data.stats.highPerformingCount.toString()} icon={TrendingUp} color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-900/20" onClick={() => navigate('/students?performanceTier=High+Performing')} />
           <StatCard label="Needs Guidance" value={data.stats.midTierCount.toString()} icon={Users} color="text-amber-600 dark:text-amber-400" bg="bg-amber-50 dark:bg-amber-900/20" onClick={() => navigate('/students?performanceTier=Average+-+Guidable')} />
           <StatCard label="Underperforming" value={data.stats.underperformingCount.toString()} icon={AlertTriangle} color="text-red-600 dark:text-red-400" bg="bg-red-50 dark:bg-red-900/20" onClick={() => navigate('/students?performanceTier=Underperforming')} />
@@ -106,8 +106,8 @@ export function TeacherDashboard({ user }: Props) {
 
       {/* 5. Mentored Projects */}
       <Card>
-        <div className="px-6 py-5 border-b border-slate-100 dark:border-brand-800 flex items-center gap-3">
-          <div className="p-2 bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 rounded-lg">
+        <div className="px-6 py-5 border-b border-slate-100 dark:border-outline-variant flex items-center gap-3">
+          <div className="p-2 bg-surface-container-low dark:bg-surface-container-low/60 text-primary dark:text-primary rounded-lg">
             <FileCode2 className="w-5 h-5" />
           </div>
           <div>
@@ -119,7 +119,7 @@ export function TeacherDashboard({ user }: Props) {
           {mentoredProjects.length > 0 ? (
             <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
-                <tr className="bg-slate-50 dark:bg-brand-900/50 border-b border-slate-200 dark:border-brand-800 text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
+                <tr className="bg-slate-50 dark:bg-surface-container-low border-b border-slate-200 dark:border-outline-variant text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
                   <th className="p-4">Project Name</th>
                   <th className="p-4">Student</th>
                   <th className="p-4">Status</th>
@@ -127,7 +127,7 @@ export function TeacherDashboard({ user }: Props) {
               </thead>
               <tbody>
                 {mentoredProjects.map((p, i) => (
-                  <tr key={p.id || i} className="border-b border-slate-100 dark:border-brand-800/50 hover:bg-slate-50 dark:hover:bg-brand-900/30 transition-colors">
+                  <tr key={p.id || i} className="border-b border-slate-100 dark:border-outline-variant/50 hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">
                     <td className="p-4 font-medium text-slate-900 dark:text-slate-100">{p.name}</td>
                     <td className="p-4 text-slate-600 dark:text-slate-400">
                       <div className="flex flex-col">
@@ -163,7 +163,7 @@ function StatCard({ label, value, icon: Icon, color, bg, onClick }: {
   label: string; value: string; icon: typeof Users; color: string; bg: string; onClick?: () => void;
 }) {
   return (
-    <Card className={`transition-all ${onClick ? 'cursor-pointer hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700' : ''}`} onClick={onClick}>
+    <Card className={`transition-all ${onClick ? 'cursor-pointer hover:shadow-md hover:border-outline-variant dark:hover:border-outline-variant' : ''}`} onClick={onClick}>
       <CardContent className="pt-6 pb-5 px-6 flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{label}</p>

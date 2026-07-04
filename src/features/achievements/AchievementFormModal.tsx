@@ -94,7 +94,7 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
             placeholder="e.g. 1st Place, Smart India Hackathon"
             value={data.title}
             onChange={e => setField('title', e.target.value)}
-            className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-950 text-sm focus:outline-none focus:border-brand-500"
+            className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
           />
         </div>
 
@@ -138,7 +138,7 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
             type="date"
             value={data.date}
             onChange={e => setField('date', e.target.value)}
-            className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-950 text-sm focus:outline-none focus:border-brand-500"
+            className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
           />
         </div>
 
@@ -159,9 +159,9 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
         <div>
           <Label>Certificate / Proof</Label>
           {data.certificateUrl ? (
-            <div className="mt-1 w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-brand-700 bg-slate-50 dark:bg-brand-900/50 flex items-center gap-3">
-              <FileText className="w-5 h-5 text-brand-500 shrink-0" />
-              <a href={data.certificateUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-brand-600 dark:text-brand-400 hover:underline truncate flex-1">
+            <div className="mt-1 w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low flex items-center gap-3">
+              <FileText className="w-5 h-5 text-primary shrink-0" />
+              <a href={data.certificateUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-primary dark:text-primary hover:underline truncate flex-1">
                 View uploaded file
               </a>
               <button
@@ -175,10 +175,10 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
             </div>
           ) : (
             <div
-              className="mt-1 w-full py-4 rounded-xl border border-dashed border-slate-300 dark:border-brand-700 bg-slate-50 dark:bg-brand-900/50 flex flex-col items-center justify-center hover:bg-slate-100 dark:hover:bg-brand-900 transition-colors cursor-pointer group"
+              className="mt-1 w-full py-4 rounded-xl border border-dashed border-slate-300 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low flex flex-col items-center justify-center hover:bg-slate-100 dark:hover:bg-surface-container transition-colors cursor-pointer group"
               onClick={() => fileInputRef.current?.click()}
             >
-              <Upload className="w-5 h-5 text-slate-400 mb-2 group-hover:text-brand-500 transition-colors" />
+              <Upload className="w-5 h-5 text-slate-400 mb-2 group-hover:text-primary transition-colors" />
               <span className="text-sm text-slate-600 dark:text-slate-400 font-medium">
                 {uploading ? 'Uploading...' : 'Upload PDF or Image'}
               </span>
@@ -194,9 +194,9 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
           />
         </div>
 
-        <div className="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-brand-800">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-brand-700 hover:bg-slate-50 dark:hover:bg-brand-800 transition-colors">Cancel</button>
-          <button onClick={handleSave} disabled={uploading} className="px-5 py-2 bg-brand-600 hover:bg-brand-500 text-white text-sm font-bold rounded-lg flex items-center gap-2 disabled:opacity-50"><Save className="w-4 h-4"/> Save</button>
+        <div className="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-outline-variant">
+          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-outline-variant hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">Cancel</button>
+          <button onClick={handleSave} disabled={uploading} className="px-5 py-2 bg-primary-container hover:bg-primary text-white text-sm font-bold rounded-lg flex items-center gap-2 disabled:opacity-50"><Save className="w-4 h-4"/> Save</button>
         </div>
       </div>
     </Modal>

@@ -13,7 +13,7 @@ export function ProjectCard({ project, onEdit, onDelete }: Props) {
   return (
     <Card className="overflow-hidden flex flex-col group h-full">
       {/* Project Image Placeholder */}
-      <div className="h-48 bg-slate-100 dark:bg-brand-900/50 relative overflow-hidden">
+      <div className="h-48 bg-slate-100 dark:bg-surface-container-low relative overflow-hidden">
         {project.imageUrl ? (
           <img src={project.imageUrl} alt={project.name} className="w-full h-full object-cover" />
         ) : (
@@ -27,7 +27,7 @@ export function ProjectCard({ project, onEdit, onDelete }: Props) {
         {(onEdit || onDelete) && (
           <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px]">
             {onEdit && (
-              <button onClick={onEdit} className="p-2 bg-white text-slate-900 rounded-full hover:bg-brand-50 hover:text-brand-600 transition-colors shadow-lg">
+              <button onClick={onEdit} className="p-2 bg-white text-slate-900 rounded-full hover:bg-surface-container-low hover:text-primary transition-colors shadow-lg">
                 <Edit2 className="w-4 h-4" />
               </button>
             )}
@@ -45,7 +45,7 @@ export function ProjectCard({ project, onEdit, onDelete }: Props) {
         <div className="flex justify-between items-start mb-3">
           <div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 line-clamp-1">{project.name}</h3>
-            <p className="text-sm text-brand-600 dark:text-brand-400 font-medium">{project.domain}</p>
+            <p className="text-sm text-primary dark:text-primary font-medium">{project.domain}</p>
           </div>
           <Badge variant={project.status === 'Completed' ? 'success' : 'warning'}>
             {project.status}
@@ -60,14 +60,14 @@ export function ProjectCard({ project, onEdit, onDelete }: Props) {
         {/* Tech Stack */}
         <div className="flex flex-wrap gap-1.5 mb-6">
           {project.techStack.map(tech => (
-            <span key={tech} className="px-2 py-0.5 text-xs font-medium bg-slate-100 dark:bg-brand-800 text-slate-600 dark:text-slate-300 rounded">
+            <span key={tech} className="px-2 py-0.5 text-xs font-medium bg-slate-100 dark:bg-surface-container-high text-slate-600 dark:text-slate-300 rounded">
               {tech}
             </span>
           ))}
         </div>
 
         {/* Spacer to push metadata down */}
-        <div className="mt-auto pt-4 border-t border-slate-100 dark:border-brand-800 space-y-3">
+        <div className="mt-auto pt-4 border-t border-slate-100 dark:border-outline-variant space-y-3">
           {/* Metadata */}
         <div className="flex flex-wrap gap-4 text-xs text-slate-500 dark:text-slate-400">
             <div className="flex items-center gap-1.5">
@@ -95,7 +95,7 @@ export function ProjectCard({ project, onEdit, onDelete }: Props) {
           </div>
 
           {/* GitHub Integration Placeholder */}
-          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-900/30 border border-slate-200 dark:border-brand-800">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant">
             <div className="flex items-center gap-2">
               <GitBranch className="w-4 h-4 text-slate-400" />
               <span className="text-xs font-medium text-slate-500 dark:text-slate-400">GitHub Integration</span>

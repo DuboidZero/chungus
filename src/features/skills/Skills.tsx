@@ -71,7 +71,7 @@ export function Skills() {
               <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Technical Skills</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Categorised by domain of interest.</p>
             </div>
-            <button onClick={() => setModals({ ...modals, tech: true })} className="flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-500 dark:text-brand-400 shrink-0">
+            <button onClick={() => setModals({ ...modals, tech: true })} className="flex items-center gap-1 text-sm font-medium text-primary hover:text-primary dark:text-primary shrink-0">
               <Plus className="w-4 h-4" /> Add Skill
             </button>
           </div>
@@ -85,7 +85,7 @@ export function Skills() {
                   <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{domain}</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                     {data.technical.filter(t => t.domain === domain).map(skill => (
-                      <div key={skill.id} className="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-brand-800 bg-slate-50 dark:bg-brand-900/50 group">
+                      <div key={skill.id} className="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low group">
                         <div>
                           <div className="flex items-center gap-2 mb-0.5">
                             <p className="font-medium text-slate-900 dark:text-slate-100 text-sm">{skill.name}</p>
@@ -114,7 +114,7 @@ export function Skills() {
               <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Soft Skills</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Interpersonal and professional competencies.</p>
             </div>
-            <button onClick={() => setModals({ ...modals, soft: true })} className="flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-500 dark:text-brand-400 shrink-0">
+            <button onClick={() => setModals({ ...modals, soft: true })} className="flex items-center gap-1 text-sm font-medium text-primary hover:text-primary dark:text-primary shrink-0">
               <Plus className="w-4 h-4" /> Add Soft Skill
             </button>
           </div>
@@ -124,11 +124,11 @@ export function Skills() {
           ) : (
             <div className="flex flex-wrap gap-2.5">
               {data.soft.map(skill => (
-                <div key={skill.id} className="flex items-center gap-2 pl-3 pr-1 py-1 rounded-full border border-slate-200 dark:border-brand-800 bg-slate-50 dark:bg-brand-900/50">
+                <div key={skill.id} className="flex items-center gap-2 pl-3 pr-1 py-1 rounded-full border border-slate-200 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low">
                   <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{skill.name}</span>
                   {skill.proficiency && <Badge variant="info">Lvl {skill.proficiency}</Badge>}
-                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide bg-white dark:bg-brand-950 px-1.5 py-0.5 rounded border border-slate-200 dark:border-brand-700">Self-assessed</span>
-                  <button onClick={() => setDeleting({ id: skill.id, type: 'soft', name: skill.name })} className="p-1 text-slate-400 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-brand-800 rounded-full transition-colors">
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wide bg-white dark:bg-surface-container-lowest px-1.5 py-0.5 rounded border border-slate-200 dark:border-outline-variant">Self-assessed</span>
+                  <button onClick={() => setDeleting({ id: skill.id, type: 'soft', name: skill.name })} className="p-1 text-slate-400 hover:text-red-500 hover:bg-slate-200 dark:hover:bg-surface-container rounded-full transition-colors">
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -146,7 +146,7 @@ export function Skills() {
               <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Languages</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Languages you can communicate in.</p>
             </div>
-            <button onClick={() => setModals({ ...modals, lang: true })} className="flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-500 dark:text-brand-400 shrink-0">
+            <button onClick={() => setModals({ ...modals, lang: true })} className="flex items-center gap-1 text-sm font-medium text-primary hover:text-primary dark:text-primary shrink-0">
               <Plus className="w-4 h-4" /> Add Language
             </button>
           </div>
@@ -156,7 +156,7 @@ export function Skills() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
               {data.languages.map(lang => (
-                <div key={lang.id} className="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-brand-800 bg-slate-50 dark:bg-brand-900/50 group">
+                <div key={lang.id} className="flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low group">
                   <div>
                     <p className="font-medium text-slate-900 dark:text-slate-100 text-sm">{lang.name}</p>
                     <Badge variant="success" className="mt-1">{lang.proficiency}</Badge>

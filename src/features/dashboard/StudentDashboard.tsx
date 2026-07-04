@@ -78,11 +78,11 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
   const { theme } = useTheme();
 
   const chartColors = {
-    grid: theme === 'dark' ? '#29315A' : '#e2e8f0',
-    axis: theme === 'dark' ? '#94a3b8' : '#64748b',
+    grid: theme === 'dark' ? '#29315A' : '#E4E1EE',
+    axis: theme === 'dark' ? '#94a3b8' : '#787585',
     tooltip: {
       bg: theme === 'dark' ? '#1a1e3a' : '#ffffff',
-      border: theme === 'dark' ? '#29315A' : '#e2e8f0',
+      border: theme === 'dark' ? '#29315A' : '#E4E1EE',
       color: theme === 'dark' ? '#f1f5f9' : '#0f172a',
     },
   };
@@ -112,8 +112,8 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
                       <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} vertical={false} />
                       <XAxis dataKey="semester" stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} domain={['dataMin - 0.5', 'dataMax + 0.5']} />
-                      <Tooltip contentStyle={{ backgroundColor: chartColors.tooltip.bg, borderColor: chartColors.tooltip.border, color: chartColors.tooltip.color }} itemStyle={{ color: '#3b82f6' }} />
-                      <Line type="monotone" dataKey="cgpa" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, fill: '#3b82f6', strokeWidth: 0 }} activeDot={{ r: 6 }} name="CGPA" connectNulls />
+                      <Tooltip contentStyle={{ backgroundColor: chartColors.tooltip.bg, borderColor: chartColors.tooltip.border, color: chartColors.tooltip.color }} itemStyle={{ color: '#6152D1' }} />
+                      <Line type="monotone" dataKey="cgpa" stroke="#6152D1" strokeWidth={3} dot={{ r: 4, fill: '#6152D1', strokeWidth: 0 }} activeDot={{ r: 6 }} name="CGPA" connectNulls />
                       <Line type="monotone" dataKey="projected" stroke="#94a3b8" strokeWidth={3} strokeDasharray="5 5" dot={{ r: 4, fill: '#94a3b8', strokeWidth: 0 }} activeDot={{ r: 6 }} name="Projected" connectNulls />
                     </LineChart>
                   </ResponsiveContainer>
@@ -147,7 +147,7 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
               {data && data.upcomingDeadlines.length > 0 ? (
                 <ul className="space-y-4">
                   {data.upcomingDeadlines.map((deadline, i) => (
-                    <li key={deadline.id} className={`flex justify-between items-start ${i < data.upcomingDeadlines.length - 1 ? 'pb-4 border-b border-slate-100 dark:border-brand-800' : ''}`}>
+                    <li key={deadline.id} className={`flex justify-between items-start ${i < data.upcomingDeadlines.length - 1 ? 'pb-4 border-b border-slate-100 dark:border-outline-variant' : ''}`}>
                       <div>
                         <p className="text-sm font-medium text-slate-900 dark:text-slate-200">{deadline.title}</p>
                         <p className="text-xs text-slate-500 dark:text-slate-400">{deadline.subject}</p>
@@ -155,7 +155,7 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
                       <span className={`text-xs font-bold px-2 py-1 rounded shrink-0 ${
                         deadline.urgency === 'urgent'
                           ? 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20'
-                          : 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-brand-800'
+                          : 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-surface-container-high'
                       }`}>{deadline.urgencyLabel}</span>
                     </li>
                   ))}
@@ -190,7 +190,7 @@ function StatCard({ title, value, icon: Icon, trend, trendUp }: {
             )}
           </div>
         </div>
-        <div className="p-3 bg-brand-50 dark:bg-brand-800 rounded-lg text-brand-600 dark:text-brand-400">
+        <div className="p-3 bg-surface-container-low dark:bg-surface-container-high rounded-lg text-primary dark:text-primary">
           <Icon className="w-5 h-5" />
         </div>
       </CardContent>

@@ -26,7 +26,7 @@ export function ProjectsTab({ studentId }: Props) {
 
   if (projects.length === 0) {
     return (
-      <div className="text-center py-20 bg-white dark:bg-brand-900 rounded-xl border border-dashed border-slate-300 dark:border-brand-700">
+      <div className="text-center py-20 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
         <p className="text-slate-500 dark:text-slate-400 font-medium">No projects found.</p>
         <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">This student hasn't uploaded any projects yet.</p>
       </div>

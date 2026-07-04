@@ -90,7 +90,7 @@ export function ProjectDetail() {
       <div className="flex items-center gap-4">
         <button 
           onClick={() => navigate(-1)}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-brand-800 text-slate-500 transition-colors"
+          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container text-slate-500 transition-colors"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -118,9 +118,9 @@ export function ProjectDetail() {
 
         {/* Right Column: Teacher Workspace (Only visible to teachers) */}
         {isTeacher && (
-          <div className="space-y-8 bg-slate-50 dark:bg-brand-900/10 p-6 rounded-xl border border-slate-200 dark:border-brand-800">
+          <div className="space-y-8 bg-slate-50 dark:bg-surface-container-low/40 p-6 rounded-xl border border-slate-200 dark:border-outline-variant">
             <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-6 border-b border-slate-200 dark:border-brand-800 pb-2">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-6 border-b border-slate-200 dark:border-outline-variant pb-2">
                 Teacher Workspace
               </h2>
             </div>

@@ -8,11 +8,11 @@ interface Props {
 
 export function ProjectOverview({ project }: Props) {
   return (
-    <Card className="border-slate-200 dark:border-brand-800">
+    <Card className="border-slate-200 dark:border-outline-variant">
       <CardContent className="p-6">
         <div className="flex items-start gap-4 mb-6">
-          <div className="w-12 h-12 rounded-lg bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center shrink-0">
-            <FolderGit2 className="w-6 h-6 text-brand-600 dark:text-brand-400" />
+          <div className="w-12 h-12 rounded-lg bg-primary-fixed dark:bg-surface-container-low flex items-center justify-center shrink-0">
+            <FolderGit2 className="w-6 h-6 text-primary dark:text-primary" />
           </div>
           <div>
             <div className="flex items-center gap-3 mb-1">
@@ -24,7 +24,7 @@ export function ProjectOverview({ project }: Props) {
                 {project.status}
               </span>
             </div>
-            <p className="text-sm text-brand-600 dark:text-brand-400 font-medium">{project.domain}</p>
+            <p className="text-sm text-primary dark:text-primary font-medium">{project.domain}</p>
           </div>
         </div>
 
@@ -44,7 +44,7 @@ export function ProjectOverview({ project }: Props) {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 dark:border-brand-800">
+          <div className="pt-4 border-t border-slate-100 dark:border-outline-variant">
             <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Project Metadata</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-600 dark:text-slate-300">
               <div className="flex items-center gap-2">
@@ -72,8 +72,8 @@ export function ProjectOverview({ project }: Props) {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 dark:border-brand-800">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-900/30 border border-slate-200 dark:border-brand-800">
+          <div className="pt-4 border-t border-slate-100 dark:border-outline-variant">
+            <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant">
               <div className="flex items-center gap-2">
                 <GitBranch className="w-4 h-4 text-slate-400" />
                 <span className="text-sm font-medium text-slate-600 dark:text-slate-300">GitHub Repository</span>

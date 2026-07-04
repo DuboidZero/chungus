@@ -33,11 +33,11 @@ export function AdminDashboard({ user: _user }: Props) {
   }, []);
 
   const chartColors = {
-    grid:  theme === 'dark' ? '#29315A' : '#e2e8f0',
-    axis:  theme === 'dark' ? '#94a3b8' : '#64748b',
+    grid:  theme === 'dark' ? '#29315A' : '#E4E1EE',
+    axis:  theme === 'dark' ? '#94a3b8' : '#787585',
     tooltip: {
       bg:     theme === 'dark' ? '#1a1e3a' : '#ffffff',
-      border: theme === 'dark' ? '#29315A' : '#e2e8f0',
+      border: theme === 'dark' ? '#29315A' : '#E4E1EE',
       color:  theme === 'dark' ? '#f1f5f9' : '#0f172a',
     },
   };
@@ -82,7 +82,7 @@ export function AdminDashboard({ user: _user }: Props) {
 
       {/* System stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Total Students" value={data ? data.stats.totalStudents.toString() : '—'}  icon={Users}      color="text-brand-600 dark:text-brand-400"   bg="bg-brand-50 dark:bg-brand-800" />
+        <StatCard label="Total Students" value={data ? data.stats.totalStudents.toString() : '—'}  icon={Users}      color="text-primary dark:text-primary"   bg="bg-surface-container-low dark:bg-surface-container-high" />
         <StatCard label="Teachers"       value={data ? data.stats.totalTeachers.toString() : '—'}  icon={BookOpen}   color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-900/20" />
         <StatCard label="Active Cohorts" value={data ? data.stats.activeCohorts.toString() : '—'}  icon={Building2}  color="text-amber-600 dark:text-amber-400"  bg="bg-amber-50 dark:bg-amber-900/20" />
         <StatCard label="Avg Completion" value={data ? `${data.stats.avgCompletion}%` : '—'}       icon={TrendingUp} color="text-purple-600 dark:text-purple-400" bg="bg-purple-50 dark:bg-purple-900/20" />
@@ -100,8 +100,8 @@ export function AdminDashboard({ user: _user }: Props) {
                       <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} vertical={false} />
                       <XAxis dataKey="month" stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} domain={['dataMin - 20', 'dataMax + 20']} />
-                      <Tooltip contentStyle={{ backgroundColor: chartColors.tooltip.bg, borderColor: chartColors.tooltip.border, color: chartColors.tooltip.color }} itemStyle={{ color: '#3b82f6' }} />
-                      <Line type="monotone" dataKey="students" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, fill: '#3b82f6', strokeWidth: 0 }} activeDot={{ r: 6 }} name="Students" />
+                      <Tooltip contentStyle={{ backgroundColor: chartColors.tooltip.bg, borderColor: chartColors.tooltip.border, color: chartColors.tooltip.color }} itemStyle={{ color: '#6152D1' }} />
+                      <Line type="monotone" dataKey="students" stroke="#6152D1" strokeWidth={3} dot={{ r: 4, fill: '#6152D1', strokeWidth: 0 }} activeDot={{ r: 6 }} name="Students" />
                     </LineChart>
                   </ResponsiveContainer>
                 ) : (
@@ -121,14 +121,14 @@ export function AdminDashboard({ user: _user }: Props) {
               {data && data.cohorts.length > 0 ? (
                 <ul className="space-y-4">
                   {data.cohorts.map((c, i) => (
-                    <li key={c.id} className={`pb-4 ${i < data.cohorts.length - 1 ? 'border-b border-slate-100 dark:border-brand-800' : ''}`}>
+                    <li key={c.id} className={`pb-4 ${i < data.cohorts.length - 1 ? 'border-b border-slate-100 dark:border-outline-variant' : ''}`}>
                       <div className="flex justify-between items-start mb-2">
                         <p className="text-sm font-medium text-slate-900 dark:text-slate-200 leading-tight">{c.name}</p>
                         <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0 ml-2">{c.students} students</span>
                       </div>
                       <div className="flex items-center gap-3">
-                        <div className="flex-1 h-1.5 bg-slate-100 dark:bg-brand-800 rounded-full overflow-hidden">
-                          <div className="h-full bg-brand-500 rounded-full" style={{ width: `${c.completionPercentage}%` }} />
+                        <div className="flex-1 h-1.5 bg-slate-100 dark:bg-surface-container-high rounded-full overflow-hidden">
+                          <div className="h-full bg-primary-container rounded-full" style={{ width: `${c.completionPercentage}%` }} />
                         </div>
                         <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0">{c.completionPercentage}%</span>
                       </div>

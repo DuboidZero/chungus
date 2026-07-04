@@ -96,7 +96,7 @@ export function CohortsPage() {
                   <select
                     value={selectedMentors[cohort.id] || ''}
                     onChange={(e) => handleMentorChange(cohort.id, e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-brand-950 border border-slate-300 dark:border-brand-700 rounded-lg text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full px-3 py-2 bg-white dark:bg-surface-container-lowest border border-slate-300 dark:border-outline-variant rounded-lg text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Select a Mentor...</option>
                     {teachers.map(t => (

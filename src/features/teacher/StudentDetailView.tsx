@@ -103,7 +103,7 @@ export function StudentDetailView() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate('/students')}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-brand-800 text-slate-500 transition-colors"
+          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container text-slate-500 transition-colors"
           title="Back to My Students"
         >
           <ChevronLeft className="w-5 h-5" />
@@ -117,11 +117,11 @@ export function StudentDetailView() {
       </div>
 
       {/* Student Identity Banner */}
-      <Card className="border-slate-200 dark:border-brand-800">
+      <Card className="border-slate-200 dark:border-outline-variant">
         <CardContent className="p-5 flex flex-wrap items-center gap-6">
           {/* Avatar */}
           {/* Avatar */}
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary-container to-primary-container flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden">
             {studentUser?.avatar ? (
               <img src={studentUser.avatar} alt={studentUser.name} className="w-full h-full object-cover" />
             ) : (
@@ -134,7 +134,7 @@ export function StudentDetailView() {
               {studentUser?.name ?? '—'}
             </h2>
             <div className="flex flex-wrap items-center gap-3 mt-1">
-              <span className="font-mono text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-brand-900/50 px-2 py-0.5 rounded">
+              <span className="font-mono text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-surface-container-low px-2 py-0.5 rounded">
                 {studentUser?.prn ?? id}
               </span>
               {tier && (
@@ -176,21 +176,21 @@ export function StudentDetailView() {
       </Card>
 
       {/* Tabs Navigation */}
-      <div className="flex overflow-x-auto border-b border-slate-200 dark:border-brand-800 scrollbar-hide">
+      <div className="flex overflow-x-auto border-b border-slate-200 dark:border-outline-variant scrollbar-hide">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
               activeTab === tab.id
-                ? 'border-brand-500 text-brand-600 dark:text-brand-400'
+                ? 'border-primary text-primary dark:text-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
             }`}
           >
             <tab.icon className="w-4 h-4" />
             {tab.label}
             {tab.id === 'notes' && notes.length > 0 && (
-              <span className="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300">
+              <span className="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary-fixed dark:bg-surface-container-low text-primary dark:text-on-surface-variant">
                 {notes.length}
               </span>
             )}

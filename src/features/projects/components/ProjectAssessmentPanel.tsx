@@ -43,20 +43,20 @@ export function ProjectAssessmentPanel({ marks, onAddMark }: Props) {
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Assessment Title</label>
-                  <input required type="text" value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-emerald-500" />
+                  <input required type="text" value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-emerald-500" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Score</label>
-                  <input required type="number" min="0" value={form.score} onChange={e => setForm({...form, score: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-emerald-500" />
+                  <input required type="number" min="0" value={form.score} onChange={e => setForm({...form, score: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-emerald-500" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Max Score</label>
-                  <input required type="number" min="1" value={form.maxScore} onChange={e => setForm({...form, maxScore: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-emerald-500" />
+                  <input required type="number" min="1" value={form.maxScore} onChange={e => setForm({...form, maxScore: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-emerald-500" />
                 </div>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Comments</label>
-                <textarea required value={form.comments} onChange={e => setForm({...form, comments: e.target.value})} className="w-full h-20 p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-emerald-500 resize-none" />
+                <textarea required value={form.comments} onChange={e => setForm({...form, comments: e.target.value})} className="w-full h-20 p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-emerald-500 resize-none" />
               </div>
               <div className="flex justify-end">
                 <button type="submit" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-700">Save Assessment</button>
@@ -67,13 +67,13 @@ export function ProjectAssessmentPanel({ marks, onAddMark }: Props) {
       )}
 
       {marks.length === 0 ? (
-        <div className="text-center py-6 border border-dashed border-slate-200 dark:border-brand-800 rounded-lg">
+        <div className="text-center py-6 border border-dashed border-slate-200 dark:border-outline-variant rounded-lg">
           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">No assessments logged yet.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {marks.map(mark => (
-            <Card key={mark.id} className="border-slate-200 dark:border-brand-800">
+            <Card key={mark.id} className="border-slate-200 dark:border-outline-variant">
               <CardContent className="p-4 flex gap-4 justify-between items-start">
                 <div>
                   <h4 className="font-semibold text-slate-900 dark:text-slate-100">{mark.assessmentTitle}</h4>

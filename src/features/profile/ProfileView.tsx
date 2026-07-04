@@ -34,9 +34,9 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
             <div className="flex items-center gap-5">
               {/* Avatar */}
               {data.avatarUrl ? (
-                <img src={data.avatarUrl} alt="Profile" className="w-20 h-20 rounded-full object-cover shrink-0 border-2 border-white dark:border-brand-900 shadow-sm shadow-brand-900/20" />
+                <img src={data.avatarUrl} alt="Profile" className="w-20 h-20 rounded-full object-cover shrink-0 border-2 border-white dark:border-outline-variant shadow-sm shadow-primary/20" />
               ) : (
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-lg shadow-brand-900/20">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary flex items-center justify-center text-2xl font-bold text-white shrink-0 shadow-lg shadow-primary/20">
                   {initials}
                 </div>
               )}
@@ -48,7 +48,7 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
                   {academicYear && ` • ${academicYear}`}
                 </p>
                 {academicMentorName && (
-                  <p className="text-brand-600 dark:text-brand-400 mt-1 text-sm font-medium">
+                  <p className="text-primary dark:text-primary mt-1 text-sm font-medium">
                     Academic Mentor: {academicMentorName}
                   </p>
                 )}
@@ -56,17 +56,17 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
                 {/* Quick contact chips */}
                 <div className="flex flex-wrap items-center gap-2 mt-3">
                   {data.email && (
-                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-brand-800 px-2.5 py-1 rounded-full">
+                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-surface-container-high px-2.5 py-1 rounded-full">
                       <Mail className="w-3 h-3" /> {data.email}
                     </span>
                   )}
                   {data.location && (
-                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-brand-800 px-2.5 py-1 rounded-full">
+                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-surface-container-high px-2.5 py-1 rounded-full">
                       <MapPin className="w-3 h-3" /> {data.location}
                     </span>
                   )}
                   {data.phone && (
-                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-brand-800 px-2.5 py-1 rounded-full">
+                    <span className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-surface-container-high px-2.5 py-1 rounded-full">
                       <Phone className="w-3 h-3" /> {data.phone}
                     </span>
                   )}
@@ -77,7 +77,7 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
             {/* Edit button */}
             <button
               onClick={onEdit}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-800 border border-brand-200 dark:border-brand-700 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-primary dark:text-primary hover:bg-surface-container-low dark:hover:bg-surface-container border border-outline-variant dark:border-outline-variant transition-colors"
             >
               <Edit2 className="w-3.5 h-3.5" />
               Edit Profile
@@ -85,7 +85,7 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
           </div>
 
           {/* Completion bar in hero */}
-          <div className="mt-6 pt-6 border-t border-slate-100 dark:border-brand-800">
+          <div className="mt-6 pt-6 border-t border-slate-100 dark:border-outline-variant">
             <Progress value={completion} showLabel />
           </div>
         </CardContent>
@@ -120,7 +120,7 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
               </Row>
             ) : (
               <Row icon={Phone} label="Phone">
-                <button onClick={onEdit} className="text-sm text-brand-500 hover:underline">Add phone number</button>
+                <button onClick={onEdit} className="text-sm text-primary hover:underline">Add phone number</button>
               </Row>
             )}
             {data.location ? (
@@ -129,7 +129,7 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
               </Row>
             ) : (
               <Row icon={MapPin} label="Location">
-                <button onClick={onEdit} className="text-sm text-brand-500 hover:underline">Add location</button>
+                <button onClick={onEdit} className="text-sm text-primary hover:underline">Add location</button>
               </Row>
             )}
           </dl>

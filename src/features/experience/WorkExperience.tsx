@@ -73,7 +73,7 @@ export function WorkExperience() {
         </div>
         <button
           onClick={() => { setEditingId(null); setIsModalOpen(true); }}
-          className="flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-lg transition-colors shadow-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-primary-container hover:bg-primary text-white font-semibold rounded-lg transition-colors shadow-sm"
         >
           <Plus className="w-4 h-4" />
           Add Experience
@@ -83,28 +83,28 @@ export function WorkExperience() {
       {/* Timeline */}
       <div className="relative">
         {entries.length === 0 ? (
-          <div className="text-center py-16 bg-white dark:bg-brand-900 rounded-xl border border-dashed border-slate-300 dark:border-brand-700">
+          <div className="text-center py-16 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
             <p className="text-slate-500 dark:text-slate-400">No work experience added yet.</p>
           </div>
         ) : (
-          <div className="relative pl-8 space-y-8 before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-brand-500 before:to-slate-200 dark:before:to-brand-900">
+          <div className="relative pl-8 space-y-8 before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-primary before:to-slate-200 dark:before:to-tertiary">
             {entries.map((entry) => (
               <div key={entry.id} className="relative group">
                 {/* Icon Marker */}
-                <div className="absolute -left-8 top-5 flex items-center justify-center w-8 h-8 rounded-full border-2 border-white dark:border-brand-950 bg-brand-500 text-white shadow shrink-0">
+                <div className="absolute -left-8 top-5 flex items-center justify-center w-8 h-8 rounded-full border-2 border-white dark:border-outline-variant bg-primary-container text-white shadow shrink-0">
                   <Briefcase className="w-3.5 h-3.5" />
                 </div>
 
                 {/* Content Card */}
-                <div className="bg-white dark:bg-brand-900/50 p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200 dark:border-brand-800 transition-all hover:shadow-md">
+                <div className="bg-white dark:bg-surface-container-low p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200 dark:border-outline-variant transition-all hover:shadow-md">
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100">{entry.role}</h3>
-                      <p className="font-medium text-brand-600 dark:text-brand-400 text-sm">{entry.organisationName}</p>
+                      <p className="font-medium text-primary dark:text-primary text-sm">{entry.organisationName}</p>
                     </div>
                     {/* Hover Actions */}
                     <div className="flex opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2">
-                      <button onClick={() => { setEditingId(entry.id); setIsModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-brand-600 transition-colors">
+                      <button onClick={() => { setEditingId(entry.id); setIsModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-primary transition-colors">
                         <Edit2 className="w-4 h-4" />
                       </button>
                       <button onClick={() => setDeletingId(entry.id)} className="p-1.5 text-slate-400 hover:text-red-500 transition-colors">
@@ -114,7 +114,7 @@ export function WorkExperience() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 mb-3">
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-brand-800 text-slate-600 dark:text-slate-300">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-surface-container-high text-slate-600 dark:text-slate-300">
                       {entry.type}
                     </span>
                     <span className="text-sm font-medium text-slate-500 dark:text-slate-400">

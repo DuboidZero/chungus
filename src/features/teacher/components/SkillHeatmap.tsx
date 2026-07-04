@@ -52,7 +52,7 @@ export function SkillHeatmap({ data, onSkillClick }: Props) {
                     <button 
                       key={skill.name}
                       onClick={() => onSkillClick?.(skill.name)}
-                      className={`relative overflow-hidden rounded-md border border-slate-200 dark:border-brand-800/30 p-3 h-24 flex flex-col justify-between text-left transition-transform hover:-translate-y-1 hover:shadow-md ${onSkillClick ? 'cursor-pointer' : 'cursor-default'}`}
+                      className={`relative overflow-hidden rounded-md border border-slate-200 dark:border-outline-variant/40 p-3 h-24 flex flex-col justify-between text-left transition-transform hover:-translate-y-1 hover:shadow-md ${onSkillClick ? 'cursor-pointer' : 'cursor-default'}`}
                     >
                       {/* Heatmap background block */}
                       <div 

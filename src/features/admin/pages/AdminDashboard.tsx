@@ -104,7 +104,7 @@ export function AdminDashboard() {
           return (
             <Card 
               key={i} 
-              className="hover:border-brand-500 dark:hover:border-brand-400 transition-colors cursor-pointer"
+              className="hover:border-primary dark:hover:border-outline-variant transition-colors cursor-pointer"
               onClick={() => navigate(card.path)}
             >
               <CardContent className="p-6 flex items-start gap-4">

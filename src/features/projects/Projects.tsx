@@ -29,7 +29,7 @@ export function Projects() {
         </div>
         <button
           onClick={() => navigate('/projects/new')}
-          className="flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-lg transition-colors shadow-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-primary-container hover:bg-primary text-white font-semibold rounded-lg transition-colors shadow-sm"
         >
           <Plus className="w-4 h-4" />
           Add Project
@@ -50,7 +50,7 @@ export function Projects() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-white dark:bg-brand-900 rounded-xl border border-dashed border-slate-300 dark:border-brand-700">
+        <div className="text-center py-20 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
           <p className="text-slate-500 dark:text-slate-400 font-medium">No projects yet.</p>
           <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Click "Add Project" to start building your portfolio.</p>
         </div>

@@ -77,16 +77,16 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
       <Card>
         <CardContent className="p-6 space-y-6">
           <div className="flex items-center gap-2 mb-2">
-            <Camera className="w-4 h-4 text-brand-500" />
+            <Camera className="w-4 h-4 text-primary" />
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Personal</h2>
           </div>
 
           {/* Avatar placeholder */}
           <div className="flex items-center gap-5">
             {data.avatarUrl ? (
-              <img src={data.avatarUrl} alt="Profile" className="w-20 h-20 rounded-full object-cover shrink-0 border-2 border-white dark:border-brand-900 shadow-sm" />
+              <img src={data.avatarUrl} alt="Profile" className="w-20 h-20 rounded-full object-cover shrink-0 border-2 border-white dark:border-outline-variant shadow-sm" />
             ) : (
-              <div className="w-20 h-20 rounded-full bg-brand-800 flex items-center justify-center text-2xl font-bold text-white shrink-0">
+              <div className="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center text-2xl font-bold text-white shrink-0">
                 {name.split(' ').map(n => n[0]).join('').slice(0, 2)}
               </div>
             )}
@@ -97,7 +97,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingAvatar}
-                className="mt-2 text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium disabled:opacity-50"
+                className="mt-2 text-xs text-primary dark:text-primary hover:underline font-medium disabled:opacity-50"
               >
                 {uploadingAvatar ? 'Uploading...' : 'Upload photo'}
               </button>
@@ -132,7 +132,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
       <Card>
         <CardContent className="p-6 space-y-5">
           <div className="flex items-center gap-2 mb-2">
-            <Mail className="w-4 h-4 text-brand-500" />
+            <Mail className="w-4 h-4 text-primary" />
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Contact</h2>
           </div>
 
@@ -147,7 +147,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 placeholder="your.email@mitwpu.edu.in"
                 value={data.email ?? ''}
                 onChange={e => set('email', e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
               />
             </div>
           </div>
@@ -163,7 +163,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 placeholder="+91 98765 43210"
                 value={data.phone ?? ''}
                 onChange={e => set('phone', e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
               />
             </div>
           </div>
@@ -179,7 +179,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 placeholder="Pune, Maharashtra"
                 value={data.location ?? ''}
                 onChange={e => set('location', e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
               />
             </div>
           </div>
@@ -190,7 +190,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
       <Card>
         <CardContent className="p-6 space-y-5">
           <div className="flex items-center gap-2 mb-2">
-            <Briefcase className="w-4 h-4 text-brand-500" />
+            <Briefcase className="w-4 h-4 text-primary" />
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Domain Interest</h2>
           </div>
           <div>
@@ -204,7 +204,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 id="domainInterest"
                 value={data.domainInterest ?? ''}
                 onChange={e => set('domainInterest', e.target.value)}
-                className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
+                className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
               >
                 <option value="">Select your primary domain...</option>
                 {DOMAIN_OPTIONS.map(d => (
@@ -220,7 +220,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
       <Card>
         <CardContent className="p-6 space-y-5">
           <div className="flex items-center gap-2 mb-2">
-            <Briefcase className="w-4 h-4 text-brand-500" />
+            <Briefcase className="w-4 h-4 text-primary" />
             <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Internship Preferences</h2>
           </div>
 
@@ -235,8 +235,8 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                   onClick={() => set('internshipPreference', opt.value)}
                   className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
                     data.internshipPreference === opt.value
-                      ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
-                      : 'bg-white dark:bg-brand-900 border-slate-300 dark:border-brand-700 text-slate-600 dark:text-slate-300 hover:border-brand-400'
+                      ? 'bg-primary-container border-primary text-white shadow-sm'
+                      : 'bg-white dark:bg-surface-container-lowest border-slate-300 dark:border-outline-variant text-slate-600 dark:text-slate-300 hover:border-outline-variant'
                   }`}
                 >
                   {opt.label}
@@ -262,7 +262,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                   id="radius"
                   value={data.preferredRadius ?? ''}
                   onChange={e => set('preferredRadius', e.target.value)}
-                  className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-slate-300 dark:border-brand-700 bg-white dark:bg-brand-900 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-colors"
+                  className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
                 >
                   <option value="">Select radius...</option>
                   <option value="5km">Within 5 km</option>
@@ -281,7 +281,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
       <button
         onClick={() => onSave(data)}
         disabled={uploadingAvatar}
-        className="w-full flex items-center justify-center gap-2 py-3 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-brand-900/20 disabled:opacity-50"
+        className="w-full flex items-center justify-center gap-2 py-3 bg-primary-container hover:bg-primary text-white font-semibold rounded-xl transition-colors shadow-lg shadow-primary/20 disabled:opacity-50"
       >
         <Save className="w-4 h-4" />
         Save Profile

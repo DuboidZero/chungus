@@ -64,7 +64,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
           </div>
           <button
             onClick={() => setIsFormOpen(!isFormOpen)}
-            className="flex items-center gap-2 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-md hover:bg-brand-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-container text-white text-sm font-medium rounded-md hover:bg-primary transition-colors"
           >
             <Plus className="w-4 h-4" />
             {isFormOpen ? 'Cancel' : 'Log Assessment'}
@@ -72,7 +72,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
         </div>
 
         {isFormOpen && (
-          <Card className="border-brand-200 dark:border-brand-700">
+          <Card className="border-outline-variant dark:border-outline-variant">
             <CardContent className="p-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -86,7 +86,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                       placeholder="e.g. Mid-Semester Viva"
                       value={formData.assessmentTitle}
                       onChange={e => setFormData({ ...formData, assessmentTitle: e.target.value })}
-                      className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                      className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
                     />
                   </div>
                   <div>
@@ -98,7 +98,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                       type="date"
                       value={formData.date}
                       onChange={e => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                      className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
                     />
                   </div>
                 </div>
@@ -113,7 +113,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                       placeholder="45"
                       value={formData.score}
                       onChange={e => setFormData({ ...formData, score: e.target.value })}
-                      className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                      className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
                     />
                   </div>
                   <div className="flex-1">
@@ -125,7 +125,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                       placeholder="50"
                       value={formData.maxScore}
                       onChange={e => setFormData({ ...formData, maxScore: e.target.value })}
-                      className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                      className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
                     />
                   </div>
                   {formData.score && formData.maxScore && (
@@ -145,7 +145,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                     placeholder="Feedback and observations..."
                     value={formData.comments}
                     onChange={e => setFormData({ ...formData, comments: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-brand-950/50 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 resize-none"
+                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 resize-none"
                   />
                 </div>
 
@@ -153,7 +153,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex items-center gap-2 px-5 py-2 bg-brand-600 text-white text-sm font-medium rounded-md hover:bg-brand-700 disabled:opacity-50"
+                    className="flex items-center gap-2 px-5 py-2 bg-primary-container text-white text-sm font-medium rounded-md hover:bg-primary disabled:opacity-50"
                   >
                     <CheckSquare className="w-4 h-4" />
                     {saving ? 'Saving…' : 'Save Assessment'}

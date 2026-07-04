@@ -96,14 +96,14 @@ export function ProjectAssessmentView() {
       <div className="flex items-center gap-4">
         <button 
           onClick={() => navigate(-1)}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-brand-800 text-slate-500 transition-colors"
+          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container text-slate-500 transition-colors"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-3">
             {project.name}
-            <span className="text-xs font-mono font-normal px-2 py-1 bg-slate-100 dark:bg-brand-900/50 text-slate-600 dark:text-slate-400 rounded">
+            <span className="text-xs font-mono font-normal px-2 py-1 bg-slate-100 dark:bg-surface-container-low text-slate-600 dark:text-slate-400 rounded">
               {project.type}
             </span>
           </h1>
@@ -114,8 +114,8 @@ export function ProjectAssessmentView() {
       <Card>
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-lg bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center shrink-0">
-              <FolderGit2 className="w-6 h-6 text-brand-600 dark:text-brand-400" />
+            <div className="w-12 h-12 rounded-lg bg-primary-fixed dark:bg-surface-container-low flex items-center justify-center shrink-0">
+              <FolderGit2 className="w-6 h-6 text-primary dark:text-primary" />
             </div>
             <div>
               <p className="text-sm text-slate-700 dark:text-slate-300">{project.description}</p>
@@ -138,7 +138,7 @@ export function ProjectAssessmentView() {
             <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100 flex items-center gap-2">
               <CheckSquare className="w-5 h-5 text-emerald-500" /> Project Assessments
             </h3>
-            <button onClick={() => setIsMarkFormOpen(!isMarkFormOpen)} className="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">
+            <button onClick={() => setIsMarkFormOpen(!isMarkFormOpen)} className="text-sm font-medium text-primary hover:text-primary dark:text-primary">
               {isMarkFormOpen ? 'Cancel' : '+ Log Assessment'}
             </button>
           </div>
@@ -150,20 +150,20 @@ export function ProjectAssessmentView() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="col-span-2">
                       <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Assessment Title</label>
-                      <input required type="text" value={markForm.title} onChange={e => setMarkForm({...markForm, title: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-emerald-500" />
+                      <input required type="text" value={markForm.title} onChange={e => setMarkForm({...markForm, title: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-emerald-500" />
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Score</label>
-                      <input required type="number" value={markForm.score} onChange={e => setMarkForm({...markForm, score: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-emerald-500" />
+                      <input required type="number" value={markForm.score} onChange={e => setMarkForm({...markForm, score: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-emerald-500" />
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Max Score</label>
-                      <input required type="number" value={markForm.maxScore} onChange={e => setMarkForm({...markForm, maxScore: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-emerald-500" />
+                      <input required type="number" value={markForm.maxScore} onChange={e => setMarkForm({...markForm, maxScore: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-emerald-500" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Comments</label>
-                    <textarea required value={markForm.comments} onChange={e => setMarkForm({...markForm, comments: e.target.value})} className="w-full h-20 p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-emerald-500 resize-none" />
+                    <textarea required value={markForm.comments} onChange={e => setMarkForm({...markForm, comments: e.target.value})} className="w-full h-20 p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-emerald-500 resize-none" />
                   </div>
                   <div className="flex justify-end">
                     <button type="submit" className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-700">Save</button>
@@ -174,7 +174,7 @@ export function ProjectAssessmentView() {
           )}
 
           {marks.length === 0 ? (
-            <p className="text-sm text-slate-500 text-center py-4 border border-dashed border-slate-200 dark:border-brand-800 rounded-lg">No assessments logged for this project.</p>
+            <p className="text-sm text-slate-500 text-center py-4 border border-dashed border-slate-200 dark:border-outline-variant rounded-lg">No assessments logged for this project.</p>
           ) : (
             <div className="space-y-3">
               {marks.map(mark => (
@@ -201,7 +201,7 @@ export function ProjectAssessmentView() {
             <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100 flex items-center gap-2">
               <Flag className="w-5 h-5 text-purple-500" /> Milestones
             </h3>
-            <button onClick={() => setIsMilestoneFormOpen(!isMilestoneFormOpen)} className="text-sm font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400">
+            <button onClick={() => setIsMilestoneFormOpen(!isMilestoneFormOpen)} className="text-sm font-medium text-primary hover:text-primary dark:text-primary">
               {isMilestoneFormOpen ? 'Cancel' : '+ Add Milestone'}
             </button>
           </div>
@@ -212,12 +212,12 @@ export function ProjectAssessmentView() {
                 <form onSubmit={handleMilestoneSubmit} className="space-y-4">
                   <div>
                     <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Milestone Description</label>
-                    <input required type="text" value={milestoneForm.description} onChange={e => setMilestoneForm({...milestoneForm, description: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-purple-500" />
+                    <input required type="text" value={milestoneForm.description} onChange={e => setMilestoneForm({...milestoneForm, description: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-purple-500" />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
-                      <select value={milestoneForm.status} onChange={e => setMilestoneForm({...milestoneForm, status: e.target.value as MilestoneStatus})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-purple-500">
+                      <select value={milestoneForm.status} onChange={e => setMilestoneForm({...milestoneForm, status: e.target.value as MilestoneStatus})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-purple-500">
                         <option value="On Track">On Track</option>
                         <option value="Delayed">Delayed</option>
                         <option value="Completed">Completed</option>
@@ -225,7 +225,7 @@ export function ProjectAssessmentView() {
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Date</label>
-                      <input required type="date" value={milestoneForm.date} onChange={e => setMilestoneForm({...milestoneForm, date: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-md focus:ring-2 focus:ring-purple-500" />
+                      <input required type="date" value={milestoneForm.date} onChange={e => setMilestoneForm({...milestoneForm, date: e.target.value})} className="w-full p-2 text-sm bg-white dark:bg-surface-container-lowest border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-purple-500" />
                     </div>
                   </div>
                   <div className="flex justify-end">
@@ -237,12 +237,12 @@ export function ProjectAssessmentView() {
           )}
 
           {milestones.length === 0 ? (
-            <p className="text-sm text-slate-500 text-center py-4 border border-dashed border-slate-200 dark:border-brand-800 rounded-lg">No milestones logged.</p>
+            <p className="text-sm text-slate-500 text-center py-4 border border-dashed border-slate-200 dark:border-outline-variant rounded-lg">No milestones logged.</p>
           ) : (
-            <div className="space-y-3 relative pl-4 border-l-2 border-slate-100 dark:border-brand-800 ml-2">
+            <div className="space-y-3 relative pl-4 border-l-2 border-slate-100 dark:border-outline-variant ml-2">
               {milestones.map(milestone => (
                 <div key={milestone.id} className="relative mb-6">
-                  <div className={`absolute -left-[23px] top-1 w-3 h-3 rounded-full border-2 border-white dark:border-brand-900 ${getStatusColor(milestone.status).split(' ')[0]}`} />
+                  <div className={`absolute -left-[23px] top-1 w-3 h-3 rounded-full border-2 border-white dark:border-outline-variant ${getStatusColor(milestone.status).split(' ')[0]}`} />
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <span className={`text-xs font-medium px-2 py-0.5 rounded ${getStatusColor(milestone.status)}`}>{milestone.status}</span>
