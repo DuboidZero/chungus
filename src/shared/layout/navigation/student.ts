@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, User, GraduationCap, Code,
-  Briefcase, Trophy, Folder, type LucideIcon
+  Briefcase, Trophy, Folder, Building2, BookMarked, type LucideIcon
 } from 'lucide-react';
 
 export interface NavItem {
@@ -36,6 +36,13 @@ export const studentNavigation: NavGroup[] = [
       { label: 'Projects', path: '/projects', icon: Folder },
       { label: 'Work Experience', path: '/work-experience', icon: Briefcase },
       { label: 'Achievements', path: '/achievements', icon: Trophy },
+    ],
+  },
+  {
+    title: 'Career',
+    items: [
+      { label: 'Placements', path: '/placements', icon: Building2 },
+      { label: 'Course Catalog', path: '/courses', icon: BookMarked },
     ],
   },
 ];

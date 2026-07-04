@@ -26,6 +26,9 @@ import { MyStudentsView } from './features/teacher/MyStudentsView';
 import { StudentDetailView } from './features/teacher/StudentDetailView';
 import { AssessmentsView } from './features/teacher/AssessmentsView';
 import { ShareProfilesWizard } from './features/teacher/ShareProfilesWizard';
+import { ResearchHub } from './features/research/ResearchHub';
+import { Placements } from './features/placement/Placements';
+import { CourseCatalog } from './features/courses/CourseCatalog';
 import { Profile } from './features/profile/Profile';
 import { AcademicRecords } from './features/academic/AcademicRecords';
 import { Skills } from './features/skills/Skills';
@@ -70,6 +73,7 @@ function RoleRouter() {
           <Route path="assessments" element={<AssessmentsView />} />
           <Route path="analytics"   element={<AnalyticsDashboard />} />
           <Route path="share"       element={<ShareProfilesWizard />} />
+          <Route path="research"    element={<ResearchHub />} />
           <Route path="*"           element={<Navigate to="/" replace />} />
         </Route>
       )}
@@ -118,6 +122,8 @@ function RoleRouter() {
           <Route path="projects/:id/edit" element={<ProjectForm />} />
           <Route path="work-experience" element={<WorkExperience />} />
           <Route path="achievements"    element={<Achievements />} />
+          <Route path="placements"      element={<Placements />} />
+          <Route path="courses"         element={<CourseCatalog />} />
           <Route path="*"               element={<Navigate to="/" replace />} />
         </Route>
       )}
