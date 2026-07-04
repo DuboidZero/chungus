@@ -50,7 +50,7 @@ export function ChangePasswordPage() {
       subtitle="Choose a strong new password for your account."
     >
       {error && (
-        <div className="p-3 bg-red-900/30 border border-red-800 rounded-lg text-sm text-red-400">
+        <div className="p-3 bg-error-container border border-error/20 rounded-md text-sm text-on-error-container">
           {error}
         </div>
       )}
@@ -83,16 +83,16 @@ export function ChangePasswordPage() {
           placeholder="Confirm new password"
         />
         {confirmPassword && newPassword !== confirmPassword && (
-          <p className="text-xs text-red-400">Passwords do not match.</p>
+          <p className="text-xs text-error">Passwords do not match.</p>
         )}
         {newPassword && currentPassword === newPassword && (
-          <p className="text-xs text-red-400">New password must be different from current.</p>
+          <p className="text-xs text-error">New password must be different from current.</p>
         )}
 
         <button
           type="submit"
           disabled={loading || !isValid}
-          className="w-full bg-brand-600 hover:bg-brand-500 text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+          className="w-full bg-primary-container hover:bg-primary text-on-primary font-medium py-3 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2 shadow-sm"
         >
           {loading ? 'Updating...' : 'Update Password'}
         </button>

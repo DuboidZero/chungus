@@ -49,7 +49,7 @@ export function LoginPage() {
       subtitle="Sign in to your account"
     >
       {error && (
-        <div className="p-3 bg-red-900/30 border border-red-800 rounded-lg text-sm text-red-400">
+        <div className="p-3 bg-error-container border border-error/20 rounded-md text-sm text-on-error-container">
           {error}
         </div>
       )}

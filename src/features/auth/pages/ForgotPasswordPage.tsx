@@ -32,25 +32,25 @@ export function ForgotPasswordPage() {
     >
       {success ? (
         <div className="space-y-6 text-center">
-          <div className="p-4 bg-emerald-900/30 border border-emerald-800 rounded-lg">
-            <p className="text-sm text-emerald-400">
+          <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-md">
+            <p className="text-sm text-emerald-700">
               If an account matches that identifier, password reset instructions have been sent.
             </p>
           </div>
-          <Link to="/login" className="inline-block text-sm font-medium text-brand-400 hover:text-brand-300 transition-colors">
+          <Link to="/login" className="inline-block text-sm font-medium text-primary hover:text-primary-container transition-colors">
             Return to Login
           </Link>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="p-3 bg-red-900/30 border border-red-800 rounded-lg text-sm text-red-400">
+            <div className="p-3 bg-error-container border border-error/20 rounded-md text-sm text-on-error-container">
               {error}
             </div>
           )}
-          
+
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">
+            <label className="block text-sm font-medium text-on-surface-variant mb-1.5">
               PRN / Institutional Email
             </label>
             <input
@@ -59,7 +59,7 @@ export function ForgotPasswordPage() {
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               placeholder="Enter your PRN or MITWPU Email"
-              className="w-full bg-brand-950 border border-brand-700 rounded-lg py-2.5 px-3 text-sm text-white focus:outline-none focus:border-brand-500 transition-colors placeholder:text-slate-500"
+              className="w-full bg-surface-container-lowest border border-outline-variant rounded-md py-2.5 px-3 text-sm text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors placeholder:text-on-surface-variant/70"
             />
           </div>
 
@@ -67,12 +67,12 @@ export function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={loading || !identifier}
-              className="w-full bg-brand-600 hover:bg-brand-500 text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-primary-container hover:bg-primary text-on-primary font-medium py-3 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
             >
               {loading ? 'Sending request...' : 'Send Reset Link'}
             </button>
             <div className="text-center">
-              <Link to="/login" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">
+              <Link to="/login" className="text-sm font-medium text-on-surface-variant hover:text-on-surface transition-colors">
                 Back to Login
               </Link>
             </div>
