@@ -1,4 +1,4 @@
-import { Search, LogOut } from 'lucide-react';
+import { Search, LogOut, Menu } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
 
@@ -21,7 +21,7 @@ const SEARCH_PLACEHOLDERS: Record<string, string> = {
   '/users': 'Search users...',
 };
 
-export function Topbar() {
+export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -37,7 +37,16 @@ export function Topbar() {
   };
 
   return (
-    <header className="h-16 flex items-center justify-between px-6 md:px-8 gap-4 bg-surface/70 backdrop-blur-xl border-b border-outline-variant/30 sticky top-0 z-10">
+    <header className="h-16 flex items-center justify-between px-4 sm:px-6 md:px-8 gap-3 sm:gap-4 bg-surface/70 backdrop-blur-xl border-b border-outline-variant/30 sticky top-0 z-20">
+      {/* Mobile menu toggle */}
+      <button
+        onClick={onMenuClick}
+        className="lg:hidden p-2 -ml-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors shrink-0"
+        aria-label="Open menu"
+      >
+        <Menu className="w-5 h-5" />
+      </button>
+
       {/* Search */}
       <div className="flex-1 max-w-md">
         <div className="relative">

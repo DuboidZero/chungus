@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { NavGroup } from './navigation/student';
 import type { Role } from '../../shared/permissions/roles';
 
@@ -14,19 +14,22 @@ interface SidebarProps {
   navigation: NavGroup[];
   collapsed: boolean;
   setCollapsed: (val: boolean) => void;
+  mobileOpen: boolean;
+  setMobileOpen: (val: boolean) => void;
 }
 
-export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarProps) {
+export function Sidebar({ role, navigation, collapsed, setCollapsed, mobileOpen, setMobileOpen }: SidebarProps) {
   const label = getRoleLabel(role);
 
   return (
     <aside
-      className={`flex flex-col bg-surface-container-low/70 backdrop-blur-xl border-r border-outline-variant/40 transition-all duration-300 h-screen sticky top-0 shrink-0 ${
-        collapsed ? 'w-20' : 'w-64'
-      }`}
+      className={`flex flex-col bg-surface-container-low/70 backdrop-blur-xl border-r border-outline-variant/40 h-screen shrink-0
+        fixed lg:sticky top-0 left-0 z-40 transition-transform duration-300 w-64
+        ${mobileOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
+        ${collapsed ? 'lg:w-20' : 'lg:w-64'}`}
     >
-      {/* Logo */}
-      <div className="flex items-center p-4 mb-2">
+      {/* Logo + mobile close */}
+      <div className="flex items-center justify-between p-4 mb-2">
         {!collapsed ? (
           <div className="flex items-center space-x-3 overflow-hidden">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-container to-tertiary flex items-center justify-center font-bold text-on-primary shrink-0 shadow-sm">
@@ -42,6 +45,13 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarPr
             M
           </div>
         )}
+        <button
+          onClick={() => setMobileOpen(false)}
+          className="lg:hidden p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container shrink-0"
+          aria-label="Close menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       {/* Nav */}
@@ -60,12 +70,13 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarPr
                 to={item.path}
                 end={item.end}
                 title={item.label}
+                onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center space-x-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${
                     isActive
                       ? 'bg-primary-container text-on-primary shadow-sm'
                       : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
-                  } ${collapsed ? 'justify-center' : ''}`
+                  } ${collapsed ? 'lg:justify-center' : ''}`
                 }
               >
                 <item.icon className="w-5 h-5 shrink-0" />
@@ -76,8 +87,8 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed }: SidebarPr
         ))}
       </nav>
 
-      {/* Footer */}
-      <div className="p-3 border-t border-outline-variant/40 space-y-1">
+      {/* Footer — desktop collapse only */}
+      <div className="p-3 border-t border-outline-variant/40 space-y-1 hidden lg:block">
         <button
           onClick={() => setCollapsed(!collapsed)}
           title={collapsed ? 'Expand' : 'Collapse'}
