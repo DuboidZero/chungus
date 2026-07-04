@@ -62,23 +62,23 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
   return (
     <div className="space-y-6 max-w-4xl">
       {/* Compose new note */}
-      <Card className="border-outline-variant dark:border-outline-variant">
+      <Card className="border-outline-variant">
         <CardContent className="p-4 sm:p-6">
           <div className="flex items-center gap-2 mb-3">
             <Lock className="w-4 h-4 text-amber-500" />
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
               Private — visible to teachers and admins only
             </p>
           </div>
           <textarea
-            className="w-full min-h-[100px] p-3 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 resize-y"
+            className="w-full min-h-[100px] p-3 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-on-surface resize-y"
             placeholder="Write a private note about this student..."
             value={newNote}
             onChange={e => setNewNote(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleAdd(); }}
           />
           <div className="mt-3 flex items-center justify-between">
-            <p className="text-xs text-slate-400 dark:text-slate-500">Ctrl+Enter to save</p>
+            <p className="text-xs text-on-surface-variant/70">Ctrl+Enter to save</p>
             <button
               onClick={handleAdd}
               disabled={!newNote.trim() || saving}
@@ -94,7 +94,7 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
       {/* Notes list */}
       <div className="space-y-4">
         {notes.length === 0 ? (
-          <p className="text-center text-slate-500 dark:text-slate-400 py-10">
+          <p className="text-center text-on-surface-variant py-10">
             No private notes recorded yet.
           </p>
         ) : (
@@ -106,18 +106,18 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
             return (
               <Card
                 key={note.id}
-                className="bg-amber-50/30 dark:bg-amber-900/5 border-amber-100 dark:border-amber-900/20"
+                className="bg-amber-50/30 border-amber-100"
               >
                 <CardContent className="p-4 sm:p-6">
                   {/* Header */}
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-amber-700 dark:text-amber-400 font-bold text-xs">
+                      <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold text-xs">
                         {note.teacherName.charAt(0)}
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-slate-900 dark:text-slate-200">{note.teacherName}</p>
-                        <p className="text-xs text-slate-400 dark:text-slate-500">
+                        <p className="text-sm font-medium text-on-surface">{note.teacherName}</p>
+                        <p className="text-xs text-on-surface-variant/70">
                           {new Date(note.createdAt).toLocaleString()}
                           {note.updatedAt !== note.createdAt && (
                             <span className="ml-1 italic">(edited)</span>
@@ -130,14 +130,14 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => { setEditingId(note.id); setEditContent(note.content); }}
-                          className="p-1.5 rounded text-slate-400 hover:text-primary hover:bg-surface-container-low dark:hover:bg-surface-container transition-colors"
+                          className="p-1.5 rounded text-on-surface-variant/70 hover:text-primary hover:bg-surface-container-low transition-colors"
                           title="Edit note"
                         >
                           <Pencil className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => setDeletingId(note.id)}
-                          className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                          className="p-1.5 rounded text-on-surface-variant/70 hover:text-red-600 hover:bg-red-50 transition-colors"
                           title="Delete note"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -151,14 +151,14 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
                     <div className="space-y-2">
                       <textarea
                         autoFocus
-                        className="w-full min-h-[80px] p-2 text-sm bg-white dark:bg-surface-container-lowest border border-outline-variant dark:border-outline-variant rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 resize-y"
+                        className="w-full min-h-[80px] p-2 text-sm bg-white border border-outline-variant rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-on-surface resize-y"
                         value={editContent}
                         onChange={e => setEditContent(e.target.value)}
                       />
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => setEditingId(null)}
-                          className="flex items-center gap-1 px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-outline-variant rounded hover:bg-slate-50 dark:hover:bg-surface-container"
+                          className="flex items-center gap-1 px-3 py-1.5 text-xs text-on-surface-variant border border-outline-variant rounded hover:bg-surface-container"
                         >
                           <X className="w-3 h-3" /> Cancel
                         </button>
@@ -171,12 +171,12 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
                       </div>
                     </div>
                   ) : isConfirmingDelete ? (
-                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/40 rounded-md p-3 space-y-2">
-                      <p className="text-sm text-red-700 dark:text-red-400">Delete this note permanently?</p>
+                    <div className="bg-red-50 border border-red-200 rounded-md p-3 space-y-2">
+                      <p className="text-sm text-red-700">Delete this note permanently?</p>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setDeletingId(null)}
-                          className="px-3 py-1.5 text-xs border border-slate-200 dark:border-outline-variant rounded text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-surface-container"
+                          className="px-3 py-1.5 text-xs border border-outline-variant rounded text-on-surface-variant hover:bg-surface-container"
                         >
                           Cancel
                         </button>
@@ -189,7 +189,7 @@ export function NotesTab({ notes: initialNotes, studentId, currentTeacherId, onN
                       </div>
                     </div>
                   ) : (
-                    <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">{note.content}</p>
+                    <p className="text-sm text-on-surface-variant whitespace-pre-wrap">{note.content}</p>
                   )}
                 </CardContent>
               </Card>

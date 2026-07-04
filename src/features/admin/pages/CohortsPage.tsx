@@ -67,36 +67,36 @@ export function CohortsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Cohort Management</h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1">
+        <h1 className="text-2xl font-bold text-on-surface">Cohort Management</h1>
+        <p className="text-on-surface-variant mt-1">
           Assign Academic Mentors to student cohorts. Students inherit their mentor from their assigned cohort.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {isLoading ? (
-          <div className="col-span-full p-8 text-center text-slate-500">Loading cohorts...</div>
+          <div className="col-span-full p-8 text-center text-on-surface-variant">Loading cohorts...</div>
         ) : (
           cohorts.map((cohort) => (
             <Card key={cohort.id} className="flex flex-col">
               <CardContent className="p-6 flex-1 flex flex-col">
                 <div className="mb-4">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                  <h3 className="text-lg font-bold text-on-surface">
                     {cohort.academicYear} {cohort.department}
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                  <p className="text-sm text-on-surface-variant mt-1">
                     Students: {cohort.studentCount}
                   </p>
                 </div>
 
                 <div className="mt-auto space-y-3">
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  <label className="block text-sm font-medium text-on-surface-variant">
                     Academic Mentor
                   </label>
                   <select
                     value={selectedMentors[cohort.id] || ''}
                     onChange={(e) => handleMentorChange(cohort.id, e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-surface-container-lowest border border-slate-300 dark:border-outline-variant rounded-lg text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Select a Mentor...</option>
                     {teachers.map(t => (
@@ -107,12 +107,12 @@ export function CohortsPage() {
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex-1">
                       {saveStatus[cohort.id] === 'success' && (
-                        <span className="flex items-center text-xs text-emerald-600 dark:text-emerald-400">
+                        <span className="flex items-center text-xs text-emerald-600">
                           <CheckCircle2 className="w-3 h-3 mr-1" /> Saved
                         </span>
                       )}
                       {saveStatus[cohort.id] === 'error' && (
-                        <span className="flex items-center text-xs text-red-600 dark:text-red-400">
+                        <span className="flex items-center text-xs text-red-600">
                           <AlertCircle className="w-3 h-3 mr-1" /> Error
                         </span>
                       )}
@@ -134,7 +134,7 @@ export function CohortsPage() {
         )}
         
         {!isLoading && cohorts.length === 0 && (
-          <div className="col-span-full p-8 text-center text-slate-500">
+          <div className="col-span-full p-8 text-center text-on-surface-variant">
             No cohorts found. Please use the Bulk Upload center to import students and create cohorts.
           </div>
         )}

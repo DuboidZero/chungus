@@ -49,9 +49,9 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
     max > 0 ? Math.round((score / max) * 100) : 0;
 
   const scoreColor = (pct: number) =>
-    pct >= 75 ? 'text-emerald-600 dark:text-emerald-400'
-    : pct >= 50 ? 'text-amber-600 dark:text-amber-400'
-    : 'text-red-600 dark:text-red-400';
+    pct >= 75 ? 'text-emerald-600'
+    : pct >= 50 ? 'text-amber-600'
+    : 'text-red-600';
 
   return (
     <div className="space-y-8 max-w-4xl">
@@ -59,8 +59,8 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">General Assessments</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Viva scores, participation, semester reviews — not visible to students</p>
+            <h3 className="text-lg font-semibold text-on-surface">General Assessments</h3>
+            <p className="text-xs text-on-surface-variant mt-0.5">Viva scores, participation, semester reviews — not visible to students</p>
           </div>
           <button
             onClick={() => setIsFormOpen(!isFormOpen)}
@@ -72,12 +72,12 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
         </div>
 
         {isFormOpen && (
-          <Card className="border-outline-variant dark:border-outline-variant">
+          <Card className="border-outline-variant">
             <CardContent className="p-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                    <label className="block text-xs font-semibold text-on-surface-variant mb-1">
                       Assessment Title *
                     </label>
                     <input
@@ -86,11 +86,11 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                       placeholder="e.g. Mid-Semester Viva"
                       value={formData.assessmentTitle}
                       onChange={e => setFormData({ ...formData, assessmentTitle: e.target.value })}
-                      className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
+                      className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
+                    <label className="block text-xs font-semibold text-on-surface-variant mb-1">
                       Date *
                     </label>
                     <input
@@ -98,14 +98,14 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                       type="date"
                       value={formData.date}
                       onChange={e => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
+                      className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface"
                     />
                   </div>
                 </div>
 
                 <div className="flex gap-4">
                   <div className="flex-1">
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Score *</label>
+                    <label className="block text-xs font-semibold text-on-surface-variant mb-1">Score *</label>
                     <input
                       required
                       type="number"
@@ -113,11 +113,11 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                       placeholder="45"
                       value={formData.score}
                       onChange={e => setFormData({ ...formData, score: e.target.value })}
-                      className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
+                      className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface"
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Max Score *</label>
+                    <label className="block text-xs font-semibold text-on-surface-variant mb-1">Max Score *</label>
                     <input
                       required
                       type="number"
@@ -125,7 +125,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                       placeholder="50"
                       value={formData.maxScore}
                       onChange={e => setFormData({ ...formData, maxScore: e.target.value })}
-                      className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
+                      className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface"
                     />
                   </div>
                   {formData.score && formData.maxScore && (
@@ -138,14 +138,14 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Comments *</label>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1">Comments *</label>
                   <textarea
                     required
                     rows={3}
                     placeholder="Feedback and observations..."
                     value={formData.comments}
                     onChange={e => setFormData({ ...formData, comments: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 resize-none"
+                    className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface resize-none"
                   />
                 </div>
 
@@ -166,7 +166,7 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
 
         <div className="space-y-3">
           {generalMarks.length === 0 ? (
-            <p className="text-center text-slate-500 dark:text-slate-400 py-8">
+            <p className="text-center text-on-surface-variant py-8">
               No general assessments recorded yet.
             </p>
           ) : (
@@ -176,15 +176,15 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
                 <Card key={mark.id}>
                   <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row gap-4 justify-between items-start">
                     <div className="flex-1">
-                      <h4 className="font-semibold text-slate-900 dark:text-slate-100">{mark.assessmentTitle}</h4>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <h4 className="font-semibold text-on-surface">{mark.assessmentTitle}</h4>
+                      <p className="text-xs text-on-surface-variant mt-0.5">
                         By {mark.teacherName} · {new Date(mark.date).toLocaleDateString()}
                       </p>
-                      <p className="text-sm text-slate-700 dark:text-slate-300 mt-2">{mark.comments}</p>
+                      <p className="text-sm text-on-surface-variant mt-2">{mark.comments}</p>
                     </div>
                     <div className="shrink-0 text-center min-w-[80px]">
                       <div className={`text-2xl font-bold ${scoreColor(pct)}`}>
-                        {mark.score}<span className="text-base text-slate-400">/{mark.maxScore}</span>
+                        {mark.score}<span className="text-base text-on-surface-variant/70">/{mark.maxScore}</span>
                       </div>
                       <div className={`text-xs font-semibold mt-0.5 ${scoreColor(pct)}`}>{pct}%</div>
                     </div>
@@ -200,30 +200,30 @@ export function AssessmentsTab({ marks: initialMarks, studentId }: Props) {
       {projectMarks.length > 0 && (
         <div className="space-y-4">
           <div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Project Assessments</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Marks attached to specific project entries</p>
+            <h3 className="text-lg font-semibold text-on-surface">Project Assessments</h3>
+            <p className="text-xs text-on-surface-variant mt-0.5">Marks attached to specific project entries</p>
           </div>
           <div className="space-y-3">
             {projectMarks.map(mark => {
               const pct = scorePercent(mark.score, mark.maxScore);
               return (
-                <Card key={mark.id} className="border-purple-100 dark:border-purple-900/30">
+                <Card key={mark.id} className="border-purple-100">
                   <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row gap-4 justify-between items-start">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded font-medium">
+                        <span className="text-xs px-2 py-0.5 bg-purple-100 text-purple-700 rounded font-medium">
                           Project Mark
                         </span>
                       </div>
-                      <h4 className="font-semibold text-slate-900 dark:text-slate-100">{mark.assessmentTitle}</h4>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <h4 className="font-semibold text-on-surface">{mark.assessmentTitle}</h4>
+                      <p className="text-xs text-on-surface-variant mt-0.5">
                         By {mark.teacherName} · {new Date(mark.date).toLocaleDateString()}
                       </p>
-                      <p className="text-sm text-slate-700 dark:text-slate-300 mt-2">{mark.comments}</p>
+                      <p className="text-sm text-on-surface-variant mt-2">{mark.comments}</p>
                     </div>
                     <div className="shrink-0 text-center min-w-[80px]">
                       <div className={`text-2xl font-bold ${scoreColor(pct)}`}>
-                        {mark.score}<span className="text-base text-slate-400">/{mark.maxScore}</span>
+                        {mark.score}<span className="text-base text-on-surface-variant/70">/{mark.maxScore}</span>
                       </div>
                       <div className={`text-xs font-semibold mt-0.5 ${scoreColor(pct)}`}>{pct}%</div>
                     </div>

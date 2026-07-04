@@ -9,21 +9,21 @@ interface Props {
 export function SemesterCard({ semester }: Props) {
   return (
     <Card className="overflow-hidden">
-      <CardHeader className="bg-slate-50 dark:bg-surface-container-low border-b border-slate-100 dark:border-outline-variant flex flex-row items-center justify-between py-4">
+      <CardHeader className="bg-surface-container-low border-b border-outline-variant/40 flex flex-row items-center justify-between py-4">
         <CardTitle className="text-lg">Semester {semester.semesterNumber}</CardTitle>
         <div className="flex gap-4 text-sm">
-          <span className="text-slate-500 dark:text-slate-400">
-            GPA: <span className="font-bold text-slate-900 dark:text-slate-100">{semester.gpa.toFixed(2)}</span>
+          <span className="text-on-surface-variant">
+            GPA: <span className="font-bold text-on-surface">{semester.gpa.toFixed(2)}</span>
           </span>
-          <span className="text-slate-500 dark:text-slate-400">
-            Credits: <span className="font-bold text-slate-900 dark:text-slate-100">{semester.totalCredits}</span>
+          <span className="text-on-surface-variant">
+            Credits: <span className="font-bold text-on-surface">{semester.totalCredits}</span>
           </span>
         </div>
       </CardHeader>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
-          <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50/50 dark:bg-surface-container-low/60 border-b border-slate-100 dark:border-outline-variant">
+          <thead className="text-xs text-on-surface-variant uppercase bg-surface-container-low/60 border-b border-outline-variant/40">
             <tr>
               <th className="px-6 py-3 font-medium">Subject</th>
               <th className="px-6 py-3 font-medium text-center">Marks</th>
@@ -31,11 +31,11 @@ export function SemesterCard({ semester }: Props) {
               <th className="px-6 py-3 font-medium text-right">Credits</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-outline-variant">
+          <tbody className="divide-y divide-outline-variant/40">
             {semester.subjects.map((sub) => (
-              <tr key={sub.id} className="hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">
-                <td className="px-6 py-3.5 font-medium text-slate-900 dark:text-slate-100">{sub.name}</td>
-                <td className="px-6 py-3.5 text-center text-slate-600 dark:text-slate-300">
+              <tr key={sub.id} className="hover:bg-surface-container transition-colors">
+                <td className="px-6 py-3.5 font-medium text-on-surface">{sub.name}</td>
+                <td className="px-6 py-3.5 text-center text-on-surface-variant">
                   {sub.marksObtained} / {sub.maxMarks}
                 </td>
                 <td className="px-6 py-3.5 text-center">
@@ -45,7 +45,7 @@ export function SemesterCard({ semester }: Props) {
                     : 'success'
                   }>{sub.grade}</Badge>
                 </td>
-                <td className="px-6 py-3.5 text-right text-slate-600 dark:text-slate-300">{sub.credits}</td>
+                <td className="px-6 py-3.5 text-right text-on-surface-variant">{sub.credits}</td>
               </tr>
             ))}
           </tbody>

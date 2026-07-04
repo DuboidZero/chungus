@@ -53,18 +53,18 @@ export function AnalyticsDashboard() {
   return (
     <div className="space-y-8 pb-12">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Cohort Analytics</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
+        <h1 className="text-3xl font-bold text-on-surface">Cohort Analytics</h1>
+        <p className="text-on-surface-variant mt-1">
           Cohort-level performance and skill distribution. Click any chart element to drill into matching students.
         </p>
       </div>
 
       {/* ── Performance Summary Cards ────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Assigned Students"  value={(stats.totalAssignedStudents ?? 0).toString()} icon={Users}         color="text-primary dark:text-primary"   bg="bg-surface-container-low dark:bg-surface-container-low/60"   onClick={() => navigate('/students')} />
-        <StatCard label="High Performing"    value={(stats.highPerformingCount ?? 0).toString()}   icon={TrendingUp}    color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-900/20" onClick={() => navigate('/students?performanceTier=High+Performing')} />
-        <StatCard label="Needs Guidance"     value={(stats.midTierCount ?? 0).toString()}          icon={Users}         color="text-amber-600 dark:text-amber-400"   bg="bg-amber-50 dark:bg-amber-900/20"   onClick={() => navigate('/students?performanceTier=Average+-+Guidable')} />
-        <StatCard label="Underperforming"    value={(stats.underperformingCount ?? 0).toString()}  icon={AlertTriangle} color="text-red-600 dark:text-red-400"       bg="bg-red-50 dark:bg-red-900/20"       onClick={() => navigate('/students?performanceTier=Underperforming')} />
+        <StatCard label="Assigned Students"  value={(stats.totalAssignedStudents ?? 0).toString()} icon={Users}         color="text-primary"   bg="bg-surface-container-low"   onClick={() => navigate('/students')} />
+        <StatCard label="High Performing"    value={(stats.highPerformingCount ?? 0).toString()}   icon={TrendingUp}    color="text-emerald-600" bg="bg-emerald-50" onClick={() => navigate('/students?performanceTier=High+Performing')} />
+        <StatCard label="Needs Guidance"     value={(stats.midTierCount ?? 0).toString()}          icon={Users}         color="text-amber-600"   bg="bg-amber-50"   onClick={() => navigate('/students?performanceTier=Average+-+Guidable')} />
+        <StatCard label="Underperforming"    value={(stats.underperformingCount ?? 0).toString()}  icon={AlertTriangle} color="text-red-600"       bg="bg-red-50"       onClick={() => navigate('/students?performanceTier=Underperforming')} />
       </div>
 
       {/* ── Row 1: Skill Heatmap + Domain Interests ──────────────────── */}
@@ -151,7 +151,7 @@ export function AnalyticsDashboard() {
         <Card>
           <CardHeader>
             <CardTitle>Achievement Volume</CardTitle>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">By category and level</p>
+            <p className="text-xs text-on-surface-variant mt-0.5">By category and level</p>
           </CardHeader>
           <CardContent>
             <div className="h-72">
@@ -178,7 +178,7 @@ export function AnalyticsDashboard() {
         <Card>
           <CardHeader>
             <CardTitle>Internship Preferences</CardTitle>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Online vs offline vs no preference</p>
+            <p className="text-xs text-on-surface-variant mt-0.5">Online vs offline vs no preference</p>
           </CardHeader>
           <CardContent>
             <div className="h-72">
@@ -211,7 +211,7 @@ export function AnalyticsDashboard() {
       <Card>
         <CardHeader>
           <CardTitle>Project Activity by Domain</CardTitle>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Count of projects per domain and tech stack</p>
+          <p className="text-xs text-on-surface-variant mt-0.5">Count of projects per domain and tech stack</p>
         </CardHeader>
         <CardContent>
           <div className="h-72">
@@ -242,7 +242,7 @@ export function AnalyticsDashboard() {
 
 function EmptyChart() {
   return (
-    <div className="flex items-center justify-center h-full text-sm text-slate-400 dark:text-slate-500">
+    <div className="flex items-center justify-center h-full text-sm text-on-surface-variant/70">
       No data available yet.
     </div>
   );
@@ -253,12 +253,12 @@ function StatCard({ label, value, icon: Icon, color, bg, onClick }: {
 }) {
   return (
     <div
-      className={`rounded-xl border border-slate-200 dark:border-outline-variant p-5 flex items-center justify-between shadow-sm transition-all ${onClick ? 'cursor-pointer hover:shadow-md hover:border-outline-variant dark:hover:border-outline-variant' : ''}`}
+      className={`rounded-xl border border-outline-variant p-5 flex items-center justify-between shadow-sm transition-all ${onClick ? 'cursor-pointer hover:shadow-md hover:border-outline-variant' : ''}`}
       onClick={onClick}
     >
       <div>
-        <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{label}</p>
-        <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{value}</p>
+        <p className="text-sm font-medium text-on-surface-variant mb-1">{label}</p>
+        <p className="text-2xl font-bold text-on-surface">{value}</p>
       </div>
       <div className={`p-3 rounded-lg ${bg} ${color}`}><Icon className="w-5 h-5" /></div>
     </div>

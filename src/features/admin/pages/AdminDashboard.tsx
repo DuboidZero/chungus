@@ -33,78 +33,78 @@ export function AdminDashboard() {
   }, []);
 
   const navCards = [
-    { title: 'Users', description: 'Manage students and teachers', icon: Users, path: '/users', color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-900/20' },
-    { title: 'Cohorts', description: 'Manage academic cohorts and mentors', icon: Building2, path: '/cohorts', color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-900/20' },
-    { title: 'Bulk Upload', description: 'Import institutional data via Excel/CSV', icon: UploadCloud, path: '/bulk-upload', color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-900/20' },
+    { title: 'Users', description: 'Manage students and teachers', icon: Users, path: '/users', color: 'text-blue-500', bg: 'bg-blue-50' },
+    { title: 'Cohorts', description: 'Manage academic cohorts and mentors', icon: Building2, path: '/cohorts', color: 'text-emerald-500', bg: 'bg-emerald-50' },
+    { title: 'Bulk Upload', description: 'Import institutional data via Excel/CSV', icon: UploadCloud, path: '/bulk-upload', color: 'text-amber-500', bg: 'bg-amber-50' },
   ];
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Admin Dashboard</h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1">System overview and quick actions.</p>
+        <h1 className="text-2xl font-bold text-on-surface">Admin Dashboard</h1>
+        <p className="text-on-surface-variant mt-1">System overview and quick actions.</p>
       </div>
 
       {/* Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-500 rounded-xl">
+            <div className="p-3 bg-blue-50 text-blue-500 rounded-xl">
               <UsersRound className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Students</p>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{stats.students}</h3>
+              <p className="text-sm font-medium text-on-surface-variant">Total Students</p>
+              <h3 className="text-2xl font-bold text-on-surface">{stats.students}</h3>
             </div>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500 rounded-xl">
+            <div className="p-3 bg-indigo-50 text-indigo-500 rounded-xl">
               <BookOpen className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Teachers</p>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{stats.teachers}</h3>
+              <p className="text-sm font-medium text-on-surface-variant">Total Teachers</p>
+              <h3 className="text-2xl font-bold text-on-surface">{stats.teachers}</h3>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 rounded-xl">
+            <div className="p-3 bg-emerald-50 text-emerald-500 rounded-xl">
               <Building2 className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Cohorts</p>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{stats.cohorts}</h3>
+              <p className="text-sm font-medium text-on-surface-variant">Total Cohorts</p>
+              <h3 className="text-2xl font-bold text-on-surface">{stats.cohorts}</h3>
             </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardContent className="p-6 flex items-center gap-4">
-            <div className="p-3 bg-rose-50 dark:bg-rose-900/20 text-rose-500 rounded-xl">
+            <div className="p-3 bg-rose-50 text-rose-500 rounded-xl">
               <AlertCircle className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Active Guidance Cases</p>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{stats.cases}</h3>
+              <p className="text-sm font-medium text-on-surface-variant">Active Guidance Cases</p>
+              <h3 className="text-2xl font-bold text-on-surface">{stats.cases}</h3>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Navigation Cards */}
-      <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mt-8">Quick Navigation</h2>
+      <h2 className="text-lg font-semibold text-on-surface mt-8">Quick Navigation</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {navCards.map((card, i) => {
           const Icon = card.icon;
           return (
             <Card 
               key={i} 
-              className="hover:border-primary dark:hover:border-outline-variant transition-colors cursor-pointer"
+              className="hover:border-primary transition-colors cursor-pointer"
               onClick={() => navigate(card.path)}
             >
               <CardContent className="p-6 flex items-start gap-4">
@@ -112,8 +112,8 @@ export function AdminDashboard() {
                   <Icon className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">{card.title}</h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <h3 className="text-lg font-bold text-on-surface mb-1">{card.title}</h3>
+                  <p className="text-sm text-on-surface-variant leading-relaxed">
                     {card.description}
                   </p>
                 </div>

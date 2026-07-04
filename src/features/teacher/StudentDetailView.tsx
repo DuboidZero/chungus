@@ -61,12 +61,12 @@ export function StudentDetailView() {
   }, [id]);
 
   const getTierColor = (tier?: PerformanceTier | string) => {
-    if (!tier) return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
+    if (!tier) return 'bg-surface-container text-on-surface-variant';
     switch (tier) {
-      case 'High Performing': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300';
-      case 'Average - Guidable': return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300';
-      case 'Underperforming': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
-      default: return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
+      case 'High Performing': return 'bg-emerald-100 text-emerald-800';
+      case 'Average - Guidable': return 'bg-amber-100 text-amber-800';
+      case 'Underperforming': return 'bg-red-100 text-red-800';
+      default: return 'bg-surface-container text-on-surface-variant';
     }
   };
 
@@ -103,21 +103,21 @@ export function StudentDetailView() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate('/students')}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container text-slate-500 transition-colors"
+          className="p-2 -ml-2 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors"
           title="Back to My Students"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         <div>
-          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase mb-0.5">My Students</p>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+          <p className="text-xs text-on-surface-variant font-medium tracking-wide uppercase mb-0.5">My Students</p>
+          <h1 className="text-2xl font-bold text-on-surface">
             {studentUser?.name || 'Student'}
           </h1>
         </div>
       </div>
 
       {/* Student Identity Banner */}
-      <Card className="border-slate-200 dark:border-outline-variant">
+      <Card className="border-outline-variant">
         <CardContent className="p-5 flex flex-wrap items-center gap-6">
           {/* Avatar */}
           {/* Avatar */}
@@ -130,11 +130,11 @@ export function StudentDetailView() {
           </div>
           {/* Core Info */}
           <div className="flex-1 min-w-0">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            <h2 className="text-xl font-bold text-on-surface">
               {studentUser?.name ?? '—'}
             </h2>
             <div className="flex flex-wrap items-center gap-3 mt-1">
-              <span className="font-mono text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-surface-container-low px-2 py-0.5 rounded">
+              <span className="font-mono text-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">
                 {studentUser?.prn ?? id}
               </span>
               {tier && (
@@ -148,26 +148,26 @@ export function StudentDetailView() {
           {/* Key Metrics */}
           <div className="flex gap-6 shrink-0">
             <div className="text-center">
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-0.5">CGPA</p>
-              <p className={`text-2xl font-bold ${cgpa !== undefined ? (cgpa >= 8.5 ? 'text-emerald-600 dark:text-emerald-400' : cgpa < 6.0 ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400') : 'text-slate-900 dark:text-slate-100'}`}>
+              <p className="text-xs text-on-surface-variant font-medium mb-0.5">CGPA</p>
+              <p className={`text-2xl font-bold ${cgpa !== undefined ? (cgpa >= 8.5 ? 'text-emerald-600' : cgpa < 6.0 ? 'text-red-600' : 'text-amber-600') : 'text-on-surface'}`}>
                 {cgpa !== undefined ? cgpa.toFixed(2) : '—'}
               </p>
             </div>
             <div className="text-center">
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-0.5">Projects</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              <p className="text-xs text-on-surface-variant font-medium mb-0.5">Projects</p>
+              <p className="text-2xl font-bold text-on-surface">
                 {overview?.stats?.projectCount ?? '—'}
               </p>
             </div>
             <div className="text-center">
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-0.5">Skills</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              <p className="text-xs text-on-surface-variant font-medium mb-0.5">Skills</p>
+              <p className="text-2xl font-bold text-on-surface">
                 {overview?.stats?.skillCount ?? '—'}
               </p>
             </div>
             <div className="text-center">
-              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-0.5">Achievements</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              <p className="text-xs text-on-surface-variant font-medium mb-0.5">Achievements</p>
+              <p className="text-2xl font-bold text-on-surface">
                 {overview?.stats?.achievementCount ?? '—'}
               </p>
             </div>
@@ -176,21 +176,21 @@ export function StudentDetailView() {
       </Card>
 
       {/* Tabs Navigation */}
-      <div className="flex overflow-x-auto border-b border-slate-200 dark:border-outline-variant scrollbar-hide">
+      <div className="flex overflow-x-auto border-b border-outline-variant scrollbar-hide">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
               activeTab === tab.id
-                ? 'border-primary text-primary dark:text-primary'
-                : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-700'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline-variant'
             }`}
           >
             <tab.icon className="w-4 h-4" />
             {tab.label}
             {tab.id === 'notes' && notes.length > 0 && (
-              <span className="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary-fixed dark:bg-surface-container-low text-primary dark:text-on-surface-variant">
+              <span className="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary-fixed text-primary">
                 {notes.length}
               </span>
             )}

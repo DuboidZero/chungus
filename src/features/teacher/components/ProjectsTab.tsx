@@ -21,14 +21,14 @@ export function ProjectsTab({ studentId }: Props) {
   }, [studentId]);
 
   if (loading) {
-    return <div className="text-center py-12 text-slate-500 animate-pulse">Loading projects...</div>;
+    return <div className="text-center py-12 text-on-surface-variant animate-pulse">Loading projects...</div>;
   }
 
   if (projects.length === 0) {
     return (
-      <div className="text-center py-20 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
-        <p className="text-slate-500 dark:text-slate-400 font-medium">No projects found.</p>
-        <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">This student hasn't uploaded any projects yet.</p>
+      <div className="text-center py-20 bg-white rounded-xl border border-dashed border-outline-variant">
+        <p className="text-on-surface-variant font-medium">No projects found.</p>
+        <p className="text-sm text-on-surface-variant/70 mt-1">This student hasn't uploaded any projects yet.</p>
       </div>
     );
   }

@@ -53,8 +53,8 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
     <div className="max-w-2xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Complete your Profile</h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
+        <h1 className="text-3xl font-bold text-on-surface">Complete your Profile</h1>
+        <p className="text-on-surface-variant mt-1">
           Your profile is the foundation of your portfolio.
         </p>
       </div>
@@ -63,7 +63,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
       <Card>
         <CardContent className="p-5">
           <Progress value={completion} showLabel />
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+          <p className="text-xs text-on-surface-variant mt-2">
             {completion < 50
               ? 'A few more details and your profile will stand out.'
               : completion < 80
@@ -78,26 +78,26 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
         <CardContent className="p-6 space-y-6">
           <div className="flex items-center gap-2 mb-2">
             <Camera className="w-4 h-4 text-primary" />
-            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Personal</h2>
+            <h2 className="text-base font-semibold text-on-surface">Personal</h2>
           </div>
 
           {/* Avatar placeholder */}
           <div className="flex items-center gap-5">
             {data.avatarUrl ? (
-              <img src={data.avatarUrl} alt="Profile" className="w-20 h-20 rounded-full object-cover shrink-0 border-2 border-white dark:border-outline-variant shadow-sm" />
+              <img src={data.avatarUrl} alt="Profile" className="w-20 h-20 rounded-full object-cover shrink-0 border-2 border-white shadow-sm" />
             ) : (
               <div className="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center text-2xl font-bold text-white shrink-0">
                 {name.split(' ').map(n => n[0]).join('').slice(0, 2)}
               </div>
             )}
             <div>
-              <p className="font-semibold text-slate-900 dark:text-slate-100">{name}</p>
-              <p className="text-sm text-slate-500 dark:text-slate-400">{department}</p>
+              <p className="font-semibold text-on-surface">{name}</p>
+              <p className="text-sm text-on-surface-variant">{department}</p>
               <button 
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingAvatar}
-                className="mt-2 text-xs text-primary dark:text-primary hover:underline font-medium disabled:opacity-50"
+                className="mt-2 text-xs text-primary hover:underline font-medium disabled:opacity-50"
               >
                 {uploadingAvatar ? 'Uploading...' : 'Upload photo'}
               </button>
@@ -121,7 +121,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
               value={data.aboutMe ?? ''}
               onChange={e => set('aboutMe', e.target.value.slice(0, 500))}
             />
-            <p className={`text-xs mt-1 text-right transition-colors ${(data.aboutMe ?? '').length >= 450 ? 'text-amber-500' : 'text-slate-400 dark:text-slate-500'}`}>
+            <p className={`text-xs mt-1 text-right transition-colors ${(data.aboutMe ?? '').length >= 450 ? 'text-amber-500' : 'text-on-surface-variant/70'}`}>
               {(data.aboutMe ?? '').length} / 500
             </p>
           </div>
@@ -133,21 +133,21 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
         <CardContent className="p-6 space-y-5">
           <div className="flex items-center gap-2 mb-2">
             <Mail className="w-4 h-4 text-primary" />
-            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Contact</h2>
+            <h2 className="text-base font-semibold text-on-surface">Contact</h2>
           </div>
 
           {/* Email */}
           <div>
             <Label htmlFor="email">Email</Label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/70" />
               <input
                 id="email"
                 type="email"
                 placeholder="your.email@mitwpu.edu.in"
                 value={data.email ?? ''}
                 onChange={e => set('email', e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-outline-variant bg-white text-on-surface placeholder:text-on-surface-variant/70 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
               />
             </div>
           </div>
@@ -156,14 +156,14 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
           <div>
             <Label htmlFor="phone">Phone</Label>
             <div className="relative">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/70" />
               <input
                 id="phone"
                 type="tel"
                 placeholder="+91 98765 43210"
                 value={data.phone ?? ''}
                 onChange={e => set('phone', e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-outline-variant bg-white text-on-surface placeholder:text-on-surface-variant/70 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
               />
             </div>
           </div>
@@ -172,14 +172,14 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
           <div>
             <Label htmlFor="location">Location</Label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/70" />
               <input
                 id="location"
                 type="text"
                 placeholder="Pune, Maharashtra"
                 value={data.location ?? ''}
                 onChange={e => set('location', e.target.value)}
-                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                className="w-full pl-9 pr-3 py-2.5 rounded-lg border border-outline-variant bg-white text-on-surface placeholder:text-on-surface-variant/70 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
               />
             </div>
           </div>
@@ -191,20 +191,20 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
         <CardContent className="p-6 space-y-5">
           <div className="flex items-center gap-2 mb-2">
             <Briefcase className="w-4 h-4 text-primary" />
-            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Domain Interest</h2>
+            <h2 className="text-base font-semibold text-on-surface">Domain Interest</h2>
           </div>
           <div>
             <Label htmlFor="domainInterest">Primary Domain</Label>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+            <p className="text-xs text-on-surface-variant mb-2">
               Your main area of technical interest. This helps your teacher understand your goals.
             </p>
             <div className="relative">
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/70 pointer-events-none" />
               <select
                 id="domainInterest"
                 value={data.domainInterest ?? ''}
                 onChange={e => set('domainInterest', e.target.value)}
-                className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-outline-variant bg-white text-on-surface text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
               >
                 <option value="">Select your primary domain...</option>
                 {DOMAIN_OPTIONS.map(d => (
@@ -221,7 +221,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
         <CardContent className="p-6 space-y-5">
           <div className="flex items-center gap-2 mb-2">
             <Briefcase className="w-4 h-4 text-primary" />
-            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Internship Preferences</h2>
+            <h2 className="text-base font-semibold text-on-surface">Internship Preferences</h2>
           </div>
 
           {/* Toggle buttons */}
@@ -236,7 +236,7 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                   className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
                     data.internshipPreference === opt.value
                       ? 'bg-primary-container border-primary text-white shadow-sm'
-                      : 'bg-white dark:bg-surface-container-lowest border-slate-300 dark:border-outline-variant text-slate-600 dark:text-slate-300 hover:border-outline-variant'
+                      : 'bg-white border-outline-variant text-on-surface-variant hover:border-outline-variant'
                   }`}
                 >
                   {opt.label}
@@ -257,12 +257,12 @@ export function ProfileForm({ initial, name, department, onSave }: Props) {
                 Preferred Radius
               </Label>
               <div className="relative">
-                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/70 pointer-events-none" />
                 <select
                   id="radius"
                   value={data.preferredRadius ?? ''}
                   onChange={e => set('preferredRadius', e.target.value)}
-                  className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+                  className="w-full appearance-none px-3 py-2.5 pr-9 rounded-lg border border-outline-variant bg-white text-on-surface text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
                 >
                   <option value="">Select radius...</option>
                   <option value="5km">Within 5 km</option>

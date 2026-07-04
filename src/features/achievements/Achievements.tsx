@@ -70,8 +70,8 @@ export function Achievements() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Achievements Tracker</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Log your competitions, hackathons, awards, and publications.</p>
+          <h1 className="text-3xl font-bold text-on-surface">Achievements Tracker</h1>
+          <p className="text-on-surface-variant mt-1">Log your competitions, hackathons, awards, and publications.</p>
         </div>
         <button
           onClick={() => { setEditingId(null); setIsModalOpen(true); }}
@@ -95,8 +95,8 @@ export function Achievements() {
       </div>
       
       {entries.length === 0 && (
-        <div className="text-center py-16 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
-          <p className="text-slate-500 dark:text-slate-400">No achievements logged yet. Add your wins!</p>
+        <div className="text-center py-16 bg-white rounded-xl border border-dashed border-outline-variant">
+          <p className="text-on-surface-variant">No achievements logged yet. Add your wins!</p>
         </div>
       )}
 

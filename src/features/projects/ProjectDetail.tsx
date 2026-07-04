@@ -81,7 +81,7 @@ export function ProjectDetail() {
   }
 
   if (!project) {
-    return <div className="text-center py-20 text-slate-500">Project not found.</div>;
+    return <div className="text-center py-20 text-on-surface-variant">Project not found.</div>;
   }
 
   return (
@@ -90,21 +90,21 @@ export function ProjectDetail() {
       <div className="flex items-center gap-4">
         <button 
           onClick={() => navigate(-1)}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container text-slate-500 transition-colors"
+          className="p-2 -ml-2 rounded-full hover:bg-surface-container text-on-surface-variant transition-colors"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
         <div>
           {isTeacher && studentId ? (
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider mb-0.5">
+            <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wider mb-0.5">
               Teacher Portal &gt; Student Detail &gt; Projects
             </p>
           ) : (
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider mb-0.5">
+            <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wider mb-0.5">
               Portfolio
             </p>
           )}
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{project.name}</h1>
+          <h1 className="text-2xl font-bold text-on-surface">{project.name}</h1>
         </div>
       </div>
 
@@ -118,9 +118,9 @@ export function ProjectDetail() {
 
         {/* Right Column: Teacher Workspace (Only visible to teachers) */}
         {isTeacher && (
-          <div className="space-y-8 bg-slate-50 dark:bg-surface-container-low/40 p-6 rounded-xl border border-slate-200 dark:border-outline-variant">
+          <div className="space-y-8 bg-surface-container-low p-6 rounded-xl border border-outline-variant">
             <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-6 border-b border-slate-200 dark:border-outline-variant pb-2">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-on-surface-variant mb-6 border-b border-outline-variant pb-2">
                 Teacher Workspace
               </h2>
             </div>

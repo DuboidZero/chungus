@@ -35,10 +35,10 @@ export function StudentDashboard({ user }: Props) {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+        <h1 className="text-3xl font-bold text-on-surface">
           Welcome back, {user.name.split(' ')[0]}
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-1">
+        <p className="text-on-surface-variant mt-1">
           Here is a summary of your academic and portfolio progress.
         </p>
       </div>
@@ -118,7 +118,7 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
                     </LineChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="flex items-center justify-center h-full text-sm text-slate-400 dark:text-slate-500">
+                  <div className="flex items-center justify-center h-full text-sm text-on-surface-variant/70">
                     No academic data available yet.
                   </div>
                 )}
@@ -131,7 +131,7 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
             <CardHeader><CardTitle>Portfolio Completion</CardTitle></CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <p className="text-sm text-slate-400 dark:text-slate-500 text-center py-4">
+                <p className="text-sm text-on-surface-variant/70 text-center py-4">
                   (Portfolio completion metric is calculated dynamically on the client.)
                 </p>
               </div>
@@ -147,21 +147,21 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
               {data && data.upcomingDeadlines.length > 0 ? (
                 <ul className="space-y-4">
                   {data.upcomingDeadlines.map((deadline, i) => (
-                    <li key={deadline.id} className={`flex justify-between items-start ${i < data.upcomingDeadlines.length - 1 ? 'pb-4 border-b border-slate-100 dark:border-outline-variant' : ''}`}>
+                    <li key={deadline.id} className={`flex justify-between items-start ${i < data.upcomingDeadlines.length - 1 ? 'pb-4 border-b border-outline-variant/40' : ''}`}>
                       <div>
-                        <p className="text-sm font-medium text-slate-900 dark:text-slate-200">{deadline.title}</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">{deadline.subject}</p>
+                        <p className="text-sm font-medium text-on-surface">{deadline.title}</p>
+                        <p className="text-xs text-on-surface-variant">{deadline.subject}</p>
                       </div>
                       <span className={`text-xs font-bold px-2 py-1 rounded shrink-0 ${
                         deadline.urgency === 'urgent'
-                          ? 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20'
-                          : 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-surface-container-high'
+                          ? 'text-orange-600 bg-orange-50'
+                          : 'text-on-surface-variant bg-surface-container'
                       }`}>{deadline.urgencyLabel}</span>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-slate-400 dark:text-slate-500 text-center py-4">
+                <p className="text-sm text-on-surface-variant/70 text-center py-4">
                   No upcoming deadlines.
                 </p>
               )}
@@ -180,17 +180,17 @@ function StatCard({ title, value, icon: Icon, trend, trendUp }: {
     <Card>
       <CardContent className="pt-8 pb-6 px-6 flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">{title}</p>
+          <p className="text-sm font-medium text-on-surface-variant mb-1">{title}</p>
           <div className="flex items-baseline space-x-2">
-            <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{value}</h3>
+            <h3 className="text-2xl font-bold text-on-surface">{value}</h3>
             {trend && (
-              <span className={`text-xs font-medium ${trendUp ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'}`}>
+              <span className={`text-xs font-medium ${trendUp ? 'text-emerald-600' : 'text-red-500'}`}>
                 {trend}
               </span>
             )}
           </div>
         </div>
-        <div className="p-3 bg-surface-container-low dark:bg-surface-container-high rounded-lg text-primary dark:text-primary">
+        <div className="p-3 bg-surface-container-low rounded-lg text-primary">
           <Icon className="w-5 h-5" />
         </div>
       </CardContent>

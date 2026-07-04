@@ -151,12 +151,12 @@ export function ProjectForm() {
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate(-1)}
-          className="p-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:text-slate-300 dark:hover:bg-surface-container transition-colors"
+          className="p-2 rounded-lg text-on-surface-variant/70 hover:text-on-surface hover:bg-surface-container transition-colors"
           aria-label="Go back"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+        <h1 className="text-2xl font-bold text-on-surface">
           {isEditing ? 'Edit Project' : 'Add New Project'}
         </h1>
       </div>
@@ -168,21 +168,21 @@ export function ProjectForm() {
           <div>
             <Label>Project Image</Label>
             <div
-              className="mt-1 h-40 w-full rounded-xl border-2 border-dashed border-slate-300 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low flex flex-col items-center justify-center hover:bg-slate-100 dark:hover:bg-surface-container transition-colors cursor-pointer group relative overflow-hidden"
+              className="mt-1 h-40 w-full rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low flex flex-col items-center justify-center hover:bg-surface-container transition-colors cursor-pointer group relative overflow-hidden"
               onClick={() => fileInputRef.current?.click()}
             >
               {imagePreview ? (
                 <>
                   <img src={imagePreview} alt="Preview" className="absolute inset-0 w-full h-full object-cover" />
                   {isUploading && (
-                    <div className="absolute inset-0 bg-slate-900/40 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-inverse-surface/40 flex items-center justify-center">
                       <span className="text-white text-xs font-medium">Uploading...</span>
                     </div>
                   )}
                   <button
                     type="button"
                     onClick={e => { e.stopPropagation(); setImagePreview(null); setField('imageUrl', undefined); }}
-                    className="absolute top-2 right-2 p-1 bg-slate-900/60 text-white rounded-full hover:bg-red-600 transition-colors z-10"
+                    className="absolute top-2 right-2 p-1 bg-inverse-surface/60 text-white rounded-full hover:bg-red-600 transition-colors z-10"
                     aria-label="Remove image"
                   >
                     <X className="w-4 h-4" />
@@ -190,11 +190,11 @@ export function ProjectForm() {
                 </>
               ) : (
                 <>
-                  <div className="p-3 bg-white dark:bg-surface-container-high rounded-full shadow-sm mb-2 group-hover:scale-105 transition-transform">
+                  <div className="p-3 bg-white rounded-full shadow-sm mb-2 group-hover:scale-105 transition-transform">
                     <ImageIcon className="w-6 h-6 text-primary" />
                   </div>
-                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Click to upload image</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">JPG or PNG (max 2MB)</p>
+                  <p className="text-sm font-medium text-on-surface-variant">Click to upload image</p>
+                  <p className="text-xs text-on-surface-variant mt-1">JPG or PNG (max 2MB)</p>
                 </>
               )}
             </div>
@@ -217,7 +217,7 @@ export function ProjectForm() {
                 placeholder="e.g. Smart IoT Home Monitor"
                 value={data.name}
                 onChange={e => setField('name', e.target.value)}
-                className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:border-primary bg-white dark:bg-surface-container-lowest transition-colors ${errors.name ? 'border-red-400 dark:border-red-600' : 'border-slate-300 dark:border-outline-variant'}`}
+                className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:border-primary bg-white transition-colors ${errors.name ? 'border-red-400' : 'border-outline-variant'}`}
               />
               <FieldError field="name" />
             </div>
@@ -230,7 +230,7 @@ export function ProjectForm() {
                 placeholder="e.g. Web Development"
                 value={data.domain}
                 onChange={e => setField('domain', e.target.value)}
-                className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:border-primary bg-white dark:bg-surface-container-lowest transition-colors ${errors.domain ? 'border-red-400 dark:border-red-600' : 'border-slate-300 dark:border-outline-variant'}`}
+                className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:border-primary bg-white transition-colors ${errors.domain ? 'border-red-400' : 'border-outline-variant'}`}
               />
               <FieldError field="domain" />
             </div>
@@ -254,7 +254,7 @@ export function ProjectForm() {
               value={data.description ?? ''}
               onChange={e => setField('description', e.target.value.slice(0, 300))}
             />
-            <p className={`text-xs mt-1 text-right transition-colors ${(data.description ?? '').length >= 280 ? 'text-amber-500' : 'text-slate-400 dark:text-slate-500'}`}>
+            <p className={`text-xs mt-1 text-right transition-colors ${(data.description ?? '').length >= 280 ? 'text-amber-500' : 'text-on-surface-variant/70'}`}>
               {(data.description ?? '').length} / 300
             </p>
           </div>
@@ -269,32 +269,32 @@ export function ProjectForm() {
                 value={techInput}
                 onChange={e => setTechInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addTech())}
-                className="flex-1 px-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
+                className="flex-1 px-3 py-2.5 rounded-lg border border-outline-variant bg-white text-sm focus:outline-none focus:border-primary"
               />
               <button
                 type="button"
                 onClick={addTech}
-                className="px-4 py-2.5 bg-slate-100 dark:bg-surface-container-high text-slate-700 dark:text-slate-300 text-sm font-medium rounded-lg hover:bg-slate-200 dark:hover:bg-primary transition-colors"
+                className="px-4 py-2.5 bg-surface-container text-on-surface-variant text-sm font-medium rounded-lg hover:bg-surface-container-high transition-colors"
               >
                 Add
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
               {data.techStack.map(tech => (
-                <span key={tech} className="flex items-center gap-1.5 px-2.5 py-1 text-sm font-medium bg-slate-100 dark:bg-surface-container-high text-slate-700 dark:text-slate-300 rounded-lg">
+                <span key={tech} className="flex items-center gap-1.5 px-2.5 py-1 text-sm font-medium bg-surface-container text-on-surface-variant rounded-lg">
                   {tech}
-                  <button onClick={() => removeTech(tech)} className="text-slate-400 hover:text-red-500 transition-colors" aria-label={`Remove ${tech}`}>
+                  <button onClick={() => removeTech(tech)} className="text-on-surface-variant/70 hover:text-red-500 transition-colors" aria-label={`Remove ${tech}`}>
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </span>
               ))}
-              {data.techStack.length === 0 && <span className="text-sm text-slate-500 italic">No technologies added yet.</span>}
+              {data.techStack.length === 0 && <span className="text-sm text-on-surface-variant italic">No technologies added yet.</span>}
             </div>
             <FieldError field="techStack" />
           </div>
 
           {/* Type + Mentor */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-slate-100 dark:border-outline-variant">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-outline-variant/40">
             <div>
               <Label>Project Type</Label>
               <Select value={data.type} onChange={e => setField('type', e.target.value as ProjectType)}>
@@ -335,12 +335,12 @@ export function ProjectForm() {
                 type="month"
                 value={data.startDate || ''}
                 onChange={e => setField('startDate', e.target.value)}
-                className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
+                className="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-white text-sm focus:outline-none focus:border-primary"
               />
             </div>
             <div>
               <Label htmlFor="proj-end">
-                End Date {data.status === 'Ongoing' && <span className="text-slate-400 font-normal">(Optional)</span>}
+                End Date {data.status === 'Ongoing' && <span className="text-on-surface-variant/70 font-normal">(Optional)</span>}
               </Label>
               <input
                 id="proj-end"
@@ -348,7 +348,7 @@ export function ProjectForm() {
                 value={data.endDate || ''}
                 min={data.startDate || undefined}
                 onChange={e => setField('endDate', e.target.value)}
-                className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:border-primary bg-white dark:bg-surface-container-lowest transition-colors ${errors.endDate ? 'border-red-400 dark:border-red-600' : 'border-slate-300 dark:border-outline-variant'} ${data.status === 'Ongoing' ? 'opacity-60' : ''}`}
+                className={`w-full px-3 py-2.5 rounded-lg border text-sm focus:outline-none focus:border-primary bg-white transition-colors ${errors.endDate ? 'border-red-400' : 'border-outline-variant'} ${data.status === 'Ongoing' ? 'opacity-60' : ''}`}
               />
               <FieldError field="endDate" />
             </div>

@@ -68,8 +68,8 @@ export function WorkExperience() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Work Experience</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Chronicle your professional journey and internships.</p>
+          <h1 className="text-3xl font-bold text-on-surface">Work Experience</h1>
+          <p className="text-on-surface-variant mt-1">Chronicle your professional journey and internships.</p>
         </div>
         <button
           onClick={() => { setEditingId(null); setIsModalOpen(true); }}
@@ -83,46 +83,46 @@ export function WorkExperience() {
       {/* Timeline */}
       <div className="relative">
         {entries.length === 0 ? (
-          <div className="text-center py-16 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
-            <p className="text-slate-500 dark:text-slate-400">No work experience added yet.</p>
+          <div className="text-center py-16 bg-white rounded-xl border border-dashed border-outline-variant">
+            <p className="text-on-surface-variant">No work experience added yet.</p>
           </div>
         ) : (
-          <div className="relative pl-8 space-y-8 before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-primary before:to-slate-200 dark:before:to-tertiary">
+          <div className="relative pl-8 space-y-8 before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-primary before:to-outline-variant">
             {entries.map((entry) => (
               <div key={entry.id} className="relative group">
                 {/* Icon Marker */}
-                <div className="absolute -left-8 top-5 flex items-center justify-center w-8 h-8 rounded-full border-2 border-white dark:border-outline-variant bg-primary-container text-white shadow shrink-0">
+                <div className="absolute -left-8 top-5 flex items-center justify-center w-8 h-8 rounded-full border-2 border-white bg-primary-container text-white shadow shrink-0">
                   <Briefcase className="w-3.5 h-3.5" />
                 </div>
 
                 {/* Content Card */}
-                <div className="bg-white dark:bg-surface-container-low p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200 dark:border-outline-variant transition-all hover:shadow-md">
+                <div className="bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-outline-variant transition-all hover:shadow-md">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100">{entry.role}</h3>
-                      <p className="font-medium text-primary dark:text-primary text-sm">{entry.organisationName}</p>
+                      <h3 className="font-bold text-base sm:text-lg text-on-surface">{entry.role}</h3>
+                      <p className="font-medium text-primary text-sm">{entry.organisationName}</p>
                     </div>
                     {/* Hover Actions */}
                     <div className="flex opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2">
-                      <button onClick={() => { setEditingId(entry.id); setIsModalOpen(true); }} className="p-1.5 text-slate-400 hover:text-primary transition-colors">
+                      <button onClick={() => { setEditingId(entry.id); setIsModalOpen(true); }} className="p-1.5 text-on-surface-variant/70 hover:text-primary transition-colors">
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button onClick={() => setDeletingId(entry.id)} className="p-1.5 text-slate-400 hover:text-red-500 transition-colors">
+                      <button onClick={() => setDeletingId(entry.id)} className="p-1.5 text-on-surface-variant/70 hover:text-red-500 transition-colors">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-2 mb-3">
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-surface-container-high text-slate-600 dark:text-slate-300">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">
                       {entry.type}
                     </span>
-                    <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                    <span className="text-sm font-medium text-on-surface-variant">
                       {new Date(entry.startDate).toLocaleDateString('default', { month: 'short', year: 'numeric' })} — {entry.endDate ? new Date(entry.endDate).toLocaleDateString('default', { month: 'short', year: 'numeric' }) : 'Present'}
                     </span>
                   </div>
 
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
+                  <p className="text-sm text-on-surface-variant leading-relaxed whitespace-pre-wrap">
                     {entry.description}
                   </p>
                 </div>

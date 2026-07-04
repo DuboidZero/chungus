@@ -76,17 +76,17 @@ export function AssessmentsView() {
 
   const scorePercent = (score: number, max: number) => max > 0 ? Math.round((score / max) * 100) : 0;
   const scoreColor = (pct: number) =>
-    pct >= 75 ? 'text-emerald-600 dark:text-emerald-400' :
-    pct >= 50 ? 'text-amber-600 dark:text-amber-400' :
-    'text-red-600 dark:text-red-400';
+    pct >= 75 ? 'text-emerald-600' :
+    pct >= 50 ? 'text-amber-600' :
+    'text-red-600';
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Assessments</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">
+          <h1 className="text-3xl font-bold text-on-surface">Assessments</h1>
+          <p className="text-on-surface-variant mt-1">
             All assessment marks you've logged across your students.
           </p>
         </div>
@@ -101,26 +101,26 @@ export function AssessmentsView() {
 
       {/* New Assessment Form */}
       {isFormOpen && (
-        <Card className="border-outline-variant dark:border-outline-variant shadow-md">
+        <Card className="border-outline-variant shadow-md">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <h2 className="text-lg font-bold text-on-surface flex items-center gap-2">
                 <CheckSquare className="w-5 h-5 text-primary" />
                 Log New Assessment
               </h2>
-              <button onClick={() => setIsFormOpen(false)} className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-surface-container text-slate-400">
+              <button onClick={() => setIsFormOpen(false)} className="p-1.5 rounded-full hover:bg-surface-container text-on-surface-variant/70">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Student selector */}
               <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Student *</label>
+                <label className="block text-xs font-semibold text-on-surface-variant mb-1">Student *</label>
                 <select
                   required
                   value={form.studentId}
                   onChange={e => setForm({ ...form, studentId: e.target.value })}
-                  className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
+                  className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface"
                 >
                   <option value="">Select a student…</option>
                   {students.map(s => (
@@ -131,40 +131,40 @@ export function AssessmentsView() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Assessment Title *</label>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1">Assessment Title *</label>
                   <input
                     required
                     type="text"
                     placeholder="e.g. Mid-Semester Viva"
                     value={form.assessmentTitle}
                     onChange={e => setForm({ ...form, assessmentTitle: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
+                    className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Date *</label>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1">Date *</label>
                   <input
                     required
                     type="date"
                     value={form.date}
                     onChange={e => setForm({ ...form, date: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100"
+                    className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface"
                   />
                 </div>
               </div>
 
               <div className="flex gap-4 items-end">
                 <div className="flex-1">
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Score *</label>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1">Score *</label>
                   <input required type="number" min="0" placeholder="45" value={form.score}
                     onChange={e => setForm({ ...form, score: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" />
+                    className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface" />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Max Score *</label>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1">Max Score *</label>
                   <input required type="number" min="1" placeholder="50" value={form.maxScore}
                     onChange={e => setForm({ ...form, maxScore: e.target.value })}
-                    className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100" />
+                    className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface" />
                 </div>
                 {form.score && form.maxScore && (
                   <div className="pb-2">
@@ -176,19 +176,19 @@ export function AssessmentsView() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Comments *</label>
+                <label className="block text-xs font-semibold text-on-surface-variant mb-1">Comments *</label>
                 <textarea
                   required
                   rows={3}
                   placeholder="Feedback and observations…"
                   value={form.comments}
                   onChange={e => setForm({ ...form, comments: e.target.value })}
-                  className="w-full p-2 text-sm bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 resize-none"
+                  className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface resize-none"
                 />
               </div>
 
               <div className="flex justify-end gap-3">
-                <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-surface-container rounded-md transition-colors">
+                <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container rounded-md transition-colors">
                   Cancel
                 </button>
                 <button type="submit" disabled={saving}
@@ -204,16 +204,16 @@ export function AssessmentsView() {
 
       {/* Search Bar */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant/70" />
         <input
           type="text"
           placeholder="Search by student name, assessment title, or comments…"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded-lg focus:ring-2 focus:ring-primary text-slate-900 dark:text-slate-100 shadow-sm"
+          className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary text-on-surface shadow-sm"
         />
         {search && (
-          <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+          <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant/70 hover:text-on-surface">
             <X className="w-4 h-4" />
           </button>
         )}
@@ -221,7 +221,7 @@ export function AssessmentsView() {
 
       {/* Marks Count */}
       {!loading && (
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-on-surface-variant">
           {filtered.length === marks.length
             ? `${marks.length} assessment${marks.length !== 1 ? 's' : ''} logged`
             : `Showing ${filtered.length} of ${marks.length}`}
@@ -234,13 +234,13 @@ export function AssessmentsView() {
           {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 w-full" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-20 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
-          <BookOpen className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-500 dark:text-slate-400 font-medium">
+        <div className="text-center py-20 bg-white rounded-xl border border-dashed border-outline-variant">
+          <BookOpen className="w-10 h-10 text-on-surface-variant/60 mx-auto mb-3" />
+          <p className="text-on-surface-variant font-medium">
             {search ? 'No assessments match your search.' : 'No assessments logged yet.'}
           </p>
           {!search && (
-            <p className="text-sm text-slate-400 mt-1">Click "New Assessment" to log your first mark.</p>
+            <p className="text-sm text-on-surface-variant/70 mt-1">Click "New Assessment" to log your first mark.</p>
           )}
         </div>
       ) : (
@@ -252,30 +252,30 @@ export function AssessmentsView() {
                 <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row gap-4 justify-between items-start">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <h3 className="font-semibold text-slate-900 dark:text-slate-100">{mark.assessmentTitle}</h3>
+                      <h3 className="font-semibold text-on-surface">{mark.assessmentTitle}</h3>
                       {mark.projectId && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-purple-100 text-purple-700 rounded">
                           Project Mark
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
-                      <span className="font-medium text-slate-700 dark:text-slate-300">{mark.studentName}</span>
+                    <div className="flex items-center gap-2 text-xs text-on-surface-variant flex-wrap">
+                      <span className="font-medium text-on-surface-variant">{mark.studentName}</span>
                       <span>·</span>
-                      <span className="font-mono bg-slate-100 dark:bg-surface-container-high px-1.5 py-0.5 rounded">{mark.studentPrn}</span>
+                      <span className="font-mono bg-surface-container px-1.5 py-0.5 rounded">{mark.studentPrn}</span>
                       <span>·</span>
                       <span>{new Date(mark.date).toLocaleDateString()}</span>
                     </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 line-clamp-2">{mark.comments}</p>
+                    <p className="text-sm text-on-surface-variant mt-2 line-clamp-2">{mark.comments}</p>
                   </div>
                   <div className="flex items-center gap-4 shrink-0">
                     <div className="text-center min-w-[70px]">
                       <div className={`text-2xl font-bold ${scoreColor(pct)}`}>
-                        {mark.score}<span className="text-base text-slate-400">/{mark.maxScore}</span>
+                        {mark.score}<span className="text-base text-on-surface-variant/70">/{mark.maxScore}</span>
                       </div>
                       <div className={`text-xs font-semibold mt-0.5 ${scoreColor(pct)}`}>{pct}%</div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-primary transition-colors" />
+                    <ChevronRight className="w-4 h-4 text-on-surface-variant/60 group-hover:text-primary transition-colors" />
                   </div>
                 </CardContent>
               </Card>

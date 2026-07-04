@@ -22,8 +22,8 @@ export function Projects() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Project Portfolio</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">
+          <h1 className="text-3xl font-bold text-on-surface">Project Portfolio</h1>
+          <p className="text-on-surface-variant mt-1">
             Showcase your technical projects and implementations.
           </p>
         </div>
@@ -50,9 +50,9 @@ export function Projects() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-white dark:bg-surface-container-lowest rounded-xl border border-dashed border-slate-300 dark:border-outline-variant">
-          <p className="text-slate-500 dark:text-slate-400 font-medium">No projects yet.</p>
-          <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Click "Add Project" to start building your portfolio.</p>
+        <div className="text-center py-20 bg-white rounded-xl border border-dashed border-outline-variant">
+          <p className="text-on-surface-variant font-medium">No projects yet.</p>
+          <p className="text-sm text-on-surface-variant/70 mt-1">Click "Add Project" to start building your portfolio.</p>
         </div>
       )}
 

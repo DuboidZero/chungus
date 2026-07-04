@@ -177,21 +177,21 @@ export function UsersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">User Management</h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-1">
+          <h1 className="text-2xl font-bold text-on-surface">User Management</h1>
+          <p className="text-on-surface-variant mt-1">
             Manage students and teacher accounts across the institution.
           </p>
         </div>
         {/* Add User deferred — students onboard via Bulk Import; single-user add TBD */}
       </div>
 
-      <div className="flex gap-4 border-b border-slate-200 dark:border-outline-variant pb-2">
+      <div className="flex gap-4 border-b border-outline-variant pb-2">
         <button
           onClick={() => setActiveTab('students')}
           className={`pb-2 px-4 font-medium transition-colors border-b-2 ${
             activeTab === 'students'
-              ? 'border-primary text-primary dark:text-primary'
-              : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+              ? 'border-primary text-primary'
+              : 'border-transparent text-on-surface-variant hover:text-on-surface'
           }`}
         >
           Students ({students.length})
@@ -200,8 +200,8 @@ export function UsersPage() {
           onClick={() => setActiveTab('teachers')}
           className={`pb-2 px-4 font-medium transition-colors border-b-2 ${
             activeTab === 'teachers'
-              ? 'border-primary text-primary dark:text-primary'
-              : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+              ? 'border-primary text-primary'
+              : 'border-transparent text-on-surface-variant hover:text-on-surface'
           }`}
         >
           Teachers ({teachers.length})
@@ -211,26 +211,26 @@ export function UsersPage() {
       <Card>
         <CardContent className="p-0 overflow-x-auto">
           {isLoading ? (
-            <div className="p-8 text-center text-slate-500">Loading users...</div>
+            <div className="p-8 text-center text-on-surface-variant">Loading users...</div>
           ) : (
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead>
-                <tr className="bg-slate-50 dark:bg-surface-container-low border-b border-slate-200 dark:border-outline-variant text-xs uppercase font-semibold text-slate-500 dark:text-slate-400">
+                <tr className="bg-surface-container-low border-b border-outline-variant text-xs uppercase font-semibold text-on-surface-variant">
                   <th
-                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
+                    className="p-4 cursor-pointer hover:bg-surface-container transition-colors"
                     onClick={() => requestSort('name')}
                   >
                     Name {renderSortIcon('name')}
                   </th>
                   <th
-                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
+                    className="p-4 cursor-pointer hover:bg-surface-container transition-colors"
                     onClick={() => requestSort('identifier')}
                   >
                     {activeTab === 'students' ? 'PRN / Email' : 'Email'} {renderSortIcon('identifier')}
                   </th>
                   {activeTab === 'students' && (
                     <th
-                      className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
+                      className="p-4 cursor-pointer hover:bg-surface-container transition-colors"
                       onClick={() => requestSort('department')}
                     >
                       Department / Cohort {renderSortIcon('department')}
@@ -238,14 +238,14 @@ export function UsersPage() {
                   )}
                   {activeTab === 'teachers' && (
                     <th
-                      className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
+                      className="p-4 cursor-pointer hover:bg-surface-container transition-colors"
                       onClick={() => requestSort('department')}
                     >
                       Department {renderSortIcon('department')}
                     </th>
                   )}
                   <th
-                    className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-surface-container transition-colors"
+                    className="p-4 cursor-pointer hover:bg-surface-container transition-colors"
                     onClick={() => requestSort('status')}
                   >
                     Status {renderSortIcon('status')}
@@ -255,9 +255,9 @@ export function UsersPage() {
               </thead>
               <tbody>
                 {sortedData.map((u, i) => (
-                  <tr key={u.id || i} className="border-b border-slate-100 dark:border-outline-variant/50 hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">
-                    <td className="p-4 font-medium text-slate-900 dark:text-slate-100">{u.name}</td>
-                    <td className="p-4 text-slate-600 dark:text-slate-400">
+                  <tr key={u.id || i} className="border-b border-outline-variant/40 hover:bg-surface-container transition-colors">
+                    <td className="p-4 font-medium text-on-surface">{u.name}</td>
+                    <td className="p-4 text-on-surface-variant">
                       {activeTab === 'students' ? (
                         <div className="flex flex-col">
                           <span className="font-medium">{u.prn}</span>
@@ -268,7 +268,7 @@ export function UsersPage() {
                       )}
                     </td>
                     {activeTab === 'students' && (
-                      <td className="p-4 text-slate-600 dark:text-slate-400">
+                      <td className="p-4 text-on-surface-variant">
                         <div className="flex flex-col">
                           <span>{u.department}</span>
                           <span className="text-xs">{u.batch} {u.academicYear && `(${u.academicYear})`}</span>
@@ -276,17 +276,17 @@ export function UsersPage() {
                       </td>
                     )}
                     {activeTab === 'teachers' && (
-                      <td className="p-4 text-slate-600 dark:text-slate-400">
+                      <td className="p-4 text-on-surface-variant">
                         {u.department}
                       </td>
                     )}
                     <td className="p-4">
                       {u.deactivated ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">
                           <UserX className="w-3 h-3" /> Deactivated
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
                           <UserCheck className="w-3 h-3" /> Active
                         </span>
                       )}
@@ -295,19 +295,19 @@ export function UsersPage() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleEditClick(u)}
-                          className="p-2 text-slate-400 hover:text-primary hover:bg-surface-container-low dark:hover:bg-surface-container rounded-lg transition-colors" title="Edit"
+                          className="p-2 text-on-surface-variant/70 hover:text-primary hover:bg-surface-container-low rounded-lg transition-colors" title="Edit"
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => setResettingUser(u)}
-                          className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/50 rounded-lg transition-colors" title="Reset Password"
+                          className="p-2 text-on-surface-variant/70 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Reset Password"
                         >
                           <KeyRound className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => setDeactivatingUser(u)}
-                          className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/50 rounded-lg transition-colors" title={u.deactivated ? "Reactivate" : "Deactivate"}
+                          className="p-2 text-on-surface-variant/70 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title={u.deactivated ? "Reactivate" : "Deactivate"}
                         >
                           <UserX className="w-4 h-4" />
                         </button>
@@ -317,7 +317,7 @@ export function UsersPage() {
                 ))}
                 {sortedData.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="p-8 text-center text-slate-500">
+                    <td colSpan={5} className="p-8 text-center text-on-surface-variant">
                       No {activeTab} found.
                     </td>
                   </tr>
@@ -403,9 +403,9 @@ export function UsersPage() {
                 </div>
                 <div>
                   <Label className="mb-2 block">Assigned Cohorts</Label>
-                  <div className="space-y-2 border border-slate-200 dark:border-outline-variant rounded-md p-3 max-h-[150px] overflow-y-auto">
+                  <div className="space-y-2 border border-outline-variant rounded-md p-3 max-h-[150px] overflow-y-auto">
                     {cohorts.map(c => (
-                      <label key={c.id} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                      <label key={c.id} className="flex items-center gap-2 text-sm text-on-surface-variant">
                         <input
                           type="checkbox"
                           checked={teacherCohorts.includes(c.id)}
@@ -416,12 +416,12 @@ export function UsersPage() {
                               setTeacherCohorts(teacherCohorts.filter(id => id !== c.id));
                             }
                           }}
-                          className="rounded border-slate-300 text-primary focus:ring-primary bg-white dark:bg-surface-container-lowest dark:border-outline-variant"
+                          className="rounded border-outline-variant text-primary focus:ring-primary bg-white"
                         />
                         {c.academicYear} - {c.department}
                       </label>
                     ))}
-                    {cohorts.length === 0 && <span className="text-slate-500 text-sm">No cohorts available.</span>}
+                    {cohorts.length === 0 && <span className="text-on-surface-variant text-sm">No cohorts available.</span>}
                   </div>
                 </div>
               </>
@@ -447,22 +447,22 @@ export function UsersPage() {
           <div className="space-y-4">
             {tempPassword ? (
               <>
-                <p className="text-slate-600 dark:text-slate-300">
+                <p className="text-on-surface-variant">
                   Password for <strong>{resettingUser.name}</strong> has been reset. Share this temporary
                   password with them — it won't be shown again:
                 </p>
-                <div className="flex items-center gap-2 p-3 bg-slate-100 dark:bg-surface-container-lowest border border-slate-300 dark:border-outline-variant rounded-lg">
-                  <code className="flex-1 text-lg font-mono text-slate-900 dark:text-slate-100 break-all">{tempPassword}</code>
+                <div className="flex items-center gap-2 p-3 bg-surface-container border border-outline-variant rounded-lg">
+                  <code className="flex-1 text-lg font-mono text-on-surface break-all">{tempPassword}</code>
                   <Button variant="outline" onClick={() => navigator.clipboard.writeText(tempPassword)}>Copy</Button>
                 </div>
-                <p className="text-xs text-slate-500">The user will be asked to change it on their next login.</p>
+                <p className="text-xs text-on-surface-variant">The user will be asked to change it on their next login.</p>
                 <div className="flex justify-end mt-6">
                   <Button onClick={closeResetModal}>Done</Button>
                 </div>
               </>
             ) : (
               <>
-                <p className="text-slate-600 dark:text-slate-300">
+                <p className="text-on-surface-variant">
                   Are you sure you want to reset the password for <strong>{resettingUser.name}</strong>?
                   A new temporary password will be generated and shown to you once.
                 </p>
@@ -486,7 +486,7 @@ export function UsersPage() {
           title={deactivatingUser.deactivated ? 'Reactivate User' : 'Deactivate User'}
         >
           <div className="space-y-4">
-            <p className="text-slate-600 dark:text-slate-300">
+            <p className="text-on-surface-variant">
               {deactivatingUser.deactivated
                 ? `Are you sure you want to reactivate ${deactivatingUser.name}? They will be able to sign in again.`
                 : `Are you sure you want to deactivate ${deactivatingUser.name}? This user will no longer be able to sign in.`}

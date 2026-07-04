@@ -94,7 +94,7 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
             placeholder="e.g. 1st Place, Smart India Hackathon"
             value={data.title}
             onChange={e => setField('title', e.target.value)}
-            className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
+            className="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-white text-sm focus:outline-none focus:border-primary"
           />
         </div>
 
@@ -138,7 +138,7 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
             type="date"
             value={data.date}
             onChange={e => setField('date', e.target.value)}
-            className="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
+            className="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-white text-sm focus:outline-none focus:border-primary"
           />
         </div>
 
@@ -150,7 +150,7 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
             value={data.description ?? ''}
             onChange={e => setField('description', e.target.value.slice(0, 300))}
           />
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 text-right">
+          <p className="text-xs text-on-surface-variant/70 mt-1 text-right">
             {(data.description ?? '').length} / 300
           </p>
         </div>
@@ -159,15 +159,15 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
         <div>
           <Label>Certificate / Proof</Label>
           {data.certificateUrl ? (
-            <div className="mt-1 w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low flex items-center gap-3">
+            <div className="mt-1 w-full py-3 px-4 rounded-xl border border-outline-variant bg-surface-container-low flex items-center gap-3">
               <FileText className="w-5 h-5 text-primary shrink-0" />
-              <a href={data.certificateUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-primary dark:text-primary hover:underline truncate flex-1">
+              <a href={data.certificateUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline truncate flex-1">
                 View uploaded file
               </a>
               <button
                 type="button"
                 onClick={() => setField('certificateUrl', undefined)}
-                className="text-slate-400 hover:text-red-500 transition-colors"
+                className="text-on-surface-variant/70 hover:text-red-500 transition-colors"
                 aria-label="Remove file"
               >
                 <X className="w-4 h-4" />
@@ -175,14 +175,14 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
             </div>
           ) : (
             <div
-              className="mt-1 w-full py-4 rounded-xl border border-dashed border-slate-300 dark:border-outline-variant bg-slate-50 dark:bg-surface-container-low flex flex-col items-center justify-center hover:bg-slate-100 dark:hover:bg-surface-container transition-colors cursor-pointer group"
+              className="mt-1 w-full py-4 rounded-xl border border-dashed border-outline-variant bg-surface-container-low flex flex-col items-center justify-center hover:bg-surface-container transition-colors cursor-pointer group"
               onClick={() => fileInputRef.current?.click()}
             >
-              <Upload className="w-5 h-5 text-slate-400 mb-2 group-hover:text-primary transition-colors" />
-              <span className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+              <Upload className="w-5 h-5 text-on-surface-variant/70 mb-2 group-hover:text-primary transition-colors" />
+              <span className="text-sm text-on-surface-variant font-medium">
                 {uploading ? 'Uploading...' : 'Upload PDF or Image'}
               </span>
-              <span className="text-[10px] text-slate-400 mt-0.5">PDF, JPG, PNG (max 5MB)</span>
+              <span className="text-[10px] text-on-surface-variant/70 mt-0.5">PDF, JPG, PNG (max 5MB)</span>
             </div>
           )}
           <input
@@ -194,8 +194,8 @@ export function AchievementFormModal({ isOpen, onClose, onSave, initialData }: P
           />
         </div>
 
-        <div className="pt-4 flex justify-end gap-3 border-t border-slate-100 dark:border-outline-variant">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-outline-variant hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">Cancel</button>
+        <div className="pt-4 flex justify-end gap-3 border-t border-outline-variant/40">
+          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-outline-variant hover:bg-surface-container transition-colors">Cancel</button>
           <button onClick={handleSave} disabled={uploading} className="px-5 py-2 bg-primary-container hover:bg-primary text-white text-sm font-bold rounded-lg flex items-center gap-2 disabled:opacity-50"><Save className="w-4 h-4"/> Save</button>
         </div>
       </div>

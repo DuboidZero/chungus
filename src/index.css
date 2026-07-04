@@ -64,21 +64,6 @@
   --color-on-tertiary-fixed: #20005E;
   --color-on-tertiary-fixed-variant: #4E2FA0;
 
-  /* --- LEGACY navy scale ---
-     Retained so pre-redesign screens keep rendering during the
-     migration. Removed in Phase 3 once no references remain. */
-  --color-brand-950: #0f1225;
-  --color-brand-900: #1a1e3a;
-  --color-brand-800: #21264b;
-  --color-brand-700: #29315A;
-  --color-brand-600: #333d73;
-  --color-brand-500: #424f96;
-  --color-brand-400: #5869c9;
-  --color-brand-300: #7a8cde;
-  --color-brand-200: #a1afe8;
-  --color-brand-100: #c9d2f2;
-  --color-brand-50:  #eff1fc;
-
   /* --- Typography (design.md · Helvetica Neue) --- */
   --font-sans: 'Helvetica Neue', Helvetica, 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 

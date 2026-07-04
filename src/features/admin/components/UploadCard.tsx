@@ -45,8 +45,8 @@ export function UploadCard({ title, description, acceptedFileTypes, onUpload }: 
   return (
     <Card>
       <CardContent className="p-6">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-1">{title}</h3>
-        <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">{description}</p>
+        <h3 className="text-lg font-bold text-on-surface mb-1">{title}</h3>
+        <p className="text-sm text-on-surface-variant mb-4">{description}</p>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <input
@@ -66,7 +66,7 @@ export function UploadCard({ title, description, acceptedFileTypes, onUpload }: 
           </Button>
 
           {file && (
-            <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+            <div className="flex items-center gap-2 text-sm text-on-surface-variant">
               <FileSpreadsheet className="w-4 h-4 text-emerald-500" />
               <span className="truncate max-w-[200px]">{file.name}</span>
             </div>
@@ -86,8 +86,8 @@ export function UploadCard({ title, description, acceptedFileTypes, onUpload }: 
         {result && (
           <div className={`mt-4 p-3 rounded-lg flex items-start gap-3 text-sm ${
             result.success 
-              ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
-              : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
+              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              : 'bg-red-50 text-red-700 border border-red-200'
           }`}>
             {result.success ? (
               <CheckCircle2 className="w-5 h-5 flex-shrink-0" />

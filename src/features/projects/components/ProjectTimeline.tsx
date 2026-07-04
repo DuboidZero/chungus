@@ -32,28 +32,28 @@ export function ProjectTimeline({ marks, milestones }: Props) {
 
   if (events.length === 0) {
     return (
-      <div className="pt-6 mt-6 border-t border-slate-200 dark:border-outline-variant">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-4">Project Timeline</h3>
-        <p className="text-sm text-slate-500">No activity recorded yet.</p>
+      <div className="pt-6 mt-6 border-t border-outline-variant">
+        <h3 className="text-lg font-bold text-on-surface mb-4">Project Timeline</h3>
+        <p className="text-sm text-on-surface-variant">No activity recorded yet.</p>
       </div>
     );
   }
 
   const getStatusColor = (status?: MilestoneStatus) => {
-    if (status === 'Completed') return 'text-emerald-600 dark:text-emerald-400';
-    if (status === 'Delayed') return 'text-red-600 dark:text-red-400';
-    return 'text-blue-600 dark:text-blue-400';
+    if (status === 'Completed') return 'text-emerald-600';
+    if (status === 'Delayed') return 'text-red-600';
+    return 'text-blue-600';
   };
 
   return (
-    <div className="pt-6 mt-6 border-t border-slate-200 dark:border-outline-variant">
-      <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-6">Project Timeline</h3>
+    <div className="pt-6 mt-6 border-t border-outline-variant">
+      <h3 className="text-lg font-bold text-on-surface mb-6">Project Timeline</h3>
       
-      <div className="relative pl-4 border-l-2 border-slate-100 dark:border-outline-variant ml-2 space-y-6">
+      <div className="relative pl-4 border-l-2 border-outline-variant/40 ml-2 space-y-6">
         {events.map(event => (
           <div key={event.id} className="relative">
-            <div className={`absolute -left-[21px] top-1 w-8 h-8 rounded-full border-2 bg-white dark:bg-surface-container-lowest flex items-center justify-center 
-              ${event.type === 'MARK' ? 'border-emerald-200 dark:border-emerald-800' : 'border-purple-200 dark:border-purple-800'}`}
+            <div className={`absolute -left-[21px] top-1 w-8 h-8 rounded-full border-2 bg-white flex items-center justify-center 
+              ${event.type === 'MARK' ? 'border-emerald-200' : 'border-purple-200'}`}
             >
               {event.type === 'MARK' ? (
                 <CheckSquare className="w-4 h-4 text-emerald-500" />
@@ -64,22 +64,22 @@ export function ProjectTimeline({ marks, milestones }: Props) {
             
             <div className="pl-6">
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
-                <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{event.title}</span>
-                <span className="text-xs text-slate-500 bg-slate-100 dark:bg-surface-container px-2 py-0.5 rounded">
+                <span className="text-sm font-semibold text-on-surface">{event.title}</span>
+                <span className="text-xs text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">
                   {new Date(event.date).toLocaleDateString()}
                 </span>
                 {event.type === 'MARK' && (
-                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-0.5 rounded">
+                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
                     Score: {event.score}/{event.maxScore}
                   </span>
                 )}
                 {event.type === 'MILESTONE' && event.status && (
-                  <span className={`text-xs font-bold bg-slate-50 dark:bg-surface-container-low/60 px-2 py-0.5 rounded ${getStatusColor(event.status)}`}>
+                  <span className={`text-xs font-bold bg-surface-container-low px-2 py-0.5 rounded ${getStatusColor(event.status)}`}>
                     {event.status}
                   </span>
                 )}
               </div>
-              <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">{event.description}</p>
+              <p className="text-sm text-on-surface-variant mt-1">{event.description}</p>
             </div>
           </div>
         ))}

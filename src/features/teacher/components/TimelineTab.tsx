@@ -86,33 +86,33 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
 
   const getEventIcon = (type: TimelineEvent['type']) => {
     switch (type) {
-      case 'NOTE':              return <FileText  className="w-4 h-4 text-primary dark:text-primary" />;
-      case 'MARK':              return <CheckSquare className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />;
-      case 'PROJECT_MILESTONE': return <Flag      className="w-4 h-4 text-purple-600 dark:text-purple-400" />;
-      case 'ACHIEVEMENT':       return <Activity  className="w-4 h-4 text-amber-600 dark:text-amber-400" />;
-      case 'SKILL_ADD':         return <Zap       className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />;
-      case 'GUIDANCE_CASE':     return <Shield    className="w-4 h-4 text-red-500 dark:text-red-400" />;
+      case 'NOTE':              return <FileText  className="w-4 h-4 text-primary" />;
+      case 'MARK':              return <CheckSquare className="w-4 h-4 text-emerald-600" />;
+      case 'PROJECT_MILESTONE': return <Flag      className="w-4 h-4 text-purple-600" />;
+      case 'ACHIEVEMENT':       return <Activity  className="w-4 h-4 text-amber-600" />;
+      case 'SKILL_ADD':         return <Zap       className="w-4 h-4 text-cyan-600" />;
+      case 'GUIDANCE_CASE':     return <Shield    className="w-4 h-4 text-red-500" />;
       case 'SYSTEM_UPDATE':
-      default:                  return <Clock     className="w-4 h-4 text-slate-400" />;
+      default:                  return <Clock     className="w-4 h-4 text-on-surface-variant/70" />;
     }
   };
 
   const getEventBg = (type: TimelineEvent['type']) => {
     switch (type) {
-      case 'NOTE':              return 'bg-primary-fixed dark:bg-surface-container-low border-outline-variant dark:border-outline-variant';
-      case 'MARK':              return 'bg-emerald-100 dark:bg-emerald-900/50 border-emerald-200 dark:border-emerald-800';
-      case 'PROJECT_MILESTONE': return 'bg-purple-100 dark:bg-purple-900/50 border-purple-200 dark:border-purple-800';
-      case 'ACHIEVEMENT':       return 'bg-amber-100 dark:bg-amber-900/50 border-amber-200 dark:border-amber-800';
-      case 'SKILL_ADD':         return 'bg-cyan-100 dark:bg-cyan-900/50 border-cyan-200 dark:border-cyan-800';
-      case 'GUIDANCE_CASE':     return 'bg-red-100 dark:bg-red-900/50 border-red-200 dark:border-red-800';
-      default:                  return 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700';
+      case 'NOTE':              return 'bg-primary-fixed border-outline-variant';
+      case 'MARK':              return 'bg-emerald-100 border-emerald-200';
+      case 'PROJECT_MILESTONE': return 'bg-purple-100 border-purple-200';
+      case 'ACHIEVEMENT':       return 'bg-amber-100 border-amber-200';
+      case 'SKILL_ADD':         return 'bg-cyan-100 border-cyan-200';
+      case 'GUIDANCE_CASE':     return 'bg-red-100 border-red-200';
+      default:                  return 'bg-surface-container border-outline-variant';
     }
   };
 
   const getCardBg = (event: TimelineEvent) =>
     event.isTeacherInitiated
-      ? 'bg-surface-container-low/60 dark:bg-surface-container-low/40 border-outline-variant/60 dark:border-outline-variant/40'
-      : 'bg-white dark:bg-surface-container-low border-slate-200 dark:border-outline-variant';
+      ? 'bg-surface-container-low/60 border-outline-variant/60'
+      : 'bg-white border-outline-variant';
 
   // Group events by date for visual date separators
   const grouped: { date: string; events: TimelineEvent[] }[] = [];
@@ -132,30 +132,30 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
     <div className="space-y-6 max-w-4xl">
       {/* ── Student Snapshot ───────────────────────────────────────────── */}
       {snapshot && (
-        <div className="bg-slate-900 dark:bg-surface-container-lowest text-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 justify-between relative overflow-hidden">
+        <div className="bg-inverse-surface text-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 justify-between relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <div className="flex-1 z-10 grid grid-cols-2 sm:grid-cols-3 gap-6">
             <div>
-              <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">CGPA</p>
+              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">CGPA</p>
               <p className="text-2xl font-bold text-white">{snapshot.cgpa?.toFixed(2) ?? '—'}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Projects</p>
+              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">Projects</p>
               <p className="text-2xl font-bold text-white">{snapshot.projectCount ?? '—'}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Semesters Completed</p>
+              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">Semesters Completed</p>
               <p className="text-2xl font-bold text-white">{snapshot.semesterCount ?? '—'}</p>
             </div>
           </div>
-          <div className="w-px bg-slate-700 dark:bg-surface-container-high hidden md:block z-10" />
+          <div className="w-px bg-surface-container-high hidden md:block z-10" />
           <div className="flex-1 z-10 grid grid-cols-2 sm:grid-cols-3 gap-6">
             <div>
-              <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Teacher Interactions</p>
+              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">Teacher Interactions</p>
               <p className="text-2xl font-bold text-on-surface-variant">{snapshot.interactions ?? '—'}</p>
             </div>
             <div className="col-span-2">
-              <p className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Last Activity</p>
+              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">Last Activity</p>
               <p className="text-sm font-semibold text-white mt-1.5">
                 {snapshot.lastInteraction ? new Date(snapshot.lastInteraction).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : 'None recorded'}
               </p>
@@ -165,8 +165,8 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
       )}
 
       {/* ── Filter bar ─────────────────────────────────────────────────── */}
-      <div className="bg-white dark:bg-surface-container-low rounded-lg border border-slate-200 dark:border-outline-variant p-4 shadow-sm space-y-4">
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+      <div className="bg-white rounded-lg border border-outline-variant p-4 shadow-sm space-y-4">
+        <div className="flex items-center gap-2 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
           <Filter className="w-3.5 h-3.5" />
           Filters
         </div>
@@ -179,7 +179,7 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
               className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                 typeFilter === t.value
                   ? 'bg-primary-container text-white'
-                  : 'bg-slate-100 dark:bg-surface-container text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-surface-container'
+                  : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'
               }`}
             >
               {t.label}
@@ -189,47 +189,47 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
         {/* Date range */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
-            <label className="text-xs text-slate-500 dark:text-slate-400">From</label>
+            <label className="text-xs text-on-surface-variant">From</label>
             <input
               type="date"
               value={fromDate}
               onChange={e => handleDateChange(e.target.value, toDate)}
-              className="text-xs p-1.5 bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded text-slate-900 dark:text-slate-100"
+              className="text-xs p-1.5 bg-surface-container-low border border-outline-variant rounded text-on-surface"
             />
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-xs text-slate-500 dark:text-slate-400">To</label>
+            <label className="text-xs text-on-surface-variant">To</label>
             <input
               type="date"
               value={toDate}
               onChange={e => handleDateChange(fromDate, e.target.value)}
-              className="text-xs p-1.5 bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded text-slate-900 dark:text-slate-100"
+              className="text-xs p-1.5 bg-surface-container-low border border-outline-variant rounded text-on-surface"
             />
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-xs text-slate-500 dark:text-slate-400">Teacher</label>
+            <label className="text-xs text-on-surface-variant">Teacher</label>
             <input
               type="text"
               placeholder="Name..."
               value={teacherFilter}
               onChange={e => handleTeacherChange(e.target.value)}
-              className="text-xs p-1.5 w-28 bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded text-slate-900 dark:text-slate-100"
+              className="text-xs p-1.5 w-28 bg-surface-container-low border border-outline-variant rounded text-on-surface"
             />
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-xs text-slate-500 dark:text-slate-400">Semester</label>
+            <label className="text-xs text-on-surface-variant">Semester</label>
             <input
               type="text"
               placeholder="e.g. S1"
               value={semesterFilter}
               onChange={e => handleSemesterChange(e.target.value)}
-              className="text-xs p-1.5 w-16 bg-slate-50 dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant rounded text-slate-900 dark:text-slate-100"
+              className="text-xs p-1.5 w-16 bg-surface-container-low border border-outline-variant rounded text-on-surface"
             />
           </div>
           {(fromDate || toDate || typeFilter !== 'ALL' || teacherFilter || semesterFilter) && (
             <button
               onClick={() => { setTypeFilter('ALL'); setFromDate(''); setToDate(''); setTeacherFilter(''); setSemesterFilter(''); setEvents(initialEvents); }}
-              className="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 underline ml-2"
+              className="text-xs text-on-surface-variant hover:text-on-surface underline ml-2"
             >
               Clear filters
             </button>
@@ -238,28 +238,28 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
       </div>
 
       {/* ── Legend ─────────────────────────────────────────────────────── */}
-      <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400">
+      <div className="flex gap-4 text-xs text-on-surface-variant">
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-primary-fixed dark:bg-surface-container-low border border-outline-variant dark:border-outline-variant" />
+          <span className="w-3 h-3 rounded-sm bg-primary-fixed border border-outline-variant" />
           Teacher activity
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-3 rounded-sm bg-white dark:bg-surface-container-low border border-slate-200 dark:border-outline-variant" />
+          <span className="w-3 h-3 rounded-sm bg-white border border-outline-variant" />
           Student activity
         </span>
       </div>
 
       {/* ── Timeline ───────────────────────────────────────────────────── */}
       {loading ? (
-        <div className="text-center text-slate-500 dark:text-slate-400 py-8 text-sm animate-pulse">Loading timeline…</div>
+        <div className="text-center text-on-surface-variant py-8 text-sm animate-pulse">Loading timeline…</div>
       ) : events.length === 0 ? (
-        <div className="text-center text-slate-500 dark:text-slate-400 py-12">
+        <div className="text-center text-on-surface-variant py-12">
           No activity matches the selected filters.
         </div>
       ) : (
         <div className="relative pl-6 py-2">
           {/* Vertical connector */}
-          <div className="absolute top-0 bottom-0 left-[35px] w-[2px] bg-slate-200 dark:bg-surface-container" />
+          <div className="absolute top-0 bottom-0 left-[35px] w-[2px] bg-surface-container-high" />
 
           <div className="space-y-6">
             {grouped.map(group => (
@@ -267,9 +267,9 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
                 {/* Date header */}
                 <div className="relative flex items-center gap-3 mb-4">
                   <div className="relative z-10 w-8 h-8 flex items-center justify-center shrink-0">
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-600" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-surface-container-high" />
                   </div>
-                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-surface-container-lowest px-2 py-0.5 rounded">
+                  <span className="text-xs font-bold text-on-surface-variant uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded">
                     {group.date}
                   </span>
                 </div>
@@ -278,31 +278,31 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
                 <div className="space-y-4">
                   {group.events.map((event, idx) => (
                     <div key={event.id || idx} className="relative flex gap-6">
-                      <div className={`relative z-10 w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 shadow-sm bg-white dark:bg-surface-container-lowest ${getEventBg(event.type)}`}>
+                      <div className={`relative z-10 w-8 h-8 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 shadow-sm bg-white ${getEventBg(event.type)}`}>
                         {getEventIcon(event.type)}
                       </div>
                       <div className={`flex-1 rounded-lg border p-4 shadow-sm ${getCardBg(event)}`}>
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-1.5 gap-1">
-                          <h4 className="font-semibold text-sm text-slate-900 dark:text-slate-100">{event.title}</h4>
-                          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                          <h4 className="font-semibold text-sm text-on-surface">{event.title}</h4>
+                          <div className="flex items-center gap-2 text-xs text-on-surface-variant">
                             <span>by {event.author}</span>
                             {event.isTeacherInitiated && (
-                              <span className="px-1.5 py-0.5 bg-primary-fixed dark:bg-surface-container-low text-primary dark:text-primary rounded text-[10px] font-semibold uppercase tracking-wider">
+                              <span className="px-1.5 py-0.5 bg-primary-fixed text-primary rounded text-[10px] font-semibold uppercase tracking-wider">
                                 Teacher
                               </span>
                             )}
                           </div>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-300 whitespace-pre-wrap">
+                        <p className="text-sm text-on-surface-variant whitespace-pre-wrap">
                           {event.description}
                         </p>
                         {event.metadata && Object.keys(event.metadata).length > 0 && (
-                          <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800/50 flex flex-wrap gap-3">
+                          <div className="mt-2 pt-2 border-t border-outline-variant/40 flex flex-wrap gap-3">
                             {Object.entries(event.metadata)
                               .filter(([, v]) => v !== null && v !== undefined)
                               .map(([key, value]) => (
-                                <span key={key} className="text-xs text-slate-500 font-mono">
-                                  <strong className="text-slate-700 dark:text-slate-300">{key}:</strong> {String(value)}
+                                <span key={key} className="text-xs text-on-surface-variant font-mono">
+                                  <strong className="text-on-surface-variant">{key}:</strong> {String(value)}
                                 </span>
                               ))}
                           </div>

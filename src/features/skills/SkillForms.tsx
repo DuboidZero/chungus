@@ -42,7 +42,7 @@ export function AddTechnicalSkillModal({
             placeholder="e.g. Web Development"
             value={domain}
             onChange={e => setDomain(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
+            className="w-full px-3 py-2 rounded-lg border border-outline-variant bg-white text-sm focus:outline-none focus:border-primary"
           />
         </div>
         <div>
@@ -52,7 +52,7 @@ export function AddTechnicalSkillModal({
             placeholder="e.g. React"
             value={name}
             onChange={e => setName(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
+            className="w-full px-3 py-2 rounded-lg border border-outline-variant bg-white text-sm focus:outline-none focus:border-primary"
           />
         </div>
         <div>
@@ -66,7 +66,7 @@ export function AddTechnicalSkillModal({
           </Select>
         </div>
         <div className="pt-4 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-outline-variant hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">Cancel</button>
+          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-outline-variant hover:bg-surface-container transition-colors">Cancel</button>
           <button onClick={handleSave} className="px-4 py-2 bg-primary-container hover:bg-primary text-white text-sm font-semibold rounded-lg flex items-center gap-2"><Save className="w-4 h-4"/> Save</button>
         </div>
       </div>
@@ -106,7 +106,7 @@ export function AddSoftSkillModal({
             placeholder="e.g. Leadership"
             value={name}
             onChange={e => setName(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
+            className="w-full px-3 py-2 rounded-lg border border-outline-variant bg-white text-sm focus:outline-none focus:border-primary"
           />
         </div>
         <div>
@@ -121,7 +121,7 @@ export function AddSoftSkillModal({
           </Select>
         </div>
         <div className="pt-4 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-outline-variant hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">Cancel</button>
+          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-outline-variant hover:bg-surface-container transition-colors">Cancel</button>
           <button onClick={handleSave} className="px-4 py-2 bg-primary-container hover:bg-primary text-white text-sm font-semibold rounded-lg flex items-center gap-2"><Save className="w-4 h-4"/> Save</button>
         </div>
       </div>
@@ -161,7 +161,7 @@ export function AddLanguageModal({
             placeholder="e.g. English"
             value={name}
             onChange={e => setName(e.target.value)}
-            className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-outline-variant bg-white dark:bg-surface-container-lowest text-sm focus:outline-none focus:border-primary"
+            className="w-full px-3 py-2 rounded-lg border border-outline-variant bg-white text-sm focus:outline-none focus:border-primary"
           />
         </div>
         <div>
@@ -175,7 +175,7 @@ export function AddLanguageModal({
           </Select>
         </div>
         <div className="pt-4 flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-outline-variant hover:bg-slate-50 dark:hover:bg-surface-container transition-colors">Cancel</button>
+          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-medium border border-outline-variant hover:bg-surface-container transition-colors">Cancel</button>
           <button onClick={handleSave} className="px-4 py-2 bg-primary-container hover:bg-primary text-white text-sm font-semibold rounded-lg flex items-center gap-2"><Save className="w-4 h-4"/> Save</button>
         </div>
       </div>

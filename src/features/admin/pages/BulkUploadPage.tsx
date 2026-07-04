@@ -12,8 +12,8 @@ export function BulkUploadPage() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Bulk Upload Center</h1>
-        <p className="text-slate-600 dark:text-slate-400 mt-1">
+        <h1 className="text-2xl font-bold text-on-surface">Bulk Upload Center</h1>
+        <p className="text-on-surface-variant mt-1">
           A centralized Admin-only hub for all institutional Excel (.xlsx, .csv) uploads.
         </p>
       </div>
