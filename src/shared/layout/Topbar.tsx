@@ -1,6 +1,5 @@
-import { Search, Moon, Sun, LogOut } from 'lucide-react';
+import { Search, LogOut } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useTheme } from '../providers/ThemeProvider';
 import { useAuth } from '../../auth/useAuth';
 
 function getInitials(name: string | null | undefined): string {
@@ -25,7 +24,6 @@ const SEARCH_PLACEHOLDERS: Record<string, string> = {
 export function Topbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
   const { user, logout } = useAuth();
 
   const placeholder =
@@ -54,16 +52,6 @@ export function Topbar() {
 
       {/* Right actions */}
       <div className="flex items-center space-x-2">
-        {/* Theme toggle */}
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
-          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          aria-label="Toggle color theme"
-        >
-          {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-        </button>
-
         {/* Logout */}
         <button
           onClick={handleLogout}
