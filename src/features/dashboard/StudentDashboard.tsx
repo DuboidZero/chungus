@@ -91,7 +91,7 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
     <div className="space-y-8">
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="stagger-in grid grid-cols-2 lg:grid-cols-5 gap-4">
         <StatCard title="CGPA / %" value={data ? `${data.stats.cgpa.toFixed(2)} / ${data.stats.percentage.toFixed(1)}%` : '—'} icon={Activity} trendUp />
         <StatCard title="Credits"      value={data ? data.stats.totalCredits.toString() : '—'} icon={BookOpen} />
         <StatCard title="Projects"     value={data ? data.stats.projectCount.toString() : '—'} icon={Briefcase} />
@@ -122,18 +122,6 @@ export function StudentDashboardView({ data }: { data: StudentDashboardResponse 
                     No academic data available yet.
                   </div>
                 )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Portfolio completion */}
-          <Card>
-            <CardHeader><CardTitle>Portfolio Completion</CardTitle></CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <p className="text-sm text-on-surface-variant/70 text-center py-4">
-                  (Portfolio completion metric is calculated dynamically on the client.)
-                </p>
               </div>
             </CardContent>
           </Card>

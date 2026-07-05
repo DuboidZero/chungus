@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Building2, UploadCloud, UsersRound, BookOpen, AlertCircle } from 'lucide-react';
+import { Users, Building2, UploadCloud, UsersRound, BookOpen } from 'lucide-react';
 import { Card, CardContent } from '../../../shared/ui/card';
 import { getCohorts } from '../../../api/services/admin';
 import { getTeachers, getStudents } from '../../../api/services/users';
 
 export function AdminDashboard() {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ students: 0, teachers: 0, cohorts: 0, cases: 5 });
+  const [stats, setStats] = useState({ students: 0, teachers: 0, cohorts: 0 });
 
   useEffect(() => {
     // In a real app, this would be a single GET /admin/dashboard/stats endpoint.
@@ -23,7 +23,6 @@ export function AdminDashboard() {
           students: students.length,
           teachers: teachers.length,
           cohorts: cohorts.length,
-          cases: 0,
         });
       } catch (err) {
         console.error('Failed to load stats', err);
@@ -46,7 +45,7 @@ export function AdminDashboard() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="stagger-in grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="p-6 flex items-center gap-4">
             <div className="p-3 bg-blue-50 text-blue-500 rounded-xl">
@@ -82,18 +81,6 @@ export function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
-
-        <Card>
-          <CardContent className="p-6 flex items-center gap-4">
-            <div className="p-3 bg-rose-50 text-rose-500 rounded-xl">
-              <AlertCircle className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-on-surface-variant">Active Guidance Cases</p>
-              <h3 className="text-2xl font-bold text-on-surface">{stats.cases}</h3>
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Navigation Cards */}
@@ -102,9 +89,10 @@ export function AdminDashboard() {
         {navCards.map((card, i) => {
           const Icon = card.icon;
           return (
-            <Card 
-              key={i} 
-              className="hover:border-primary transition-colors cursor-pointer"
+            <Card
+              key={i}
+              interactive
+              className="hover:border-primary"
               onClick={() => navigate(card.path)}
             >
               <CardContent className="p-6 flex items-start gap-4">

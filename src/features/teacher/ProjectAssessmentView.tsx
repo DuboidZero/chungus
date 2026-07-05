@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, FolderGit2, CheckSquare, Flag } from 'lucide-react';
 import { Card, CardContent } from '../../shared/ui/card';
 import { Skeleton } from '../../shared/ui/loading-skeleton';
+import { Select } from '../../shared/ui/select';
 
 import type { Project } from '../../api/entities/project';
 import type { AssessmentMark, ProjectMilestone, MilestoneStatus } from '../../api/entities/teacher';
@@ -217,11 +218,11 @@ export function ProjectAssessmentView() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-medium text-on-surface-variant mb-1">Status</label>
-                      <select value={milestoneForm.status} onChange={e => setMilestoneForm({...milestoneForm, status: e.target.value as MilestoneStatus})} className="w-full p-2 text-sm bg-white border border-outline-variant rounded-md focus:ring-2 focus:ring-purple-500">
+                      <Select value={milestoneForm.status} onChange={e => setMilestoneForm({...milestoneForm, status: e.target.value as MilestoneStatus})}>
                         <option value="On Track">On Track</option>
                         <option value="Delayed">Delayed</option>
                         <option value="Completed">Completed</option>
-                      </select>
+                      </Select>
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-on-surface-variant mb-1">Date</label>

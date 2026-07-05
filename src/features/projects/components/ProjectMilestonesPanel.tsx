@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Flag } from 'lucide-react';
 import { Card, CardContent } from '../../../shared/ui/card';
+import { Select } from '../../../shared/ui/select';
 import type { ProjectMilestone, MilestoneStatus } from '../../../api/entities/teacher';
 
 interface Props {
@@ -53,11 +54,11 @@ export function ProjectMilestonesPanel({ milestones, onAddMilestone }: Props) {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-on-surface-variant mb-1">Status</label>
-                  <select value={form.status} onChange={e => setForm({...form, status: e.target.value as MilestoneStatus})} className="w-full p-2 text-sm bg-white border border-outline-variant rounded-md focus:ring-2 focus:ring-purple-500">
+                  <Select value={form.status} onChange={e => setForm({...form, status: e.target.value as MilestoneStatus})}>
                     <option value="On Track">On Track</option>
                     <option value="Delayed">Delayed</option>
                     <option value="Completed">Completed</option>
-                  </select>
+                  </Select>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-on-surface-variant mb-1">Date</label>

@@ -33,7 +33,6 @@ import { Profile } from './features/profile/Profile';
 import { AcademicRecords } from './features/academic/AcademicRecords';
 import { Skills } from './features/skills/Skills';
 import { Projects } from './features/projects/Projects';
-import { ProjectForm } from './features/projects/ProjectForm';
 import { ProjectDetail } from './features/projects/ProjectDetail';
 import { WorkExperience } from './features/experience/WorkExperience';
 import { Achievements } from './features/achievements/Achievements';
@@ -117,9 +116,7 @@ function RoleRouter() {
           <Route path="academic-records" element={<AcademicRecords />} />
           <Route path="skills"          element={<Skills />} />
           <Route path="projects"        element={<Projects />} />
-          <Route path="projects/new"    element={<ProjectForm />} />
           <Route path="projects/:id"    element={<ProjectDetail />} />
-          <Route path="projects/:id/edit" element={<ProjectForm />} />
           <Route path="work-experience" element={<WorkExperience />} />
           <Route path="achievements"    element={<Achievements />} />
           <Route path="placements"      element={<Placements />} />

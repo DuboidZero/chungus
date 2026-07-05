@@ -1,11 +1,18 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes } from 'react';
 
-export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className = '', ...props }, ref) => (
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  /** Adds a hover-lift micro-interaction. Use for clickable cards/tiles. */
+  interactive?: boolean;
+}
+
+export const Card = forwardRef<HTMLDivElement, CardProps>(
+  ({ className = '', interactive = false, ...props }, ref) => (
     <div
       ref={ref}
-      className={`rounded-xl border border-outline-variant/50 bg-surface-container-lowest text-on-surface shadow-[0_8px_32px_rgba(90,86,139,0.08)] ${className}`}
+      className={`rounded-xl border border-outline-variant/50 bg-surface-container-lowest text-on-surface shadow-[0_8px_32px_rgba(90,86,139,0.08)] ${
+        interactive ? 'hover-lift cursor-pointer' : ''
+      } ${className}`}
       {...props}
     />
   )

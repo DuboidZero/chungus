@@ -47,7 +47,7 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed, mobileOpen,
         )}
         <button
           onClick={() => setMobileOpen(false)}
-          className="lg:hidden p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container shrink-0"
+          className="press lg:hidden p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors shrink-0"
           aria-label="Close menu"
         >
           <X className="w-5 h-5" />
@@ -72,14 +72,14 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed, mobileOpen,
                 title={item.label}
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                  `group flex items-center space-x-3 px-3 py-2.5 rounded-lg font-medium transition-[color,background-color,box-shadow,transform] duration-200 active:scale-[0.98] ${
                     isActive
                       ? 'bg-primary-container text-on-primary shadow-sm'
                       : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                   } ${collapsed ? 'lg:justify-center' : ''}`
                 }
               >
-                <item.icon className="w-5 h-5 shrink-0" />
+                <item.icon className="w-5 h-5 shrink-0 transition-transform duration-200 group-hover:scale-110" />
                 {!collapsed && <span className="truncate">{item.label}</span>}
               </NavLink>
             ))}
@@ -92,7 +92,7 @@ export function Sidebar({ role, navigation, collapsed, setCollapsed, mobileOpen,
         <button
           onClick={() => setCollapsed(!collapsed)}
           title={collapsed ? 'Expand' : 'Collapse'}
-          className={`flex items-center w-full space-x-3 px-3 py-2.5 rounded-lg font-medium text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors ${
+          className={`press flex items-center w-full space-x-3 px-3 py-2.5 rounded-lg font-medium text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors ${
             collapsed ? 'justify-center' : ''
           }`}
         >

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, Plus, Search, CheckSquare, X, ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '../../shared/ui/card';
 import { Skeleton } from '../../shared/ui/loading-skeleton';
+import { Select } from '../../shared/ui/select';
 import { getAllMarks, getAssignedStudents, createStudentMark } from '../../api/services/teacher';
 import type { AssessmentMark } from '../../api/entities/teacher';
 import type { StudentSummary } from '../../api/entities/teacher';
@@ -116,17 +117,16 @@ export function AssessmentsView() {
               {/* Student selector */}
               <div>
                 <label className="block text-xs font-semibold text-on-surface-variant mb-1">Student *</label>
-                <select
+                <Select
                   required
                   value={form.studentId}
                   onChange={e => setForm({ ...form, studentId: e.target.value })}
-                  className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded-md focus:ring-2 focus:ring-primary text-on-surface"
                 >
                   <option value="">Select a student…</option>
                   {students.map(s => (
                     <option key={s.id} value={s.id}>{s.name} ({s.prn})</option>
                   ))}
-                </select>
+                </Select>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Save, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent } from '../../../shared/ui/card';
 import { Button } from '../../../shared/ui/button';
+import { Select } from '../../../shared/ui/select';
 import { getCohorts, updateCohortMentor } from '../../../api/services/admin';
 import { getTeachers } from '../../../api/services/users';
 import type { Cohort } from '../../../api/entities/cohort';
@@ -93,16 +94,15 @@ export function CohortsPage() {
                   <label className="block text-sm font-medium text-on-surface-variant">
                     Academic Mentor
                   </label>
-                  <select
+                  <Select
                     value={selectedMentors[cohort.id] || ''}
                     onChange={(e) => handleMentorChange(cohort.id, e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-outline-variant rounded-lg text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Select a Mentor...</option>
                     {teachers.map(t => (
                       <option key={t.id} value={t.id}>{t.name}</option>
                     ))}
-                  </select>
+                  </Select>
 
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex-1">

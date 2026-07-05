@@ -23,7 +23,7 @@ export function Tabs({ tabs, defaultTab }: TabsProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-6 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
+            className={`px-6 py-3 text-sm font-medium border-b-2 -mb-px transition-[color,border-color] duration-200 ${
               activeTab === tab.id
                 ? 'border-primary text-primary'
                 : 'border-transparent text-on-surface-variant hover:text-on-surface hover:border-outline-variant'
@@ -33,7 +33,8 @@ export function Tabs({ tabs, defaultTab }: TabsProps) {
           </button>
         ))}
       </div>
-      <div>
+      {/* key remounts on tab change so content cross-fades in */}
+      <div key={activeTab} className="animate-fade-in">
         {activeContent}
       </div>
     </div>

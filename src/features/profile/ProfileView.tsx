@@ -1,7 +1,9 @@
+/** Read-only profile view — sections reveal on scroll (see Reveal). */
 import { Mail, Phone, MapPin, Briefcase, Edit2, CheckCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../shared/ui/card';
 import { Badge } from '../../shared/ui/badge';
 import { Progress } from '../../shared/ui/progress';
+import { Reveal } from '../../shared/ui/Reveal';
 import type { StudentProfileData } from './types';
 import { calcCompletion } from './types';
 
@@ -77,7 +79,7 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
             {/* Edit button */}
             <button
               onClick={onEdit}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-primary hover:bg-surface-container-low border border-outline-variant transition-colors"
+              className="press flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-primary hover:bg-surface-container-low border border-outline-variant transition-colors"
             >
               <Edit2 className="w-3.5 h-3.5" />
               Edit Profile
@@ -93,17 +95,20 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
 
       {/* About Me */}
       {data.aboutMe && (
-        <Card>
-          <CardHeader><CardTitle>About Me</CardTitle></CardHeader>
-          <CardContent className="pb-6">
-            <p className="text-sm text-on-surface-variant leading-relaxed whitespace-pre-wrap">
-              {data.aboutMe}
-            </p>
-          </CardContent>
-        </Card>
+        <Reveal>
+          <Card>
+            <CardHeader><CardTitle>About Me</CardTitle></CardHeader>
+            <CardContent className="pb-6">
+              <p className="text-sm text-on-surface-variant leading-relaxed whitespace-pre-wrap">
+                {data.aboutMe}
+              </p>
+            </CardContent>
+          </Card>
+        </Reveal>
       )}
 
       {/* Contact */}
+      <Reveal delay={60}>
       <Card>
         <CardHeader><CardTitle>Contact</CardTitle></CardHeader>
         <CardContent className="pb-6">
@@ -135,8 +140,10 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
           </dl>
         </CardContent>
       </Card>
+      </Reveal>
 
       {/* Internship Preferences */}
+      <Reveal delay={120}>
       <Card>
         <CardHeader><CardTitle>Internship Preferences</CardTitle></CardHeader>
         <CardContent className="pb-6">
@@ -158,6 +165,7 @@ export function ProfileView({ data, name, department, batch, academicYear, acade
           </div>
         </CardContent>
       </Card>
+      </Reveal>
     </div>
   );
 }

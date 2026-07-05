@@ -8,14 +8,14 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = '', variant = 'primary', size = 'md', ...props }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-50 disabled:pointer-events-none';
+    const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-[color,background-color,border-color,box-shadow,transform] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.97] disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-50 disabled:pointer-events-none';
 
     const variants = {
-      primary: 'bg-primary-container text-on-primary hover:bg-primary shadow-sm',
+      primary: 'bg-primary-container text-on-primary hover:bg-primary shadow-sm hover:shadow-md',
       secondary: 'bg-surface-container text-on-surface hover:bg-surface-container-high',
-      outline: 'border border-outline-variant text-on-surface hover:bg-surface-container',
+      outline: 'border border-outline-variant text-on-surface hover:bg-surface-container hover:border-outline',
       ghost: 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface',
-      danger: 'bg-error text-on-primary hover:bg-error/90 shadow-sm',
+      danger: 'bg-error text-on-primary hover:bg-error/90 shadow-sm hover:shadow-md',
     };
 
     const sizes = {

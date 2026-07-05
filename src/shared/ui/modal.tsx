@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 import { useEscapeKey } from '../lib/useEscapeKey';
 
@@ -21,7 +21,22 @@ const maxWidthClass = {
 export function Modal({ isOpen, onClose, title, children, maxWidth = 'md' }: ModalProps) {
   useEscapeKey(onClose, isOpen);
 
-  if (!isOpen) return null;
+  // Keep the modal mounted through its exit animation, then unmount.
+  const [rendered, setRendered] = useState(isOpen);
+  const [closing, setClosing] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setRendered(true);
+      setClosing(false);
+      return;
+    }
+    setClosing(true);
+    const t = setTimeout(() => setRendered(false), 160);
+    return () => clearTimeout(t);
+  }, [isOpen]);
+
+  if (!rendered) return null;
 
   return (
     <div
@@ -32,18 +47,18 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'md' }: Mod
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-inverse-surface/40 backdrop-blur-sm transition-opacity"
+        className={`absolute inset-0 bg-inverse-surface/50 backdrop-blur-md ${closing ? 'modal-backdrop-out' : 'modal-backdrop'}`}
         onClick={onClose}
         aria-hidden="true"
       />
 
-      <div className={`relative w-full ${maxWidthClass[maxWidth]} bg-surface-container-lowest rounded-xl shadow-[0_24px_64px_rgba(90,86,139,0.25)] border border-outline-variant/40 flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-150`}>
+      <div className={`relative w-full ${maxWidthClass[maxWidth]} bg-surface-container-lowest rounded-xl shadow-[0_24px_64px_rgba(90,86,139,0.25)] border border-outline-variant/40 flex flex-col max-h-[90vh] overflow-hidden ${closing ? 'modal-panel-out' : 'modal-panel'}`}>
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-outline-variant/50">
           <h2 id="modal-title" className="text-lg font-semibold text-on-surface">{title}</h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+            className="press p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -78,7 +93,7 @@ export function DeleteConfirmModal({ isOpen, onClose, onConfirm, title, entityNa
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-md text-sm font-medium border border-outline-variant text-on-surface hover:bg-surface-container transition-colors"
+            className="press px-4 py-2 rounded-md text-sm font-medium border border-outline-variant text-on-surface hover:bg-surface-container transition-colors"
           >
             Cancel
           </button>
@@ -87,7 +102,7 @@ export function DeleteConfirmModal({ isOpen, onClose, onConfirm, title, entityNa
               onConfirm();
               onClose();
             }}
-            className="px-4 py-2 rounded-md text-sm font-medium bg-error hover:bg-error/90 text-on-primary transition-colors"
+            className="press px-4 py-2 rounded-md text-sm font-medium bg-error hover:bg-error/90 text-on-primary shadow-sm hover:shadow-md transition-[color,background-color,box-shadow] duration-150"
           >
             Delete
           </button>

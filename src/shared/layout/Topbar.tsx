@@ -41,7 +41,7 @@ export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
       {/* Mobile menu toggle */}
       <button
         onClick={onMenuClick}
-        className="lg:hidden p-2 -ml-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors shrink-0"
+        className="press lg:hidden p-2 -ml-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors shrink-0"
         aria-label="Open menu"
       >
         <Menu className="w-5 h-5" />
@@ -54,7 +54,7 @@ export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
           <input
             type="text"
             placeholder={placeholder}
-            className="w-full h-10 pl-11 pr-4 rounded-full bg-surface-container-low border border-outline-variant/50 text-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors"
+            className="w-full h-10 pl-11 pr-4 rounded-full bg-surface-container-low border border-outline-variant/50 text-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-[color,border-color,box-shadow] duration-200"
           />
         </div>
       </div>
@@ -64,7 +64,7 @@ export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+          className="press p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
           title="Log out"
           aria-label="Log out"
         >
@@ -73,7 +73,7 @@ export function Topbar({ onMenuClick }: { onMenuClick?: () => void }) {
 
         {/* Avatar */}
         <div
-          className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center border border-outline-variant/40 shrink-0 cursor-pointer overflow-hidden"
+          className="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center border border-outline-variant/40 shrink-0 cursor-pointer overflow-hidden transition-[box-shadow,transform] duration-200 hover:ring-2 hover:ring-primary/30 active:scale-95"
           title={user?.name}
         >
           {user?.avatar ? (

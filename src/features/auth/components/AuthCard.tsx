@@ -42,9 +42,12 @@ export function AuthCard({ title, subtitle, children }: AuthCardProps) {
           </div>
         </div>
 
-        <p className="relative text-xs text-on-primary-container/70">
-          MIT World Peace University · Internal System
-        </p>
+        <div className="relative text-xs text-on-primary-container/70 space-y-1">
+          <p>MIT World Peace University · Internal System</p>
+          <p>
+            Built by <span className="font-semibold text-white">iGNISIA Tech Team</span>
+          </p>
+        </div>
       </div>
 
       {/* Right — form */}
@@ -62,9 +65,12 @@ export function AuthCard({ title, subtitle, children }: AuthCardProps) {
             {children}
           </div>
 
-          <p className="text-center text-xs text-on-surface-variant/70">
-            MIT World Peace University · Internal System · Not for public access
-          </p>
+          <div className="text-center text-xs text-on-surface-variant/70 space-y-1">
+            <p>MIT World Peace University · Internal System · Not for public access</p>
+            <p>
+              Built by <span className="font-semibold text-primary">iGNISIA Tech Team</span>
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -23,10 +23,21 @@ const EMPTY_PROJECT = (): ProjectEntry => ({
   status: 'Ongoing',
 });
 
-export function ProjectForm() {
+interface ProjectFormProps {
+  /** Render bare (no page header/Card) for embedding inside a Modal. */
+  embedded?: boolean;
+  /** Project id to edit — overrides the route param, for modal use. */
+  projectId?: string;
+  /** Called after a successful save or on cancel. Defaults to /projects. */
+  onDone?: () => void;
+}
+
+export function ProjectForm({ embedded = false, projectId, onDone }: ProjectFormProps = {}) {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id: routeId } = useParams();
+  const id = projectId ?? routeId;
   const isEditing = Boolean(id);
+  const finish = () => (onDone ? onDone() : navigate('/projects'));
   const { addProject, updateProject, getProject } = useProjects();
 
   const [data, setData] = useState<ProjectEntry>(EMPTY_PROJECT);
@@ -48,8 +59,8 @@ export function ProjectForm() {
         setData(existing);
         if (existing.imageUrl) setImagePreview(existing.imageUrl);
       } else {
-        /** Fallback: Redirect to the projects index if the requested project ID doesn't exist. */
-        navigate('/projects', { replace: true });
+        /** Fallback: close/redirect if the requested project ID doesn't exist. */
+        finish();
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -132,7 +143,7 @@ export function ProjectForm() {
       } else {
         await addProject(data);
       }
-      navigate('/projects');
+      finish();
     } catch (err) {
       console.error('Failed to save project', err);
     }
@@ -145,24 +156,8 @@ export function ProjectForm() {
       </p>
     ) : null;
 
-  return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 rounded-lg text-on-surface-variant/70 hover:text-on-surface hover:bg-surface-container transition-colors"
-          aria-label="Go back"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="text-2xl font-bold text-on-surface">
-          {isEditing ? 'Edit Project' : 'Add New Project'}
-        </h1>
-      </div>
-
-      <Card>
-        <CardContent className="p-6 md:p-8 space-y-8">
+  const formFields = (
+    <div className="space-y-8">
 
           {/* Image Upload */}
           <div>
@@ -354,20 +349,65 @@ export function ProjectForm() {
             </div>
           </div>
 
+    </div>
+  );
+
+  const actions = (
+    <div className="flex justify-end gap-3 pt-4">
+      {embedded && (
+        <button
+          type="button"
+          onClick={finish}
+          className="press px-4 py-2 rounded-lg text-sm font-medium border border-outline-variant text-on-surface hover:bg-surface-container transition-colors"
+        >
+          Cancel
+        </button>
+      )}
+      <button
+        onClick={handleSave}
+        disabled={isUploading}
+        className="press flex items-center gap-2 px-6 py-3 bg-primary-container hover:bg-primary text-white font-bold rounded-xl transition-colors shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <Save className="w-5 h-5" />
+        {isEditing ? 'Save Changes' : 'Create Project'}
+      </button>
+    </div>
+  );
+
+  // Bare content for embedding inside a Modal.
+  if (embedded) {
+    return (
+      <div className="space-y-8">
+        {formFields}
+        {actions}
+      </div>
+    );
+  }
+
+  // Full-page layout (kept for direct navigation / deep links).
+  return (
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="press p-2 rounded-lg text-on-surface-variant/70 hover:text-on-surface hover:bg-surface-container transition-colors"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <h1 className="text-2xl font-bold text-on-surface">
+          {isEditing ? 'Edit Project' : 'Add New Project'}
+        </h1>
+      </div>
+
+      <Card>
+        <CardContent className="p-6 md:p-8">
+          {formFields}
         </CardContent>
       </Card>
 
-      {/* Save Button */}
-      <div className="flex justify-end pt-4">
-        <button
-          onClick={handleSave}
-          disabled={isUploading}
-          className="flex items-center gap-2 px-6 py-3 bg-primary-container hover:bg-primary text-white font-bold rounded-xl transition-colors shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Save className="w-5 h-5" />
-          {isEditing ? 'Save Changes' : 'Create Project'}
-        </button>
-      </div>
+      {actions}
     </div>
   );
 }

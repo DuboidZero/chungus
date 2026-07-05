@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, Filter, X } from 'lucide-react';
+import { Select } from '../../../shared/ui/select';
 import type { PerformanceTier, GuidanceCaseStatus } from '../../../api/entities/teacher';
 
 export interface FilterState {
@@ -127,42 +128,39 @@ export function SearchFilterBar({ onFilterChange, onSearch, initialState }: Prop
         <div className="mt-4 pt-4 border-t border-outline-variant/40 grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="block text-xs font-medium text-on-surface-variant mb-1">Batch</label>
-            <select
+            <Select
               value={filters.batch}
               onChange={(e) => updateDropdownFilter('batch', e.target.value)}
-              className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded text-on-surface focus:outline-none focus:border-primary"
             >
               <option value="">All Batches</option>
               <option value="2022-2026">2022-2026</option>
               <option value="2023-2027">2023-2027</option>
-            </select>
+            </Select>
           </div>
           <div>
             <label className="block text-xs font-medium text-on-surface-variant mb-1">Performance Tier</label>
-            <select
+            <Select
               value={filters.performanceTier}
               onChange={(e) => updateDropdownFilter('performanceTier', e.target.value as PerformanceTier)}
-              className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded text-on-surface focus:outline-none focus:border-primary"
             >
               <option value="">All Tiers</option>
               <option value="High Performing">High Performing</option>
               <option value="Average - Guidable">Average - Guidable</option>
               <option value="Underperforming">Underperforming</option>
-            </select>
+            </Select>
           </div>
           <div>
             <label className="block text-xs font-medium text-on-surface-variant mb-1">Guidance Status</label>
-            <select
+            <Select
               value={filters.guidanceStatus}
               onChange={(e) => updateDropdownFilter('guidanceStatus', e.target.value as GuidanceCaseStatus)}
-              className="w-full p-2 text-sm bg-surface-container-low border border-outline-variant rounded text-on-surface focus:outline-none focus:border-primary"
             >
               <option value="">Any Status</option>
               <option value="Open">Open</option>
               <option value="Assigned">Assigned</option>
               <option value="In Progress">In Progress</option>
               <option value="Resolved">Resolved</option>
-            </select>
+            </Select>
           </div>
           <div className="flex items-end">
             <button

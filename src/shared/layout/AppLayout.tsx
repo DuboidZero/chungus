@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import type { NavGroup } from './navigation/student';
@@ -13,13 +13,14 @@ interface AppLayoutProps {
 export function AppLayout({ navigation, role }: AppLayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <div className="flex min-h-screen text-on-surface">
       {/* Mobile drawer backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-30 bg-inverse-surface/40 backdrop-blur-sm lg:hidden"
+          className="animate-fade-in fixed inset-0 z-30 bg-inverse-surface/40 backdrop-blur-sm lg:hidden"
           onClick={() => setMobileOpen(false)}
           aria-hidden="true"
         />
@@ -36,7 +37,7 @@ export function AppLayout({ navigation, role }: AppLayoutProps) {
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10 pt-6 sm:pt-8 lg:pt-12 overflow-y-auto">
-          <div className="max-w-6xl mx-auto">
+          <div key={location.pathname} className="page-enter max-w-6xl mx-auto">
             <Outlet />
           </div>
         </main>

@@ -96,7 +96,7 @@ export function TeacherDashboard({ user }: Props) {
         </div>
 
         {/* 4. Performance Summary */}
-        <div className="space-y-4">
+        <div className="stagger-in space-y-4">
           <StatCard label="Assigned Students" value={data.stats.totalAssignedStudents.toString()} icon={Users} color="text-primary" bg="bg-surface-container-low" onClick={() => navigate('/students')} />
           <StatCard label="High Performing" value={data.stats.highPerformingCount.toString()} icon={TrendingUp} color="text-emerald-600" bg="bg-emerald-50" onClick={() => navigate('/students?performanceTier=High+Performing')} />
           <StatCard label="Needs Guidance" value={data.stats.midTierCount.toString()} icon={Users} color="text-amber-600" bg="bg-amber-50" onClick={() => navigate('/students?performanceTier=Average+-+Guidable')} />
