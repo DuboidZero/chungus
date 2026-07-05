@@ -134,7 +134,9 @@ backdrop-click close, and delayed unmount.
 
 - **Tailwind v4**, configured entirely in CSS (`src/index.css`) — no `tailwind.config.js`.
 - Tokens live in an `@theme { … }` block: semantic colors (`--color-primary`,
-  `--color-surface`, `--color-on-surface`, …), radii, and the **"Luminous Academic"** palette.
+  `--color-surface`, `--color-on-surface`, …), radii, and the **"Academic Pulse"** palette
+  (primary `#5545cd`, indigo/lavender surfaces). Typeface is **Hanken Grotesk** (loaded via
+  Google Fonts in `index.html`). Token values are the exact Stitch design values.
   Full spec: [`DESIGN.md`](./DESIGN.md).
 - Custom `@utility` helpers: `glass`, `glass-subtle`, `app-canvas`, plus the motion utilities (§9).
 - **Always use semantic tokens** (`text-on-surface`, `bg-surface-container`, `border-outline-variant`)
@@ -223,7 +225,7 @@ which calls are mock-backed vs backend-only.
   modals, dropdowns) lives in `shared/ui` so it propagates app-wide from one place.
 - **RBAC via `permissions.ts` functions** (`canEditProfile(role)`, `canManageCohorts(role)`, …)
   rather than inline role checks — centralizes access logic and eases backend migration.
-- **Light-only redesign.** Dark mode was removed to commit fully to the Luminous Academic light palette.
+- **Light-only redesign.** Dark mode was removed to commit fully to the Academic Pulse light palette.
 
 ---
 

@@ -100,8 +100,8 @@ export function AdminDashboard({ user: _user }: Props) {
                       <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} vertical={false} />
                       <XAxis dataKey="month" stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis stroke={chartColors.axis} fontSize={12} tickLine={false} axisLine={false} domain={['dataMin - 20', 'dataMax + 20']} />
-                      <Tooltip contentStyle={{ backgroundColor: chartColors.tooltip.bg, borderColor: chartColors.tooltip.border, color: chartColors.tooltip.color }} itemStyle={{ color: '#6152D1' }} />
-                      <Line type="monotone" dataKey="students" stroke="#6152D1" strokeWidth={3} dot={{ r: 4, fill: '#6152D1', strokeWidth: 0 }} activeDot={{ r: 6 }} name="Students" />
+                      <Tooltip contentStyle={{ backgroundColor: chartColors.tooltip.bg, borderColor: chartColors.tooltip.border, color: chartColors.tooltip.color }} itemStyle={{ color: '#6e60e8' }} />
+                      <Line type="monotone" dataKey="students" stroke="#6e60e8" strokeWidth={3} dot={{ r: 4, fill: '#6e60e8', strokeWidth: 0 }} activeDot={{ r: 6 }} name="Students" />
                     </LineChart>
                   </ResponsiveContainer>
                 ) : (

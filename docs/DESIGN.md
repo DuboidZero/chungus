@@ -1,251 +1,174 @@
-# Luminous Academic — Design System
-
-> A sophisticated blend of high-end ed-tech professionalism and modern glassmorphism.  
-> Designed to evoke clarity, intelligence, and calm focus for students and educators alike.
-
+---
+name: Academic Pulse
+colors:
+  surface: '#fbf8ff'
+  surface-dim: '#d9d8f2'
+  surface-bright: '#fbf8ff'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#f5f2ff'
+  surface-container: '#eeecff'
+  surface-container-high: '#e7e6ff'
+  surface-container-highest: '#e1e0fb'
+  on-surface: '#191a2d'
+  on-surface-variant: '#474554'
+  inverse-surface: '#2e2f43'
+  inverse-on-surface: '#f1efff'
+  outline: '#787585'
+  outline-variant: '#c8c4d6'
+  surface-tint: '#5748d0'
+  primary: '#5545cd'
+  on-primary: '#ffffff'
+  primary-container: '#6e60e8'
+  on-primary-container: '#fffbff'
+  inverse-primary: '#c6c0ff'
+  secondary: '#0060a7'
+  on-secondary: '#ffffff'
+  secondary-container: '#64acfe'
+  on-secondary-container: '#003f70'
+  tertiary: '#5a568b'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#736ea5'
+  on-tertiary-container: '#fffbff'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#e4dfff'
+  primary-fixed-dim: '#c6c0ff'
+  on-primary-fixed: '#150066'
+  on-primary-fixed-variant: '#3f2bb8'
+  secondary-fixed: '#d2e4ff'
+  secondary-fixed-dim: '#a1c9ff'
+  on-secondary-fixed: '#001c37'
+  on-secondary-fixed-variant: '#004880'
+  tertiary-fixed: '#e4dfff'
+  tertiary-fixed-dim: '#c6c0fd'
+  on-tertiary-fixed: '#191346'
+  on-tertiary-fixed-variant: '#454074'
+  background: '#fbf8ff'
+  on-background: '#191a2d'
+  surface-variant: '#e1e0fb'
+typography:
+  display-lg:
+    fontFamily: Hanken Grotesk
+    fontSize: 48px
+    fontWeight: '700'
+    lineHeight: 56px
+    letterSpacing: -0.02em
+  headline-lg:
+    fontFamily: Hanken Grotesk
+    fontSize: 32px
+    fontWeight: '600'
+    lineHeight: 40px
+    letterSpacing: -0.01em
+  headline-md:
+    fontFamily: Hanken Grotesk
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: 32px
+  title-lg:
+    fontFamily: Hanken Grotesk
+    fontSize: 20px
+    fontWeight: '600'
+    lineHeight: 28px
+  title-md:
+    fontFamily: Hanken Grotesk
+    fontSize: 18px
+    fontWeight: '500'
+    lineHeight: 24px
+  body-lg:
+    fontFamily: Hanken Grotesk
+    fontSize: 16px
+    fontWeight: '400'
+    lineHeight: 24px
+  body-md:
+    fontFamily: Hanken Grotesk
+    fontSize: 14px
+    fontWeight: '400'
+    lineHeight: 20px
+  label-md:
+    fontFamily: Hanken Grotesk
+    fontSize: 12px
+    fontWeight: '600'
+    lineHeight: 16px
+    letterSpacing: 0.05em
+  label-sm:
+    fontFamily: Hanken Grotesk
+    fontSize: 11px
+    fontWeight: '500'
+    lineHeight: 14px
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  unit: 4px
+  xs: 4px
+  sm: 8px
+  md: 16px
+  lg: 24px
+  xl: 32px
+  xxl: 48px
 ---
 
-## Brand Philosophy
+## Brand & Style
+The design system is built for a modern academic portfolio environment, balancing high-performance utility with an approachable, student-centric aesthetic. The personality is **sophisticated, organized, and optimistic**. 
 
-The visual narrative is built around **Glassmorphism** as its core structural principle. Surfaces are translucent panes that interact with vibrant, soft-focus gradients in the background — creating spatial depth and modernity rather than a flat or industrial feel.
-
-The tone is **premium yet accessible**: light lavender hues reduce eye strain while vivid indigo accents drive critical actions. The result is an interface that feels organic, inviting, and unmistakably academic.
-
----
+The visual style follows a **Modern Corporate** direction with **Soft-UI** influences. It utilizes a layered approach to information architecture, using subtle lavender-tinted shadows and a cool-toned palette to reduce cognitive load. The goal is to evoke a sense of professional readiness and academic achievement through clean lines, ample whitespace, and high-quality typography.
 
 ## Colors
+The palette is rooted in a "Cool Lavender" spectrum. The primary accent (#7C6FF7) is used for high-emphasis actions and active states. Secondary blue provides a refreshing contrast for informational highlights.
 
-The palette spans a sophisticated spectrum of violet and indigo.
-
-### Roles
-
-| Role | Hex | Usage |
-|---|---|---|
-| **Primary** | `#4837B7` | Actions, links, brand highlights |
-| **Primary Container** | `#6152D1` | Button fills, active states |
-| **On Primary** | `#FFFFFF` | Text/icons on primary surfaces |
-| **On Primary Container** | `#E6E1FF` | Text/icons inside primary containers |
-| **Secondary** | `#5C588D` | Secondary text, sidebar icons |
-| **Secondary Container** | `#C8C3FF` | Secondary fills |
-| **Tertiary** | `#5638A8` | Accent fills |
-| **Tertiary Container** | `#6E52C2` | Accent containers |
-| **Error** | `#BA1A1A` | Errors, destructive states |
-| **Error Container** | `#FFDAD6` | Error backgrounds |
-
-### Surfaces
-
-| Token | Hex | Usage |
-|---|---|---|
-| `surface` | `#FCF8FF` | Base canvas |
-| `surface-dim` | `#DBD8E5` | Dimmed surfaces |
-| `surface-bright` | `#FCF8FF` | Elevated bright surfaces |
-| `surface-container-lowest` | `#FFFFFF` | Innermost containers |
-| `surface-container-low` | `#F5F2FF` | Secondary sections |
-| `surface-container` | `#EFECF9` | Standard containers |
-| `surface-container-high` | `#E9E6F3` | Elevated containers |
-| `surface-container-highest` | `#E4E1EE` | Top-level containers |
-| `on-surface` | `#1B1B24` | Primary body text |
-| `on-surface-variant` | `#474553` | Secondary / supporting text |
-
-### Structure
-
-| Token | Hex | Usage |
-|---|---|---|
-| `outline` | `#787585` | Borders, dividers |
-| `outline-variant` | `#C8C4D6` | Subtle borders |
-| `inverse-surface` | `#302F39` | Dark mode surfaces |
-| `inverse-on-surface` | `#F2EFFC` | Text on dark surfaces |
-| `inverse-primary` | `#C6BFFF` | Primary in dark contexts |
-| `surface-tint` | `#594AC9` | Tint overlay on elevated surfaces |
-| `background` | `#FCF8FF` | Page background |
-| `on-background` | `#1B1B24` | Text on background |
-| `surface-variant` | `#E4E1EE` | Chip/tag backgrounds |
-
-### Fixed Palette
-
-| Token | Hex |
-|---|---|
-| `primary-fixed` | `#E4DFFF` |
-| `primary-fixed-dim` | `#C6BFFF` |
-| `on-primary-fixed` | `#170066` |
-| `on-primary-fixed-variant` | `#412EB0` |
-| `secondary-fixed` | `#E4DFFF` |
-| `secondary-fixed-dim` | `#C5C0FC` |
-| `on-secondary-fixed` | `#191446` |
-| `on-secondary-fixed-variant` | `#444174` |
-| `tertiary-fixed` | `#E8DDFF` |
-| `tertiary-fixed-dim` | `#CEBDFF` |
-| `on-tertiary-fixed` | `#20005E` |
-| `on-tertiary-fixed-variant` | `#4E2FA0` |
-
----
+The neutral system is intentionally tinted with blue and violet undertones—avoiding true greys to maintain the design system's cohesive cool temperature. Text levels are strictly enforced to ensure WCAG AA accessibility standards against the pale backgrounds.
 
 ## Typography
+The system uses **Hanken Grotesk** as a modern, high-legibility substitute for Helvetica Neue, offering better variable weight control and a more contemporary feel suitable for SaaS environments.
 
-The system uses **Helvetica Neue** as its typeface — a neutral, highly legible foundation that balances the expressive glassmorphic UI.
+- **Scale:** Uses a major second (1.125) scale for hierarchical clarity.
+- **Headlines:** Use SemiBold (600) or Bold (700) with slight negative letter spacing to feel "locked in."
+- **Body:** Regular (400) weight is preferred for long-form reading, with Medium (500) used for emphasis within text blocks.
+- **Labels:** Small caps or uppercase are used sparingly for metadata categories to differentiate from interactive labels.
 
-| Token | Font | Size | Weight | Line Height | Letter Spacing |
-|---|---|---|---|---|---|
-| `display-lg` | Helvetica Neue | 48px | 700 | 1.1 | −0.02em |
-| `headline-lg` | Helvetica Neue | 32px | 600 | 1.2 | — |
-| `headline-md` | Helvetica Neue | 24px | 600 | 1.3 | — |
-| `body-lg` | Helvetica Neue | 18px | 400 | 1.6 | — |
-| `body-md` | Helvetica Neue | 16px | 400 | 1.5 | — |
-| `label-md` | Helvetica Neue | 14px | 500 | 1.2 | 0.01em |
-| `label-sm` | Helvetica Neue | 12px | 600 | 1.2 | — |
+## Layout & Spacing
+This design system utilizes a **12-column fluid grid** for desktop and a **4-column grid** for mobile. 
 
-### Guidelines
-
-- **Headlines** — Tight letter spacing and heavier weights create strong hierarchy.
-- **Body** — Generous line heights ensure readability during long-form academic tasks.
-- **Labels** — Medium-to-semibold weight keeps labels legible on glass surfaces.
-- **Mobile scaling** — `display-lg` scales down to `32px`; `headline-lg` to `24px`.
-
----
-
-## Spacing
-
-All spacing follows an **8px linear scale**.
-
-| Token | Value | Usage |
-|---|---|---|
-| `xs` | 4px | Micro gaps |
-| `sm` | 12px | Tight internal spacing |
-| `base` | 8px | Grid unit |
-| `md` | 24px | Standard card padding |
-| `lg` | 40px | Section gaps |
-| `xl` | 64px | Page-level vertical rhythm |
-| `gutter` | 24px | Column gutters |
-| `margin` | 32px | Page-edge margins |
-
----
-
-## Layout
-
-The layout follows a **Fluid Grid** philosophy for data-heavy dashboards.
-
-| Breakpoint | Columns |
-|---|---|
-| Desktop | 12 |
-| Tablet | 8 |
-| Mobile | 4 |
-
-**Sidebar** — Fixed at ~260px width with a frosted glass effect to differentiate global navigation from the workspace.
-
----
-
-## Border Radius
-
-The shape language is ultra-modern and approachable — exaggerated rounded corners reinforce the "liquid-glass" feel.
-
-| Token | Value | Usage |
-|---|---|---|
-| `rounded-sm` | 0.5rem / 8px | Small utility elements |
-| `rounded` | 1rem / 16px | Input fields |
-| `rounded-md` | 1.5rem / 24px | Moderate cards |
-| `rounded-lg` | 2rem / 32px | Dashboard cards, primary buttons |
-| `rounded-xl` | 3rem / 48px | Hero sections, large surfaces |
-| `rounded-full` | 9999px | Chips, tags, pill buttons |
-
----
+- **The Sidebar:** Remains fixed at 260px on desktop to provide a persistent navigation anchor.
+- **Rhythm:** A strict 4px/8px baseline grid is applied. All vertical margins and paddings must be multiples of 8px.
+- **Density:** The system prioritizes "breathability." Large cards (Project/Student cards) should utilize `lg` (24px) internal padding, while utility cards (StatCard) can scale down to `md` (16px).
 
 ## Elevation & Depth
+Depth is created through **Tonal Layering** combined with soft, chromatic shadows.
 
-Depth is created through **layered translucency** rather than heavy shadows.
+- **Level 0 (Base):** `#F4F7FF` - The canvas layer.
+- **Level 1 (Sub-navigation):** `#EEF1FF` - Sidebars and nested navigation containers. No shadow.
+- **Level 2 (Surface):** `#FFFFFF` - Cards and primary containers. Utilizes the signature lavender shadow: `0 2px 12px rgba(124,111,247,0.08)`.
+- **Level 3 (Overlay):** Floating action buttons or dropdowns. Uses a deeper shadow: `0 8px 24px rgba(124,111,247,0.12)`.
 
-| Property | Value |
-|---|---|
-| Surface opacity | 75–85% white or light lavender |
-| Backdrop blur | `12px – 16px` (applied to all glass elements) |
-| Border | `1px solid rgba(255,255,255, 0.2–0.4)` |
-| Shadow | Ambient only — `#5A568B` at 10% opacity, large blur radius |
+Borders are used primarily as structural reinforcement on Level 1 and 2 surfaces using `#E2E6F3`.
 
-The `1px` semi-opaque border creates a **specular highlight** effect, defining the edge of each glass pane without hard lines.
+## Shapes
+The shape language is "Variably Rounded," where the radius is mapped to the component's scale and frequency of use:
 
----
+1.  **Functional Elements (8px - 10px):** Inputs and buttons use a tighter radius to imply precision and interactability.
+2.  **Structural Elements (16px):** Main cards and containers use a generous radius to feel friendly and modern.
+3.  **Status Elements (24px):** Pills and badges are fully rounded (pill-shaped) to distinguish them from interactive buttons.
 
 ## Components
 
-### Buttons
+### Buttons & Inputs
+- **Primary Button:** Solid `#7C6FF7` with white text, 10px radius.
+- **Secondary Button:** Ghost style with `#7C6FF7` border and text.
+- **Input Fields:** 8px radius, `#E2E6F3` border. Focus state uses a 2px stroke of `#7C6FF7` with a soft lavender glow.
 
-| Variant | Background | Text | Radius | Border |
-|---|---|---|---|---|
-| Primary | `#6152D1` | `#FFFFFF` | `rounded-lg` | None |
-| Ghost | Transparent | `on-surface` | `rounded-lg` | `1px rgba(255,255,255, 0.3)` |
+### Specialized Cards
+- **StatCard:** Minimalist container for metrics. Value in `headline-md`, label in `label-sm` secondary text.
+- **StudentCard:** Features a rounded-stroke avatar, student name, and the signature **Cohort Badge**.
+- **ProjectCard:** Includes a thumbnail area (16px radius), project title, and a row of **SkillPills**.
 
-- Hover state: subtle tint overlay on ghost; slight scale or glow on primary.
-
-### Cards
-
-Glass cards are the primary dashboard widget container.
-
-```
-background: rgba(255, 255, 255, 0.80)
-backdrop-filter: blur(16px)
-border: 1px solid rgba(255, 255, 255, 0.3)
-border-radius: rounded-lg (2rem)
-padding: md (24px)
-box-shadow: 0 8px 32px rgba(90, 86, 139, 0.10)
-```
-
-### Chips / Tags
-
-Used for status indicators: `Active`, `Pending`, etc.
-
-```
-background: rgba(<semantic-color>, 0.10)
-color: <semantic-color> (full opacity)
-border-radius: rounded-full
-padding: xs sm (4px 12px)
-font: label-sm
-```
-
-### Input Fields
-
-```
-background: rgba(255, 255, 255, 0.60)
-border: 1px solid outline-variant
-border-radius: rounded (1rem)
-focus-border: 2px solid primary (#4837B7)
-placeholder-color: rgba(90, 86, 139, 0.50)
-```
-
-### Lists & Tables
-
-- **Zebra-striping** — Alternating rows use `surface-container-low` (`#F5F2FF`) at 5% opacity tint.
-- No heavy horizontal rules — row separation relies solely on the alternating tint.
-
----
-
-## Quick Reference
-
-```css
-/* Core tokens */
---color-primary:            #4837B7;
---color-primary-container:  #6152D1;
---color-surface:            #FCF8FF;
---color-surface-container:  #EFECF9;
---color-on-surface:         #1B1B24;
---color-outline:            #787585;
-
-/* Glass surface */
---glass-bg:                 rgba(255, 255, 255, 0.80);
---glass-blur:               blur(16px);
---glass-border:             1px solid rgba(255, 255, 255, 0.30);
---glass-shadow:             0 8px 32px rgba(90, 86, 139, 0.10);
-
-/* Radii */
---radius-sm:   0.5rem;
---radius:      1rem;
---radius-md:   1.5rem;
---radius-lg:   2rem;
---radius-xl:   3rem;
---radius-full: 9999px;
-
-/* Spacing */
---space-xs: 4px;
---space-sm: 12px;
---space-md: 24px;
---space-lg: 40px;
---space-xl: 64px;
-```
+### Signature Elements
+- **Cohort Badge:** A pill-shaped badge using `bg: #C8C2FF` and `text: #7C6FF7`. This is the primary identifier for student affiliation.
+- **SkillPill:** Small, neutral-themed pills (`bg: #EEF1FF`, `text: #6B7094`) used for tagging technical competencies.
+- **Icons:** Use a 2px stroke width with rounded caps and joins to match the soft UI language.

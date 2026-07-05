@@ -4,68 +4,74 @@
 
 @theme {
   /* ============================================================
-     LUMINOUS ACADEMIC — design system (a.k.a. "Academic Pulse")
-     Source of truth: Context/design.md
+     ACADEMIC PULSE — design system
+     Source of truth: docs/DESIGN.md (Stitch "Academic Pulse" tokens).
+     Colors below are the exact Stitch values.
      ============================================================ */
 
   /* --- Primary --- */
-  --color-primary: #4837B7;
-  --color-primary-container: #6152D1;
-  --color-on-primary: #FFFFFF;
-  --color-on-primary-container: #E6E1FF;
+  --color-primary: #5545cd;
+  --color-primary-container: #6e60e8;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #fffbff;
 
   /* --- Secondary --- */
-  --color-secondary: #5C588D;
-  --color-secondary-container: #C8C3FF;
+  --color-secondary: #0060a7;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #64acfe;
+  --color-on-secondary-container: #003f70;
 
   /* --- Tertiary --- */
-  --color-tertiary: #5638A8;
-  --color-tertiary-container: #6E52C2;
+  --color-tertiary: #5a568b;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #736ea5;
+  --color-on-tertiary-container: #fffbff;
 
   /* --- Error --- */
-  --color-error: #BA1A1A;
-  --color-error-container: #FFDAD6;
-  --color-on-error-container: #93000A;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
 
   /* --- Surfaces --- */
-  --color-surface: #FCF8FF;
-  --color-surface-dim: #DBD8E5;
-  --color-surface-bright: #FCF8FF;
-  --color-surface-container-lowest: #FFFFFF;
-  --color-surface-container-low: #F5F2FF;
-  --color-surface-container: #EFECF9;
-  --color-surface-container-high: #E9E6F3;
-  --color-surface-container-highest: #E4E1EE;
-  --color-on-surface: #1B1B24;
-  --color-on-surface-variant: #474553;
-  --color-surface-variant: #E4E1EE;
+  --color-surface: #fbf8ff;
+  --color-surface-dim: #d9d8f2;
+  --color-surface-bright: #fbf8ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f2ff;
+  --color-surface-container: #eeecff;
+  --color-surface-container-high: #e7e6ff;
+  --color-surface-container-highest: #e1e0fb;
+  --color-on-surface: #191a2d;
+  --color-on-surface-variant: #474554;
+  --color-surface-variant: #e1e0fb;
 
   /* --- Structure --- */
   --color-outline: #787585;
-  --color-outline-variant: #C8C4D6;
-  --color-inverse-surface: #302F39;
-  --color-inverse-on-surface: #F2EFFC;
-  --color-inverse-primary: #C6BFFF;
-  --color-surface-tint: #594AC9;
-  --color-background: #FCF8FF;
-  --color-on-background: #1B1B24;
+  --color-outline-variant: #c8c4d6;
+  --color-inverse-surface: #2e2f43;
+  --color-inverse-on-surface: #f1efff;
+  --color-inverse-primary: #c6c0ff;
+  --color-surface-tint: #5748d0;
+  --color-background: #fbf8ff;
+  --color-on-background: #191a2d;
 
   /* --- Fixed palette --- */
-  --color-primary-fixed: #E4DFFF;
-  --color-primary-fixed-dim: #C6BFFF;
-  --color-on-primary-fixed: #170066;
-  --color-on-primary-fixed-variant: #412EB0;
-  --color-secondary-fixed: #E4DFFF;
-  --color-secondary-fixed-dim: #C5C0FC;
-  --color-on-secondary-fixed: #191446;
-  --color-on-secondary-fixed-variant: #444174;
-  --color-tertiary-fixed: #E8DDFF;
-  --color-tertiary-fixed-dim: #CEBDFF;
-  --color-on-tertiary-fixed: #20005E;
-  --color-on-tertiary-fixed-variant: #4E2FA0;
+  --color-primary-fixed: #e4dfff;
+  --color-primary-fixed-dim: #c6c0ff;
+  --color-on-primary-fixed: #150066;
+  --color-on-primary-fixed-variant: #3f2bb8;
+  --color-secondary-fixed: #d2e4ff;
+  --color-secondary-fixed-dim: #a1c9ff;
+  --color-on-secondary-fixed: #001c37;
+  --color-on-secondary-fixed-variant: #004880;
+  --color-tertiary-fixed: #e4dfff;
+  --color-tertiary-fixed-dim: #c6c0fd;
+  --color-on-tertiary-fixed: #191346;
+  --color-on-tertiary-fixed-variant: #454074;
 
-  /* --- Typography (design.md · Helvetica Neue) --- */
-  --font-sans: 'Helvetica Neue', Helvetica, 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  /* --- Typography (Stitch · Hanken Grotesk; loaded in index.html) --- */
+  --font-sans: 'Hanken Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
 
   /* --- Shape · radii ---
      design.md prescribes an exaggerated scale (2–3rem), but the approved
