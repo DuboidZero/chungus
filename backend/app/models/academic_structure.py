@@ -33,18 +33,16 @@ class Domain(Base, TimestampMixin):
     description = Column(String, nullable=True)
 
 class Course(Base, TimestampMixin):
-    """Course catalog entry — one row per course per branch per semester.
-    Renamed from the PRD's 'Subject' to avoid colliding with the existing
-    per-student Subject model in academic.py (legacy manual grade entries)."""
     __tablename__ = "courses"
 
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     branch_id = Column(String(36), ForeignKey("branches.id"), nullable=False, index=True)
-    semester = Column(Integer, nullable=False)          # 1-6
+    semester = Column(Integer, nullable=False)
     course_code = Column(String, nullable=False)
     course_name = Column(String, nullable=False)
-    type = Column(String, nullable=False)                # DSC / SEC / VEC / AEC
+    type = Column(String, nullable=False)
     credits = Column(Integer, nullable=False)
+    marking_scheme = Column(String, nullable=True)   # label only for now — becomes a real FK in Phase 2 (D3)
 
     __table_args__ = (
         UniqueConstraint("branch_id", "course_code", name="uq_course_branch_code"),

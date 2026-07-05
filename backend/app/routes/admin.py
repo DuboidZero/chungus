@@ -13,6 +13,7 @@ from openpyxl import load_workbook
 
 from app.models.user import User
 from app.models.academic import Semester, Subject
+from app.models.academic_structure import Branch, Course
 from app.schemas.admin import (
     BulkUploadResult, SeededStudent, TeacherCreate, UserSummary,
     MentorAssignmentRequest, MentorAssignmentResponse,
@@ -245,6 +246,81 @@ async def bulk_upload_teachers(
         errors=errors,
         teachers=seeded_teachers,
     )
+
+# ============================================================
+#  Bulk course/subject upload (per branch)
+#  Columns: A=Semester  B=Course Code  C=Course Name  D=Type  E=Credits  F=Marking Scheme
+# ============================================================
+@router.post("/import/courses", response_model=dict)
+async def bulk_upload_courses(
+    branch_id: str,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    branch = db.query(Branch).filter(Branch.id == branch_id).first()
+    if branch is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Branch not found")
+
+    sheet = _open_sheet(await file.read())
+
+    created = 0
+    skipped = 0
+    errors = []
+    seen_codes = set()   # track course codes within THIS upload to catch in-file duplicates
+
+    valid_types = {"DSC", "SEC", "VEC", "AEC"}
+
+    for row_num, row in enumerate(sheet.iter_rows(min_row=2, values_only=True), start=2):
+        if row is None or all(cell is None for cell in row):
+            continue
+
+        semester, course_code, course_name, course_type, credits, marking_scheme = (list(row) + [None] * 6)[:6]
+
+        if not semester or not course_code or not course_name or not course_type or credits is None:
+            errors.append(f"Row {row_num}: missing semester, course code, name, type, or credits")
+            continue
+
+        course_code = str(course_code).strip()
+
+        if course_code in seen_codes or db.query(Course).filter(
+            Course.branch_id == branch_id, Course.course_code == course_code
+        ).first():
+            skipped += 1
+            continue
+
+        try:
+            sem_int = int(semester)
+            if not (1 <= sem_int <= 6):
+                raise ValueError(f"semester must be 1-6, got {sem_int}")
+
+            course_type = str(course_type).strip().upper()
+            if course_type not in valid_types:
+                raise ValueError(f"type must be one of {sorted(valid_types)}, got '{course_type}'")
+
+            credits_int = int(credits)
+
+            course = Course(
+                branch_id=branch_id,
+                semester=sem_int,
+                course_code=course_code,
+                course_name=str(course_name).strip(),
+                type=course_type,
+                credits=credits_int,
+                marking_scheme=str(marking_scheme).strip() if marking_scheme else None,
+            )
+            db.add(course)
+            db.flush()  # surface any DB error now, on this row
+
+            seen_codes.add(course_code)
+            created += 1
+        except (ValueError, TypeError, SQLAlchemyError) as e:
+            db.rollback()
+            errors.append(f"Row {row_num}: {str(e)}")
+
+    db.commit()
+
+    return {"created": created, "skipped": skipped, "errors": errors}
 
 # ============================================================
 #  Bulk marks upload (one row per subject)

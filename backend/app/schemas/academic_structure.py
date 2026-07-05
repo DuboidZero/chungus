@@ -114,15 +114,15 @@ class CourseCreate(CamelModel):
     semester: int = Field(ge=1, le=6)
     course_code: str = Field(min_length=1, max_length=30)
     course_name: str = Field(min_length=2, max_length=200)
-    type: str = Field(min_length=2, max_length=10)   # DSC / SEC / VEC / AEC
+    type: str = Field(min_length=2, max_length=10)
     credits: int = Field(ge=0, le=20)
+    marking_scheme: str | None = Field(default=None, max_length=100)
     domains: list[CourseDomainLink] = []
 
-    @field_validator("course_code", "course_name", "type")
+    @field_validator("course_code", "course_name", "type", "marking_scheme")
     @classmethod
     def _trim(cls, v):
         return v.strip() if isinstance(v, str) else v
-
 
 class CourseUpdate(CamelModel):
     branch_id: str | None = None
@@ -131,8 +131,9 @@ class CourseUpdate(CamelModel):
     course_name: str | None = Field(default=None, min_length=2, max_length=200)
     type: str | None = Field(default=None, min_length=2, max_length=10)
     credits: int | None = Field(default=None, ge=0, le=20)
+    marking_scheme: str | None = Field(default=None, max_length=100)
 
-    @field_validator("course_code", "course_name", "type")
+    @field_validator("course_code", "course_name", "type", "marking_scheme")
     @classmethod
     def _trim_or_none(cls, v):
         if isinstance(v, str):
@@ -149,6 +150,7 @@ class CourseResponse(CamelModel):
     course_name: str
     type: str
     credits: int
+    marking_scheme: str | None
 
 
 class CourseDomainResponse(CamelModel):

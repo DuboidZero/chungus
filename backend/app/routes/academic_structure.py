@@ -239,6 +239,7 @@ async def create_course(
         course_name=payload.course_name,
         type=payload.type,
         credits=payload.credits,
+        marking_scheme=payload.marking_scheme,
     )
     db.add(course)
     try:
