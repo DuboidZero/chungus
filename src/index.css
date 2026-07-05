@@ -135,9 +135,6 @@
   from { opacity: 0; transform: scale(0.96); }
   to   { opacity: 1; transform: scale(1); }
 }
-@keyframes ringFill {
-  from { stroke-dashoffset: var(--ring-circ); }
-}
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(8px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -154,10 +151,6 @@
   0%   { opacity: 0; transform: scale(0.6); }
   60%  { opacity: 1; transform: scale(1.08); }
   100% { opacity: 1; transform: scale(1); }
-}
-@keyframes checkDraw {
-  from { stroke-dashoffset: var(--check-len, 48); }
-  to   { stroke-dashoffset: 0; }
 }
 
 /* --- Entrance utilities --- */
