@@ -66,7 +66,7 @@ The router for system administrators. All routes are protected and render within
 
 ## Routing Implementation Details
 
-- **Entry Point**: `src/App.tsx` handles the overarching `<Router>`, `<ThemeProvider>`, and `<AuthProvider>`.
+- **Entry Point**: `frontend/src/App.tsx` handles the overarching `<Router>`, `<ThemeProvider>`, and `<AuthProvider>`.
 - **Role Router**: The `RoleRouter` component dynamically swaps the entire route tree based on the user's role to guarantee complete isolation of views.
 - **Protection**: The `<ProtectedRoute>` wrapper ensures that child components cannot be rendered unless the user is authenticated (and optionally, holds a specific role).
-- **Navigation Sidebars**: The sidebars corresponding to these routes are configured via constant arrays in `src/shared/layout/navigation/`.
+- **Navigation Sidebars**: The sidebars corresponding to these routes are configured via constant arrays in `frontend/src/shared/layout/navigation/`.
