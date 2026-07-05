@@ -14,7 +14,7 @@ import {
 import { SkillHeatmap } from '../teacher/components/SkillHeatmap';
 import { Users, TrendingUp, AlertTriangle } from 'lucide-react';
 
-const PALETTE = ['#6152D1', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#f97316'];
+const PALETTE = ['#6e60e8', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#f97316'];
 
 export function AnalyticsDashboard() {
   const { theme } = useTheme();
@@ -118,7 +118,7 @@ export function AnalyticsDashboard() {
                     <XAxis dataKey="range" stroke={axis} fontSize={11} tickLine={false} axisLine={false} />
                     <YAxis stroke={axis} fontSize={11} tickLine={false} axisLine={false} />
                     <Tooltip contentStyle={{ backgroundColor: tt.bg, borderColor: tt.border, color: tt.color }} />
-                    <Bar dataKey="count" name="Students" fill="#6152D1" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="count" name="Students" fill="#6e60e8" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               ) : <EmptyChart />}
@@ -194,7 +194,7 @@ export function AnalyticsDashboard() {
                       isAnimationActive={false}
                     >
                       {((data as any).internshipPreferences ?? []).map((_: any, i: number) => (
-                        <Cell key={i} fill={['#6152D1', '#10b981', '#94a3b8'][i % 3]} />
+                        <Cell key={i} fill={['#6e60e8', '#10b981', '#94a3b8'][i % 3]} />
                       ))}
                     </Pie>
                     <Tooltip contentStyle={{ backgroundColor: tt.bg, borderColor: tt.border, color: tt.color }} />
