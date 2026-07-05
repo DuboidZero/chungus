@@ -6,12 +6,22 @@ class SeededStudent(CamelModel):
     full_name: str
     initial_password: str   # returned once so admin can distribute it
 
+class SeededTeacher(CamelModel):
+    email: str
+    full_name: str
+    initial_password: str   # returned once so admin can distribute it
 
 class BulkUploadResult(CamelModel):
     created: int
     skipped: int
     errors: list[str]
     students: list[SeededStudent]
+
+class BulkTeacherUploadResult(CamelModel):
+    created: int
+    skipped: int
+    errors: list[str]
+    teachers: list[SeededTeacher]
 
 class TeacherCreate(CamelModel):
     email: str

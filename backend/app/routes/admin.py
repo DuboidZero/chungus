@@ -17,7 +17,7 @@ from app.schemas.admin import (
     BulkUploadResult, SeededStudent, TeacherCreate, UserSummary,
     MentorAssignmentRequest, MentorAssignmentResponse,
     AdminUserUpdate, AdminUserResponse, ResetPasswordResponse, ToggleStatusResponse,
-    CohortMentorUpdate,
+    CohortMentorUpdate, SeededTeacher, BulkTeacherUploadResult,
 )
 from app.core.dependencies import get_current_admin, get_db
 from app.core.security import hash_password, generate_temp_password
@@ -173,6 +173,78 @@ async def list_cohorts(db: Session = Depends(get_db), admin: User = Depends(get_
             "academicMentorName": mentor.name if mentor else None,
         })
     return result
+
+# ============================================================
+#  Bulk teacher account upload
+#  Columns: A=Email  B=Full Name  C=Department
+# ============================================================
+@router.post("/import/teachers", response_model=BulkTeacherUploadResult)
+async def bulk_upload_teachers(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    sheet = _open_sheet(await file.read())
+
+    created = 0
+    skipped = 0
+    errors = []
+    seeded_teachers = []
+    seen_emails = set()   # track emails within THIS upload to catch in-file duplicates
+
+    for row_num, row in enumerate(sheet.iter_rows(min_row=2, values_only=True), start=2):
+        if row is None or all(cell is None for cell in row):
+            continue
+
+        email, full_name, department = (list(row) + [None] * 3)[:3]
+
+        if not email or not full_name:
+            errors.append(f"Row {row_num}: missing email or full name")
+            continue
+
+        email = str(email).strip().lower()
+
+        if "@" not in email or "." not in email.split("@")[-1]:
+            errors.append(f"Row {row_num}: invalid email '{email}'")
+            continue
+
+        # Skip if email already in DB OR already seen earlier in this same file
+        if email in seen_emails or db.query(User).filter(User.email == email).first():
+            skipped += 1
+            continue
+
+        try:
+            initial_password = generate_temp_password()
+            user = User(
+                role="teacher",
+                email=email,
+                name=str(full_name).strip(),
+                department=str(department).strip() if department else None,
+                hashed_password=hash_password(initial_password),
+                must_change_password=True,
+            )
+            db.add(user)
+            db.flush()  # surface any DB error now, on this row
+
+            seen_emails.add(email)
+            created += 1
+            seeded_teachers.append(SeededTeacher(
+                email=email,
+                full_name=str(full_name).strip(),
+                initial_password=initial_password,
+            ))
+        except (ValueError, TypeError, SQLAlchemyError) as e:
+            db.rollback()
+            errors.append(f"Row {row_num}: {str(e)}")
+
+    db.commit()
+
+    return BulkTeacherUploadResult(
+        created=created,
+        skipped=skipped,
+        errors=errors,
+        teachers=seeded_teachers,
+    )
 
 # ============================================================
 #  Bulk marks upload (one row per subject)
