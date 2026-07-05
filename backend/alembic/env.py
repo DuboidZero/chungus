@@ -10,7 +10,7 @@ from app.models.skill import TechnicalSkill, SoftSkill, Language
 from app.models.academic import Semester, Subject
 from app.models.mentor import MentorAssignment
 from app.models.cohort import Cohort
-from app.models.academic_structure import Branch, Division
+from app.models.academic_structure import Branch, Division, Domain, Course, CourseDomain
 from app.models.teacher_records import PrivateNote, AssessmentMark, ProjectMilestone, GuidanceCase
 from logging.config import fileConfig
 
