@@ -23,3 +23,11 @@ class Division(Base, TimestampMixin):
     __table_args__ = (
         UniqueConstraint("branch_id", "name", name="uq_division_branch_name"),
     )
+
+class Domain(Base, TimestampMixin):
+    """Competency domain, e.g. AI/ML, CyberSec, DSA/Backend. Admin-managed master list."""
+    __tablename__ = "domains"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    name = Column(String, nullable=False, unique=True)
+    description = Column(String, nullable=True)
