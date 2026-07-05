@@ -4,8 +4,9 @@ Run after a fresh DB setup:  python seed.py
 Safe to run repeatedly (skips if the admin already exists).
 """
 from app.database import SessionLocal
-from app.models.user import User
 from app.core.security import hash_password
+import app.models          # registers ALL tables via __init__.py
+from app.models.user import User
 
 ADMIN_EMAIL = "admin@mitwpu.edu.in"
 ADMIN_PASSWORD = "admin123"   # change after first login in production
