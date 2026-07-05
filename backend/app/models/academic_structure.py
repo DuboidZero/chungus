@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, Integer, Float, String, ForeignKey, UniqueConstraint
+from sqlalchemy import Column, Integer, Float, String, Boolean, ForeignKey, UniqueConstraint
 from app.database import Base, TimestampMixin
 
 
@@ -63,4 +63,20 @@ class CourseDomain(Base, TimestampMixin):
 
     __table_args__ = (
         UniqueConstraint("course_id", "domain_id", name="uq_coursedomain_course_domain"),
+    )
+
+class SkillsMaster(Base, TimestampMixin):
+    """Master list of skills, organized under Domains. Admin-curated entries have
+    is_custom=False; student-created ones (PRD: 'create custom skills') get
+    is_custom=True and record who added them."""
+    __tablename__ = "skills_master"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
+    domain_id = Column(String(36), ForeignKey("domains.id"), nullable=False, index=True)
+    name = Column(String, nullable=False)
+    is_custom = Column(Boolean, nullable=False, default=False)
+    created_by = Column(String(36), ForeignKey("users.id"), nullable=True)
+
+    __table_args__ = (
+        UniqueConstraint("domain_id", "name", name="uq_skillsmaster_domain_name"),
     )
