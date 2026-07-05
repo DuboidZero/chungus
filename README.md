@@ -38,6 +38,16 @@ See `backend/` for the FastAPI service and its own setup instructions.
 The UI implements the **Luminous Academic** design system — see `docs/DESIGN.md`
 for tokens (colors, typography, spacing, radii, glassmorphism) and component specs.
 
+## Documentation (`docs/`)
+
+| File | Purpose |
+|---|---|
+| [`FRONTEND_API_CONTRACT.md`](docs/FRONTEND_API_CONTRACT.md) | **Implementation-derived** API reference — every endpoint the frontend calls, verbs, schemas, and which need backend support. Start here for integration. |
+| [`FRONTEND_HANDOVER.md`](docs/FRONTEND_HANDOVER.md) | Technical handover — structure, routing, state, UI kit, motion system, known limitations, build/run. |
+| [`API_CONTRACT.md`](docs/API_CONTRACT.md) · [`TEACHER_CONTRACT.md`](docs/TEACHER_CONTRACT.md) · [`ADMIN_CONTRACT.md`](docs/ADMIN_CONTRACT.md) | Backend team's target API spec (aspirational). |
+| [`DESIGN.md`](docs/DESIGN.md) | Luminous Academic design system. |
+| [`instructions.md`](docs/instructions.md) | Local setup steps. |
+
 ---
 
 Built by **iGNISIA Tech Team**
