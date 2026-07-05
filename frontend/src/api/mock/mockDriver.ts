@@ -167,18 +167,35 @@ export const mockDriver = {
     return allStudents.find(s => s.user.id === userId)?.academic ?? [];
   },
   getSkills(userId: string) {
-    return allStudents.find(s => s.user.id === userId)?.skills ?? { technical: [], soft: [], languages: [] };
+    // Return copies — handing out live references lets driver mutations leak
+    // into React state and double-add entries on create.
+    const skills = allStudents.find(s => s.user.id === userId)?.skills;
+    return {
+      technical: [...(skills?.technical ?? [])],
+      soft: [...(skills?.soft ?? [])],
+      languages: [...(skills?.languages ?? [])],
+    };
   },
   getProjects(userId: string) {
-    return allStudents.find(s => s.user.id === userId)?.projects ?? [];
+    const projects = allStudents.find(s => s.user.id === userId)?.projects ?? [];
+    // Normalize legacy fixture fields (title/category) to the UI contract
+    // (name/domain/type) so cards and edit forms render correctly.
+    return projects.map((p: any) => ({
+      ...p,
+      name: p.name ?? p.title ?? '',
+      type: p.type ?? p.category ?? 'Personal Project',
+      domain: p.domain ?? p.category ?? '',
+    }));
   },
-  
+
   createProject(userId: string, data: any) {
     const student = allStudents.find(s => s.user.id === userId);
     if (!student) throw new Error('Student not found');
+    // Server-style create: the driver owns id/timestamps — client-supplied
+    // ids (weak Math.random ids from forms) are discarded to keep keys unique.
     const newProject = {
-      id: `proj-${mockUuid()}`,
       ...data,
+      id: `proj-${mockUuid()}`,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -200,11 +217,74 @@ export const mockDriver = {
     student.projects[idx] = updated;
     return updated;
   },
-  getExperience(userId: string) {
-    return allStudents.find(s => s.user.id === userId)?.experience ?? [];
+  deleteProject(userId: string, projectId: string) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    student.projects = (student.projects ?? []).filter((p: any) => p.id !== projectId);
   },
+
+  getExperience(userId: string) {
+    return [...(allStudents.find(s => s.user.id === userId)?.experience ?? [])];
+  },
+  createExperience(userId: string, data: any) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    const entry = { ...data, id: `exp-${mockUuid()}`, userId, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    if (!student.experience) student.experience = [];
+    student.experience.push(entry);
+    return entry;
+  },
+  updateExperience(userId: string, id: string, data: any) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    const idx = (student.experience ?? []).findIndex((e: any) => e.id === id);
+    if (idx === -1) throw new Error('Experience not found');
+    student.experience[idx] = { ...student.experience[idx], ...data, updatedAt: new Date().toISOString() };
+    return student.experience[idx];
+  },
+  deleteExperience(userId: string, id: string) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    student.experience = (student.experience ?? []).filter((e: any) => e.id !== id);
+  },
+
   getAchievements(userId: string) {
-    return allStudents.find(s => s.user.id === userId)?.achievements ?? [];
+    return [...(allStudents.find(s => s.user.id === userId)?.achievements ?? [])];
+  },
+  createAchievement(userId: string, data: any) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    const entry = { ...data, id: `ach-${mockUuid()}`, userId, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+    if (!student.achievements) student.achievements = [];
+    student.achievements.push(entry);
+    return entry;
+  },
+  updateAchievement(userId: string, id: string, data: any) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    const idx = (student.achievements ?? []).findIndex((a: any) => a.id === id);
+    if (idx === -1) throw new Error('Achievement not found');
+    student.achievements[idx] = { ...student.achievements[idx], ...data, updatedAt: new Date().toISOString() };
+    return student.achievements[idx];
+  },
+  deleteAchievement(userId: string, id: string) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    student.achievements = (student.achievements ?? []).filter((a: any) => a.id !== id);
+  },
+
+  createSkill(userId: string, kind: 'technical' | 'soft' | 'languages', data: any) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    if (!student.skills) student.skills = { technical: [], soft: [], languages: [] };
+    const entry = { ...data, id: `skill-${mockUuid()}` };
+    student.skills[kind].push(entry);
+    return entry;
+  },
+  deleteSkill(userId: string, kind: 'technical' | 'soft' | 'languages', id: string) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    student.skills[kind] = (student.skills[kind] ?? []).filter((s: any) => s.id !== id);
   },
 
   /** Teacher Dashboard and Aggregation */

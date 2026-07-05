@@ -29,20 +29,38 @@ export async function getAchievements(): Promise<AchievementListResponse> {
 
 /** POST /me/achievements */
 export async function createAchievement(data: CreateAchievementRequest): Promise<CreateAchievementResponse> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    const created = mockDriver.createAchievement(userId, data);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    return created;
+  }
   const response = await apiClient.post<CreateAchievementResponse>(API.ACHIEVEMENTS, data);
   return response.data;
 }
 
 /** PATCH /me/achievements/:id */
 export async function updateAchievement(id: string, data: UpdateAchievementRequest): Promise<UpdateAchievementResponse> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    const updated = mockDriver.updateAchievement(userId, id, data);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    return updated;
+  }
   const response = await apiClient.patch<UpdateAchievementResponse>(API.ACHIEVEMENT_ITEM(id), data);
   return response.data;
 }
 
 /** DELETE /me/achievements/:id */
 export async function deleteAchievement(id: string): Promise<void> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    mockDriver.deleteAchievement(userId, id);
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return;
+  }
   await apiClient.delete(API.ACHIEVEMENT_ITEM(id));
 }

@@ -46,7 +46,7 @@ export function UploadCard({ title, description, acceptedFileTypes, onUpload }: 
     <Card>
       <CardContent className="p-6">
         <h3 className="text-lg font-bold text-on-surface mb-1">{title}</h3>
-        <p className="text-sm text-on-surface-variant mb-4">{description}</p>
+        <p className="text-sm text-on-surface-variant mb-4 break-words">{description}</p>
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <input

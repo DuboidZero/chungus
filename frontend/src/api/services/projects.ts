@@ -45,20 +45,38 @@ export async function getProject(id: string): Promise<ProjectResponse> {
 
 /** POST /me/projects */
 export async function createProject(data: CreateProjectRequest): Promise<CreateProjectResponse> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    const created = mockDriver.createProject(userId, data);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    return created;
+  }
   const response = await apiClient.post<CreateProjectResponse>(API.PROJECTS, data);
   return response.data;
 }
 
 /** PATCH /me/projects/:id */
 export async function updateProject(id: string, data: UpdateProjectRequest): Promise<UpdateProjectResponse> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    const updated = mockDriver.updateProject(userId, id, data);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    return updated;
+  }
   const response = await apiClient.patch<UpdateProjectResponse>(API.PROJECT(id), data);
   return response.data;
 }
 
 /** DELETE /me/projects/:id */
 export async function deleteProject(id: string): Promise<void> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    mockDriver.deleteProject(userId, id);
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return;
+  }
   await apiClient.delete(API.PROJECT(id));
 }

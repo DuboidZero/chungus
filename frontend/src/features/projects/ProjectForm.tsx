@@ -43,6 +43,7 @@ export function ProjectForm({ embedded = false, projectId, onDone }: ProjectForm
   const [data, setData] = useState<ProjectEntry>(EMPTY_PROJECT);
   const [techInput, setTechInput] = useState('');
   const [errors, setErrors] = useState<Errors>({});
+  const [saveError, setSaveError] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [teachers, setTeachers] = useState<{id: string, name: string}[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -137,6 +138,7 @@ export function ProjectForm({ embedded = false, projectId, onDone }: ProjectForm
       return;
     }
     if (!validate()) return;
+    setSaveError(null);
     try {
       if (isEditing) {
         await updateProject(data);
@@ -146,6 +148,7 @@ export function ProjectForm({ embedded = false, projectId, onDone }: ProjectForm
       finish();
     } catch (err) {
       console.error('Failed to save project', err);
+      setSaveError('Could not save the project. Please check your connection and try again.');
     }
   };
 
@@ -353,7 +356,12 @@ export function ProjectForm({ embedded = false, projectId, onDone }: ProjectForm
   );
 
   const actions = (
-    <div className="flex justify-end gap-3 pt-4">
+    <div className="flex flex-wrap items-center justify-end gap-3 pt-4">
+      {saveError && (
+        <p className="flex items-center gap-1.5 text-sm text-error mr-auto">
+          <AlertCircle className="w-4 h-4 shrink-0" /> {saveError}
+        </p>
+      )}
       {embedded && (
         <button
           type="button"

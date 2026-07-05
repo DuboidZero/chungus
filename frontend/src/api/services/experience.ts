@@ -29,20 +29,38 @@ export async function getExperience(): Promise<ExperienceListResponse> {
 
 /** POST /me/experience */
 export async function createExperience(data: CreateExperienceRequest): Promise<CreateExperienceResponse> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    const created = mockDriver.createExperience(userId, data);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    return created;
+  }
   const response = await apiClient.post<CreateExperienceResponse>(API.EXPERIENCE, data);
   return response.data;
 }
 
 /** PATCH /me/experience/:id */
 export async function updateExperience(id: string, data: UpdateExperienceRequest): Promise<UpdateExperienceResponse> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    const updated = mockDriver.updateExperience(userId, id, data);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    return updated;
+  }
   const response = await apiClient.patch<UpdateExperienceResponse>(API.EXPERIENCE_ITEM(id), data);
   return response.data;
 }
 
 /** DELETE /me/experience/:id */
 export async function deleteExperience(id: string): Promise<void> {
-  /** Initiates a network request to the backend service to perform the specified operation. */
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    mockDriver.deleteExperience(userId, id);
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return;
+  }
   await apiClient.delete(API.EXPERIENCE_ITEM(id));
 }

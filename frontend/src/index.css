@@ -154,8 +154,11 @@
 }
 
 /* --- Entrance utilities --- */
+/* NOTE: `backwards` (not `both`) — a retained fill would leave an identity
+   transform on the route container, which becomes the containing block for
+   position:fixed children and breaks modal/overlay viewport centering. */
 @utility page-enter {
-  animation: fadeInUp var(--dur-slow) var(--ease-out-quart) both;
+  animation: fadeInUp var(--dur-slow) var(--ease-out-quart) backwards;
 }
 @utility animate-fade-in {
   animation: fadeIn var(--dur-base) var(--ease-out-quart) both;
@@ -194,6 +197,8 @@
 .reveal.is-visible {
   opacity: 1;
   transform: none;
+  /* release will-change so no containing block lingers for fixed children */
+  will-change: auto;
 }
 
 /* --- Interaction states (micro-interactions) --- */
