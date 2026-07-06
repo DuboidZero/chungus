@@ -16,3 +16,4 @@ from app.models.academic import Semester, Subject
 from app.models.cohort import Cohort
 from app.models.mentor import MentorAssignment
 from app.models.marks import MarkingScheme, SchemeComponent, MarksEntry
+from app.models.mentorship import SubjectTeacher

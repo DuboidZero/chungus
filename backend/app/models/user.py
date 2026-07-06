@@ -21,3 +21,7 @@ class User(Base, TimestampMixin):
     current_semester = Column(Integer, nullable=True)          # 1-6, replaces academic_year going forward
     division_id = Column(String(36), ForeignKey("divisions.id"), nullable=True, index=True)
     cgpa = Column(Float, nullable=True)                         # computed and cached, see Phase 2
+
+    # --- Phase 3 additions ---
+    branch_id = Column(String(36), ForeignKey("branches.id"), nullable=True, index=True)   # teacher's branch (for mentor eligibility)
+    mentor_id = Column(String(36), ForeignKey("users.id"), nullable=True, index=True)       # student's chosen mentor (a teacher)
