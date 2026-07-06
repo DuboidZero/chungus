@@ -4,6 +4,46 @@ This file documents **new or modified API endpoints** introduced as part of the 
 
 ---
 
+## Token Format (Important)
+
+Share tokens are **self-contained** — the student IDs are encoded directly into the token using base64url encoding. This means:
+
+- Share links work in any browser, any device, and any deployment **without needing shared server state to validate the token**.
+- The backend should decode the token to extract student IDs rather than look them up in a database table (though storing them for audit/revocation purposes is fine).
+
+**Encoding (frontend generates, backend validates):**
+```
+token = base64url( JSON.stringify(studentIds[]) )
+```
+Example: `["student-1", "student-2"]` → `WyJzdHVkZW50LTEiLCJzdHVkZW50LTIiXQ`
+
+**Special token:** `demo1234` is a reserved demo token that always resolves to all students (dev/testing only).
+
+> [!NOTE]
+> The frontend generates the share URL using `window.location.origin + "/share/" + token` — no hardcoded domain. This works correctly on any deployment (local, Vercel preview, production) automatically.
+
+---
+
+## Deployment Note
+
+The frontend is a **Single Page Application (SPA)**. All routing is handled client-side by React Router. To prevent 404 errors when recruiters open share links directly, the hosting provider must rewrite all unmatched routes to `index.html`.
+
+**Vercel** (`vercel.json`):
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
+```
+
+**Nginx:**
+```nginx
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
+---
+
 ## 1. Feature / Unfeature a Project
 
 ### `PATCH /me/projects/:id/feature`
@@ -202,13 +242,16 @@ Creates a new share bundle and returns a token.
 **Success Response — `201 Created`:**
 ```json
 {
-  "token": "abc12345",
-  "shareUrl": "https://portfolio.mitwpu.edu.in/share/abc12345",
+  "token": "WyJzdHVkZW50LTEiLCJzdHVkZW50LTIiXQ",
+  "shareUrl": "https://<your-domain>/share/WyJzdHVkZW50LTEiLCJzdHVkZW50LTIiXQ",
   "createdAt": "2026-07-06T00:00:00Z",
   "expiresAt":  "2026-08-05T00:00:00Z",
   "studentCount": 3
 }
 ```
+
+> [!NOTE]
+> The `shareUrl` should be constructed from the request's `Origin` header or a configured base URL — never hardcoded. The frontend always uses `window.location.origin` so the URL is correct on any deployment.
 
 ---
 

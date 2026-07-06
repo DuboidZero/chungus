@@ -46,8 +46,7 @@ export function ShareProfilesWizard() {
   const next = () => {
     if (step === 1) {
       const bundle = mockDriver.createShareBundle([...selected]);
-      const base = import.meta.env.VITE_DEPLOY_URL || window.location.origin;
-      setLink(`${base}/share/${bundle.token}`);
+      setLink(`${window.location.origin}/share/${bundle.token}`);
     }
     setStep(s => Math.min(2, s + 1));
   };

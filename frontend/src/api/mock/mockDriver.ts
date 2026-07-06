@@ -21,43 +21,35 @@ const allAdmins:   any[] = getMockData(adminModules).map(a => JSON.parse(JSON.st
 
 const mockMilestones: any[] = [];
 
-// In-memory share bundles created by the teacher's ShareProfilesWizard
-interface ShareBundle {
-  token: string;
-  studentIds: string[];
-  createdAt: string;
-  expiresAt: string;
+// ─── Self-contained share token encoding ─────────────────────────────────────
+// Tokens encode the student IDs directly so links work across any browser,
+// device, or deployment without shared state (no localStorage dependency).
+// Format: base64url( JSON.stringify(studentIds) )
+// Special case: 'demo1234' always resolves to ALL students.
+
+
+
+function encodeShareToken(studentIds: string[]): string {
+  const json = JSON.stringify(studentIds);
+  // btoa → base64url (URL-safe, no padding)
+  return btoa(unescape(encodeURIComponent(json)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
 
-const BUNDLES_STORAGE_KEY = 'mit_mock_share_bundles';
-
-/** Load previously generated bundles from localStorage (survive page refresh). */
-function loadBundles(): ShareBundle[] {
+function decodeShareToken(token: string): string[] | null {
+  if (token === 'demo1234') return null; // handled as special case
   try {
-    const raw = localStorage.getItem(BUNDLES_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    // Restore base64 padding
+    const pad = token.length % 4;
+    const b64 = token.replace(/-/g, '+').replace(/_/g, '/')
+                     + (pad ? '='.repeat(4 - pad) : '');
+    const json = decodeURIComponent(escape(atob(b64)));
+    const ids = JSON.parse(json);
+    return Array.isArray(ids) ? ids : null;
   } catch {
-    return [];
+    return null;
   }
 }
-
-function saveBundles(bundles: ShareBundle[]) {
-  try {
-    localStorage.setItem(BUNDLES_STORAGE_KEY, JSON.stringify(bundles));
-  } catch { /* quota exceeded — silently ignore */ }
-}
-
-const shareBundles: ShareBundle[] = [
-  // Demo token — always available, seeded with all student IDs lazily
-  {
-    token: 'demo1234',
-    studentIds: [],
-    createdAt: new Date('2026-07-01').toISOString(),
-    expiresAt: new Date('2099-12-31').toISOString(),
-  },
-  // Merge in any bundles generated in previous sessions
-  ...loadBundles(),
-];
 
 
 // Admin Cohorts
@@ -744,28 +736,31 @@ export const mockDriver = {
   },
 
   // ─── Recruiter Share Bundle ───────────────────────────────────────────────
-  createShareBundle(studentIds: string[]): ShareBundle {
-    const token = Math.random().toString(36).slice(2, 10);
-    const bundle: ShareBundle = {
+  createShareBundle(studentIds: string[]): { token: string; createdAt: string; expiresAt: string } {
+    // Encode student IDs directly into the token — no server/localStorage needed
+    const token = encodeShareToken(studentIds);
+    const now = new Date();
+    return {
       token,
-      studentIds,
-      createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: now.toISOString(),
+      expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     };
-    shareBundles.push(bundle);
-    // Persist to localStorage so the link survives page refresh
-    saveBundles(shareBundles.filter(b => b.token !== 'demo1234'));
-    return bundle;
   },
 
   getShareBundle(token: string) {
-    const bundle = shareBundles.find(b => b.token === token);
-    if (!bundle) return null;
-    // Lazily seed the demo bundle with all students
-    if (bundle.studentIds.length === 0) {
-      bundle.studentIds = allStudents.map(s => s.user.id);
+    const now = new Date().toISOString();
+
+    // Resolve student IDs — either from the special demo token or by decoding
+    let studentIds: string[];
+    if (token === 'demo1234') {
+      studentIds = allStudents.map(s => s.user.id);
+    } else {
+      const decoded = decodeShareToken(token);
+      if (!decoded) return null;
+      studentIds = decoded;
     }
-    const students = bundle.studentIds.map(id => {
+
+    const students = studentIds.map(id => {
       const s = allStudents.find(st => st.user.id === id);
       if (!s) return null;
       const projects: any[] = s.projects ?? [];
@@ -783,19 +778,21 @@ export const mockDriver = {
         hasExperience: (s.experience ?? []).length > 0,
       };
     }).filter(Boolean);
+
     return {
-      token: bundle.token,
-      createdAt: bundle.createdAt,
-      expiresAt: bundle.expiresAt,
+      token,
+      createdAt: now,
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       studentCount: students.length,
       students,
     };
   },
 
   getRecruiterStudentProfile(token: string, studentId: string) {
-    const bundle = shareBundles.find(b => b.token === token);
-    if (bundle && bundle.studentIds.length === 0) {
-      bundle.studentIds = allStudents.map(s => s.user.id);
+    // Validate token (decode to confirm it's legitimate, or accept demo)
+    if (token !== 'demo1234') {
+      const decoded = decodeShareToken(token);
+      if (!decoded || !decoded.includes(studentId)) return null;
     }
     const s = allStudents.find(st => st.user.id === studentId);
     if (!s) return null;
