@@ -43,6 +43,7 @@ class Course(Base, TimestampMixin):
     type = Column(String, nullable=False)
     credits = Column(Integer, nullable=False)
     marking_scheme = Column(String, nullable=True)   # label only for now — becomes a real FK in Phase 2 (D3)
+    marking_scheme_id = Column(String(36), ForeignKey("marking_schemes.id"), nullable=True, index=True)
 
     __table_args__ = (
         UniqueConstraint("branch_id", "course_code", name="uq_course_branch_code"),

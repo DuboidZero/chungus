@@ -117,6 +117,7 @@ class CourseCreate(CamelModel):
     type: str = Field(min_length=2, max_length=10)
     credits: int = Field(ge=0, le=20)
     marking_scheme: str | None = Field(default=None, max_length=100)
+    marking_scheme_id: str | None = None
     domains: list[CourseDomainLink] = []
 
     @field_validator("course_code", "course_name", "type", "marking_scheme")
@@ -132,6 +133,7 @@ class CourseUpdate(CamelModel):
     type: str | None = Field(default=None, min_length=2, max_length=10)
     credits: int | None = Field(default=None, ge=0, le=20)
     marking_scheme: str | None = Field(default=None, max_length=100)
+    marking_scheme_id: str | None = None
 
     @field_validator("course_code", "course_name", "type", "marking_scheme")
     @classmethod
@@ -151,6 +153,7 @@ class CourseResponse(CamelModel):
     type: str
     credits: int
     marking_scheme: str | None
+    marking_scheme_id: str | None = None
 
 
 class CourseDomainResponse(CamelModel):

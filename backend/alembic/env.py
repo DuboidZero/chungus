@@ -12,6 +12,7 @@ from app.models.mentor import MentorAssignment
 from app.models.cohort import Cohort
 from app.models.academic_structure import Branch, Division, Domain, Course, CourseDomain, SkillsMaster
 from app.models.teacher_records import PrivateNote, AssessmentMark, ProjectMilestone, GuidanceCase
+from app.models.marks import MarkingScheme, SchemeComponent, MarksEntry
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config

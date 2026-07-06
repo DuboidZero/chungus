@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-
+from app.routes.marks import router as marks_router
 from app.routes import auth, profile, achievement, experience, project, skill, academic, dashboard, admin, teacher, upload
 from app.routes.academic_structure import router as academic_structure_router
 
@@ -88,6 +88,7 @@ app.include_router(admin.router, prefix="/api/v1")
 app.include_router(academic_structure_router, prefix="/api/v1")
 app.include_router(teacher.router, prefix="/api/v1")
 app.include_router(upload.router, prefix="/api/v1")
+app.include_router(marks_router, prefix="/api/v1")
 
 
 

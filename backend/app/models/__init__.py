@@ -15,3 +15,4 @@ from app.models.experience import Experience
 from app.models.academic import Semester, Subject
 from app.models.cohort import Cohort
 from app.models.mentor import MentorAssignment
+from app.models.marks import MarkingScheme, SchemeComponent, MarksEntry

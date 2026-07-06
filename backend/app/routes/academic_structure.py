@@ -11,6 +11,7 @@ from app.schemas.academic_structure import (
     DomainCreate, DomainUpdate, DomainResponse,
     CourseCreate, CourseUpdate, CourseResponse, CourseDomainResponse,
 )
+from app.models.marks import MarkingScheme
 
 router = APIRouter(prefix="/admin/academic-structure", tags=["academic-structure"])
 
@@ -228,6 +229,9 @@ async def create_course(
     if not db.query(Branch).filter(Branch.id == payload.branch_id).first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Branch not found")
 
+    if payload.marking_scheme_id and not db.query(MarkingScheme).filter(MarkingScheme.id == payload.marking_scheme_id).first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Marking scheme not found")
+
     for link in payload.domains:
         if not db.query(Domain).filter(Domain.id == link.domain_id).first():
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Domain {link.domain_id} not found")
@@ -240,6 +244,7 @@ async def create_course(
         type=payload.type,
         credits=payload.credits,
         marking_scheme=payload.marking_scheme,
+        marking_scheme_id=payload.marking_scheme_id,
     )
     db.add(course)
     try:
@@ -295,6 +300,8 @@ async def update_course(
     data = payload.model_dump(exclude_unset=True)
     if "branch_id" in data and not db.query(Branch).filter(Branch.id == data["branch_id"]).first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Branch not found")
+    if data.get("marking_scheme_id") and not db.query(MarkingScheme).filter(MarkingScheme.id == data["marking_scheme_id"]).first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Marking scheme not found")
     for field, value in data.items():
         setattr(course, field, value)
     _commit_or_conflict(db, "That course code already exists for this branch")
