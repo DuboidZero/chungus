@@ -4,7 +4,7 @@ Returns JSON (labels/values); the frontend draws the charts.
 """
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.models.academic_structure import Course, Division
+from app.models.academic_structure import Course, Division, CourseDomain, Domain
 from app.models.marks import MarksEntry
 from app.core.marks_engine import compute_subject_result, compute_student_cgpa
 
@@ -144,3 +144,62 @@ def class_grade_distribution(db: Session, course: Course) -> dict:
         "totalStudents": n,
         "gradeDistribution": dist,
     }
+
+
+def component_comparison(db: Session, student_id: str, course: Course) -> dict:
+    """Normalize each component to a % so components with different maxes are
+    comparable on ONE scale — spot strong vs weak areas within a subject."""
+    from app.models.marks import SchemeComponent, MarksEntry
+    if not course.marking_scheme_id:
+        return {"course": course.course_code, "components": []}
+
+    components = db.query(SchemeComponent).filter(
+        SchemeComponent.scheme_id == course.marking_scheme_id
+    ).order_by(SchemeComponent.display_order, SchemeComponent.code).all()
+
+    entries = {e.component_id: e.obtained_marks for e in db.query(MarksEntry).filter(
+        MarksEntry.student_id == student_id, MarksEntry.course_id == course.id
+    ).all()}
+
+    out = []
+    for c in components:
+        obtained = entries.get(c.id)
+        got = obtained if obtained is not None else 0.0
+        normalized = round((got / c.max_marks) * 100, 2) if c.max_marks else 0
+        out.append({
+            "code": c.code, "label": c.label,
+            "obtained": obtained, "max": c.max_marks,
+            "normalizedPercent": normalized,
+        })
+    return {
+        "courseId": course.id,
+        "courseCode": course.course_code,
+        "courseName": course.course_name,
+        "components": out,
+    }
+
+
+def domain_radar(db: Session, student_id: str) -> dict:
+    """Average normalized performance per DOMAIN across the student's subjects.
+    Uses the CourseDomain mapping. Ready for a radar/spider chart."""
+    data = compute_student_cgpa(db, student_id)
+    subj_pct = {}
+    for sem in data["semesters"]:
+        for subj in sem["subjects"]:
+            subj_pct[subj["course_id"]] = subj["percentage"]
+
+    domain_scores = {}
+    links = db.query(CourseDomain).filter(CourseDomain.course_id.in_(list(subj_pct.keys()))).all() if subj_pct else []
+    for link in links:
+        domain_scores.setdefault(link.domain_id, []).append(subj_pct[link.course_id])
+
+    axes = []
+    for domain_id, pcts in domain_scores.items():
+        domain = db.query(Domain).filter(Domain.id == domain_id).first()
+        axes.append({
+            "domain": domain.name if domain else domain_id,
+            "averagePercent": round(sum(pcts) / len(pcts), 2),
+            "subjectCount": len(pcts),
+        })
+
+    return {"studentId": student_id, "axes": axes}
