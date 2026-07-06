@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, Users, BookOpen, BarChart3, Share2, type LucideIcon
+  LayoutDashboard, Users, BookOpen, BarChart3, Share2, Link2, type LucideIcon
 } from 'lucide-react';
 
 export interface NavItem {
@@ -33,6 +33,7 @@ export const teacherNavigation: NavGroup[] = [
     title: 'Placement',
     items: [
       { label: 'Share Profiles', path: '/share', icon: Share2 },
+      { label: 'Shared Profiles', path: '/share/manage', icon: Link2 },
     ],
   },
 ];

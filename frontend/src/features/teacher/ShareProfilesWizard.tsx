@@ -6,7 +6,7 @@ import { Card } from '../../shared/ui/card';
 import { Skeleton } from '../../shared/ui/loading-skeleton';
 import {
   Check, ChevronLeft, ChevronRight, Copy, GraduationCap, Code2,
-  FolderGit2, Award, Briefcase, GitBranch, ShieldCheck, Link2, RotateCcw,
+  FolderGit2, Award, Briefcase, GitBranch, Link2, RotateCcw, Clock,
 } from 'lucide-react';
 
 const STEPS = ['Select Students', 'Choose Data', 'Generate Link'];
@@ -32,6 +32,8 @@ export function ShareProfilesWizard() {
   });
   const [link, setLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [neverExpires, setNeverExpires] = useState(false);
+  const [expiryDays, setExpiryDays] = useState(30);
 
   useEffect(() => {
     getAssignedStudents().then(setStudents).catch(console.error).finally(() => setLoading(false));
@@ -43,9 +45,15 @@ export function ShareProfilesWizard() {
   const dataCount = Object.values(dataSel).filter(Boolean).length;
   const canNext = step === 0 ? selected.size > 0 : step === 1 ? dataCount > 0 : true;
 
+  const selectedSections = Object.entries(dataSel).filter(([, v]) => v).map(([k]) => k);
+
   const next = () => {
     if (step === 1) {
-      const bundle = mockDriver.createShareBundle([...selected]);
+      const bundle = mockDriver.createShareBundle(
+        [...selected],
+        selectedSections,
+        neverExpires ? null : expiryDays,
+      );
       setLink(`${window.location.origin}/share/${bundle.token}`);
     }
     setStep(s => Math.min(2, s + 1));
@@ -180,11 +188,32 @@ export function ShareProfilesWizard() {
                   );
                 })}
               </div>
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-surface-container-low border border-outline-variant/50">
-                <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <p className="text-sm text-on-surface-variant">
-                  The recruiter view is a redacted resume — internal exam itemisations (CCA/LCA) never appear, per institution policy.
-                </p>
+              {/* ── Expiration ── */}
+              <div className="p-5 rounded-xl bg-surface-container-low border border-outline-variant/50 space-y-4">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold text-on-surface">Link Expiration</h3>
+                </div>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${neverExpires ? 'bg-primary-container border-primary-container' : 'border-outline-variant'}`}>
+                    {neverExpires && <Check className="w-3.5 h-3.5 text-on-primary" />}
+                  </div>
+                  <input type="checkbox" className="sr-only" checked={neverExpires} onChange={e => setNeverExpires(e.target.checked)} />
+                  <span className="text-sm font-medium text-on-surface">Never expires</span>
+                </label>
+                <div className="flex items-center gap-3">
+                  <span className={`text-sm ${neverExpires ? 'text-on-surface-variant/50' : 'text-on-surface-variant'}`}>Expires after</span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={365}
+                    value={expiryDays}
+                    onChange={e => setExpiryDays(Math.max(1, parseInt(e.target.value) || 1))}
+                    disabled={neverExpires}
+                    className="w-20 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface text-sm font-medium text-center disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  />
+                  <span className={`text-sm ${neverExpires ? 'text-on-surface-variant/50' : 'text-on-surface-variant'}`}>days</span>
+                </div>
               </div>
             </div>
           )}
@@ -221,8 +250,8 @@ export function ShareProfilesWizard() {
                   <p className="text-sm text-on-surface-variant">Data categories</p>
                 </div>
                 <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant/50">
-                  <p className="text-2xl font-bold text-primary">30d</p>
-                  <p className="text-sm text-on-surface-variant">Link expires in</p>
+                  <p className="text-2xl font-bold text-primary">{neverExpires ? '∞' : `${expiryDays}d`}</p>
+                  <p className="text-sm text-on-surface-variant">{neverExpires ? 'Never expires' : 'Link expires in'}</p>
                 </div>
               </div>
             </div>

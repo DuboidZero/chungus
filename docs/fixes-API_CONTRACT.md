@@ -235,18 +235,24 @@ Creates a new share bundle and returns a token.
 ```json
 {
   "studentIds": ["uuid1", "uuid2", "uuid3"],
+  "sections": ["academics", "skills", "projects", "experience"],
   "expiresInDays": 30
 }
 ```
 
+> [!NOTE]
+> `expiresInDays` may be `null` to create a link that never expires.
+> `sections` is an array of data categories the recruiter can view.
+
 **Success Response — `201 Created`:**
 ```json
 {
-  "token": "WyJzdHVkZW50LTEiLCJzdHVkZW50LTIiXQ",
-  "shareUrl": "https://<your-domain>/share/WyJzdHVkZW50LTEiLCJzdHVkZW50LTIiXQ",
+  "token": "x8f3k2m9lp0qrs",
+  "shareUrl": "https://<your-domain>/share/x8f3k2m9lp0qrs",
   "createdAt": "2026-07-06T00:00:00Z",
-  "expiresAt":  "2026-08-05T00:00:00Z",
-  "studentCount": 3
+  "expiresAt": "2026-08-05T00:00:00Z",
+  "studentCount": 3,
+  "sections": ["academics", "skills", "projects", "experience"]
 }
 ```
 
@@ -273,7 +279,7 @@ Permanently revokes a share bundle, making the link inaccessible immediately.
 
 ### `GET /share`
 
-Returns all active (non-expired) share bundles created by the authenticated teacher.
+Returns all share bundles (active, expired, revoked) created by the authenticated teacher.
 
 **Auth:** Required (teacher JWT)
 
@@ -281,12 +287,18 @@ Returns all active (non-expired) share bundles created by the authenticated teac
 ```json
 [
   {
-    "token": "abc12345",
-    "shareUrl": "https://portfolio.mitwpu.edu.in/share/abc12345",
+    "token": "x8f3k2m9lp0qrs",
+    "shareUrl": "https://<your-domain>/share/x8f3k2m9lp0qrs",
     "createdAt": "2026-07-01T00:00:00Z",
-    "expiresAt":  "2026-07-31T00:00:00Z",
+    "expiresAt": "2026-07-31T00:00:00Z",
+    "revokedAt": null,
     "studentCount": 5,
-    "isExpired": false
+    "sections": ["academics", "skills", "projects"],
+    "status": "active"
   }
 ]
 ```
+
+> [!NOTE]
+> `status` is one of `"active"`, `"expired"`, or `"revoked"`. The backend derives this from `expiresAt` and `revokedAt`.
+> `expiresAt` may be `null` for links that never expire.

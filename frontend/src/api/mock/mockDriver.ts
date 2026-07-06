@@ -21,34 +21,37 @@ const allAdmins:   any[] = getMockData(adminModules).map(a => JSON.parse(JSON.st
 
 const mockMilestones: any[] = [];
 
-// ─── Self-contained share token encoding ─────────────────────────────────────
-// Tokens encode the student IDs directly so links work across any browser,
-// device, or deployment without shared state (no localStorage dependency).
-// Format: base64url( JSON.stringify(studentIds) )
-// Special case: 'demo1234' always resolves to ALL students.
+// ─── Share Bundle Persistence ────────────────────────────────────────────────
+// Bundles are stored in localStorage to simulate server-side persistence.
+// In production, the backend stores these so they can be listed, revoked, and audited.
 
-
-
-function encodeShareToken(studentIds: string[]): string {
-  const json = JSON.stringify(studentIds);
-  // btoa → base64url (URL-safe, no padding)
-  return btoa(unescape(encodeURIComponent(json)))
-    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+interface ShareBundle {
+  token: string;
+  studentIds: string[];
+  sections: string[];       // e.g. ['academics','skills','projects']
+  createdAt: string;
+  expiresAt: string | null; // null = never expires
+  revokedAt: string | null; // null = not revoked
 }
 
-function decodeShareToken(token: string): string[] | null {
-  if (token === 'demo1234') return null; // handled as special case
+const BUNDLES_KEY = 'mit_share_bundles';
+
+function loadShareBundles(): ShareBundle[] {
   try {
-    // Restore base64 padding
-    const pad = token.length % 4;
-    const b64 = token.replace(/-/g, '+').replace(/_/g, '/')
-                     + (pad ? '='.repeat(4 - pad) : '');
-    const json = decodeURIComponent(escape(atob(b64)));
-    const ids = JSON.parse(json);
-    return Array.isArray(ids) ? ids : null;
-  } catch {
-    return null;
-  }
+    const raw = localStorage.getItem(BUNDLES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveShareBundles(bundles: ShareBundle[]) {
+  try { localStorage.setItem(BUNDLES_KEY, JSON.stringify(bundles)); } catch {}
+}
+
+/** Get the status of a bundle. */
+function getBundleStatus(b: ShareBundle): 'active' | 'expired' | 'revoked' {
+  if (b.revokedAt) return 'revoked';
+  if (b.expiresAt && new Date(b.expiresAt) < new Date()) return 'expired';
+  return 'active';
 }
 
 
@@ -736,31 +739,82 @@ export const mockDriver = {
   },
 
   // ─── Recruiter Share Bundle ───────────────────────────────────────────────
-  createShareBundle(studentIds: string[]): { token: string; createdAt: string; expiresAt: string } {
-    // Encode student IDs directly into the token — no server/localStorage needed
-    const token = encodeShareToken(studentIds);
+  createShareBundle(
+    studentIds: string[],
+    sections: string[],
+    expiresInDays: number | null,
+  ): ShareBundle {
+    const token = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
     const now = new Date();
-    return {
+    const bundle: ShareBundle = {
       token,
+      studentIds,
+      sections,
       createdAt: now.toISOString(),
-      expiresAt: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      expiresAt: expiresInDays != null
+        ? new Date(now.getTime() + expiresInDays * 24 * 60 * 60 * 1000).toISOString()
+        : null,
+      revokedAt: null,
     };
+    const all = loadShareBundles();
+    all.push(bundle);
+    saveShareBundles(all);
+    return bundle;
+  },
+
+  listTeacherShareBundles(): (ShareBundle & { status: string; studentCount: number })[] {
+    const all = loadShareBundles();
+    return all.map(b => ({
+      ...b,
+      status: getBundleStatus(b),
+      studentCount: b.studentIds.length,
+    }));
+  },
+
+  revokeShareBundle(token: string): boolean {
+    const all = loadShareBundles();
+    const bundle = all.find(b => b.token === token);
+    if (!bundle || bundle.revokedAt) return false;
+    bundle.revokedAt = new Date().toISOString();
+    saveShareBundles(all);
+    return true;
   },
 
   getShareBundle(token: string) {
-    const now = new Date().toISOString();
-
-    // Resolve student IDs — either from the special demo token or by decoding
-    let studentIds: string[];
+    // Demo token — always returns all students
     if (token === 'demo1234') {
-      studentIds = allStudents.map(s => s.user.id);
-    } else {
-      const decoded = decodeShareToken(token);
-      if (!decoded) return null;
-      studentIds = decoded;
+      const students = allStudents.map(s => {
+        const projects: any[] = s.projects ?? [];
+        const featured = projects.filter((p: any) => p.isFeatured);
+        const techSkills: any[] = s.skills?.technical ?? [];
+        return {
+          id: s.user.id,
+          name: s.user.name,
+          department: s.user.department,
+          batch: s.user.batch,
+          avatar: null,
+          cgpa: s.dashboard?.stats?.cgpa ?? null,
+          topSkills: techSkills.slice(0, 3).map((sk: any) => sk.name),
+          featuredProjectCount: featured.length,
+          hasExperience: (s.experience ?? []).length > 0,
+        };
+      });
+      return {
+        token: 'demo1234',
+        createdAt: new Date('2026-07-01').toISOString(),
+        expiresAt: null,
+        studentCount: students.length,
+        students,
+      };
     }
 
-    const students = studentIds.map(id => {
+    // Look up persisted bundle
+    const all = loadShareBundles();
+    const bundle = all.find(b => b.token === token);
+    if (!bundle) return null;
+    if (getBundleStatus(bundle) !== 'active') return null;
+
+    const students = bundle.studentIds.map(id => {
       const s = allStudents.find(st => st.user.id === id);
       if (!s) return null;
       const projects: any[] = s.projects ?? [];
@@ -780,26 +834,27 @@ export const mockDriver = {
     }).filter(Boolean);
 
     return {
-      token,
-      createdAt: now,
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      token: bundle.token,
+      createdAt: bundle.createdAt,
+      expiresAt: bundle.expiresAt,
       studentCount: students.length,
       students,
     };
   },
 
   getRecruiterStudentProfile(token: string, studentId: string) {
-    // Validate token (decode to confirm it's legitimate, or accept demo)
+    // Demo token — always allowed
     if (token !== 'demo1234') {
-      const decoded = decodeShareToken(token);
-      if (!decoded || !decoded.includes(studentId)) return null;
+      const all = loadShareBundles();
+      const bundle = all.find(b => b.token === token);
+      if (!bundle || getBundleStatus(bundle) !== 'active') return null;
+      if (!bundle.studentIds.includes(studentId)) return null;
     }
     const s = allStudents.find(st => st.user.id === studentId);
     if (!s) return null;
 
     const projects: any[] = s.projects ?? [];
     const featured = projects.filter((p: any) => p.isFeatured);
-    // If no featured, show 3 most recent
     const displayProjects = featured.length > 0
       ? featured
       : [...projects].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 3);
@@ -813,12 +868,10 @@ export const mockDriver = {
       cgpa: s.dashboard?.stats?.cgpa ?? null,
       bio: s.profile?.aboutMe ?? null,
       domainInterest: s.profile?.domainInterest ?? null,
-      // Social links — mocked for now
       github: s.profile?.github ?? `https://github.com/${s.user.name.toLowerCase().replace(' ', '-')}`,
       portfolio: s.profile?.portfolio ?? null,
       linkedin: s.profile?.linkedin ?? null,
       resumePdf: s.profile?.resumePdf ?? null,
-      // Recruiter-visible portfolio data
       projects: displayProjects.map((p: any) => ({
         id: p.id,
         name: p.name ?? p.title ?? '',
@@ -860,3 +913,4 @@ export const mockDriver = {
     };
   },
 };
+
