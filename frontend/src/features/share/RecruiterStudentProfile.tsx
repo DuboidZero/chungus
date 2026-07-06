@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft, GitBranch, Globe, Link2, FileText, Star,
-  Briefcase, Trophy, Code2, MessageSquare, Globe2, FolderGit2,
+  Briefcase, Trophy, Code2, Globe2, FolderGit2,
   Calendar, MapPin, ExternalLink, AlertTriangle, GraduationCap,
   Award, Zap, Users,
 } from 'lucide-react';
