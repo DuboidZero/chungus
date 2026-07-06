@@ -24,6 +24,11 @@ class ExperienceCreate(CamelModel):
     end_date: date_type | None = None
     description: str | None = None
     type: ExperienceType
+    is_paid: str | None = None
+    supervisor_contact: str | None = None
+    faculty_guide: str | None = None
+    work_model: str | None = None
+    reflection: str | None = None
 
     @field_validator("start_date", "end_date", mode="before")
     @classmethod
@@ -38,6 +43,11 @@ class ExperienceUpdate(CamelModel):
     end_date: date_type | None = None
     description: str | None = None
     type: ExperienceType | None = None
+    is_paid: str | None = None
+    supervisor_contact: str | None = None
+    faculty_guide: str | None = None
+    work_model: str | None = None
+    reflection: str | None = None
 
     @field_validator("start_date", "end_date", mode="before")
     @classmethod
@@ -53,5 +63,10 @@ class ExperienceResponse(CamelModel):
     end_date: date_type | None
     description: str | None
     type: str
+    is_paid: str | None = None
+    supervisor_contact: str | None = None
+    faculty_guide: str | None = None
+    work_model: str | None = None
+    reflection: str | None = None
     created_at: datetime
     updated_at: datetime

@@ -17,3 +17,4 @@ class Profile(Base, TimestampMixin):
     internship_preference = Column(String, default="none", nullable=False)
     preferred_radius = Column(String, nullable=True)
     domain_interest = Column(String, nullable=True)
+    best_five_subjects = Column(String, nullable=True)   # Phase 6: top 5 Class 10 subjects (comma-separated)

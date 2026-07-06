@@ -15,6 +15,7 @@ from app.models.teacher_records import PrivateNote, AssessmentMark, ProjectMiles
 from app.models.marks import MarkingScheme, SchemeComponent, MarksEntry
 from app.models.mentorship import SubjectTeacher
 from logging.config import fileConfig
+from app.models.phase6 import AuditLog, CoCurricular
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool

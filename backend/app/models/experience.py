@@ -1,7 +1,7 @@
 import uuid
-from sqlalchemy import Column, String, Date, ForeignKey
-from app.database import Base, TimestampMixin
 from sqlalchemy import Column, String, Date, ForeignKey, Boolean
+from app.database import Base, TimestampMixin
+
 
 class Experience(Base, TimestampMixin):
     __tablename__ = "experiences"
@@ -12,7 +12,12 @@ class Experience(Base, TimestampMixin):
     organisation_name = Column(String, nullable=False)
     role = Column(String, nullable=False)
     start_date = Column(Date, nullable=True)
-    end_date = Column(Date, nullable=True)        # null = currently working (per contract)
+    end_date = Column(Date, nullable=True)        # null = currently working
     description = Column(String, nullable=True)
     type = Column(String, nullable=False)          # Internship / Part-time / Full-time
     is_public = Column(Boolean, default=True, nullable=False)
+    is_paid = Column(String, nullable=True)          # "Paid" / "Unpaid"
+    supervisor_contact = Column(String, nullable=True)
+    faculty_guide = Column(String, nullable=True)
+    work_model = Column(String, nullable=True)       # "Remote" / "Hybrid" / "Onsite"
+    reflection = Column(String, nullable=True)       # student's reflection block

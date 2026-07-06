@@ -13,7 +13,8 @@ class ProfileResponse(CamelModel):
     location: str | None
     internship_preference: str
     preferred_radius: str | None
-    domain_interest: str | None          # ← THIS LINE must be present
+    domain_interest: str | None   
+    best_five_subjects: str | None     
     created_at: datetime
     updated_at: datetime
 

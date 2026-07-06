@@ -12,6 +12,7 @@ from app.routes.academic_structure import router as academic_structure_router
 from app.routes.mentorship import router as mentorship_router
 from app.routes.analytics import router as analytics_router
 from app.routes.share import router as share_router
+from app.routes.phase6 import router as phase6_router
 
 app = FastAPI(title="MIT WPU Portfolio System")
 
@@ -95,6 +96,7 @@ app.include_router(marks_router, prefix="/api/v1")
 app.include_router(mentorship_router, prefix="/api/v1")
 app.include_router(analytics_router, prefix="/api/v1")
 app.include_router(share_router, prefix="/api/v1")
+app.include_router(phase6_router, prefix="/api/v1")
 
 
 
