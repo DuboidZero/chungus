@@ -80,3 +80,16 @@ export async function deleteProject(id: string): Promise<void> {
   }
   await apiClient.delete(API.PROJECT(id));
 }
+
+/** PATCH /me/projects/:id/feature — toggle is_featured (max 3 at a time) */
+export async function toggleFeaturedProject(id: string): Promise<{ isFeatured: boolean }> {
+  if (USE_MOCK) {
+    const userId = mockDriver.getCurrentUserId();
+    if (!userId) throw new Error("No mocked user session");
+    const result = mockDriver.toggleFeatured(userId, id);
+    await new Promise(resolve => setTimeout(resolve, 200));
+    return { isFeatured: result.isFeatured };
+  }
+  const response = await apiClient.patch<{ isFeatured: boolean }>(API.PROJECT_FEATURE(id), {});
+  return response.data;
+}

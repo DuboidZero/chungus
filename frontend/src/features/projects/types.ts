@@ -32,4 +32,5 @@ export interface ProjectEntry {
     language: string;
     lastUpdated: string;
   };
+  isFeatured?: boolean;
 }

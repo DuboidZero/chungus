@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, Users, BookOpen, BarChart3, Share2, FlaskConical, type LucideIcon
+  LayoutDashboard, Users, BookOpen, BarChart3, Share2, type LucideIcon
 } from 'lucide-react';
 
 export interface NavItem {
@@ -30,9 +30,8 @@ export const teacherNavigation: NavGroup[] = [
     ],
   },
   {
-    title: 'Research & Placement',
+    title: 'Placement',
     items: [
-      { label: 'Research Hub', path: '/research', icon: FlaskConical },
       { label: 'Share Profiles', path: '/share', icon: Share2 },
     ],
   },

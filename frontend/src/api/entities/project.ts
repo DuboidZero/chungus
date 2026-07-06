@@ -29,6 +29,8 @@ export interface Project {
     language: string;
     lastUpdated: string;
   };
+  /** Phase 5: Whether this project is featured on the recruiter profile */
+  isFeatured?: boolean;
   createdAt: string;
   updatedAt: string;
 }

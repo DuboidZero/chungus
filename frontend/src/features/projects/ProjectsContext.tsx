@@ -12,6 +12,7 @@ import {
   createProject,
   updateProject as apiUpdateProject,
   deleteProject as apiDeleteProject,
+  toggleFeaturedProject,
 } from '../../api/services/projects';
 
 interface ProjectsContextType {
@@ -20,9 +21,10 @@ interface ProjectsContextType {
   updateProject: (p: ProjectEntry) => Promise<void>;
   deleteProject: (id: string) => Promise<void>;
   getProject: (id: string) => ProjectEntry | undefined;
+  toggleFeatured: (id: string) => Promise<void>;
 }
 
-const ProjectsContext = createContext<ProjectsContextType | undefined>(undefined);
+export const ProjectsContext = createContext<ProjectsContextType | undefined>(undefined);
 
 export function ProjectsProvider({ children }: { children: ReactNode }) {
   const [projects, setProjects] = useState<ProjectEntry[]>([]);
@@ -50,8 +52,15 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
 
   const getProject = (id: string) => projects.find(x => x.id === id);
 
+  const toggleFeatured = async (id: string) => {
+    const result = await toggleFeaturedProject(id);
+    setProjects(prev =>
+      prev.map(x => (x.id === id ? { ...x, isFeatured: result.isFeatured } : x)),
+    );
+  };
+
   return (
-    <ProjectsContext.Provider value={{ projects, addProject, updateProject, deleteProject, getProject }}>
+    <ProjectsContext.Provider value={{ projects, addProject, updateProject, deleteProject, getProject, toggleFeatured }}>
       {children}
     </ProjectsContext.Provider>
   );

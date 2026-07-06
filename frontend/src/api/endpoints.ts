@@ -35,6 +35,7 @@ export const API = {
 
   PROJECTS: '/me/projects',
   PROJECT:  (id: string) => `/me/projects/${id}` as const,
+  PROJECT_FEATURE: (id: string) => `/me/projects/${id}/feature` as const,
 
   EXPERIENCE:      '/me/experience',
   EXPERIENCE_ITEM: (id: string) => `/me/experience/${id}` as const,

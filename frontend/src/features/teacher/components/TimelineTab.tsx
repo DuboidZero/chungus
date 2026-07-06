@@ -132,31 +132,30 @@ export function TimelineTab({ events: initialEvents, studentId, snapshot }: Prop
     <div className="space-y-6 max-w-4xl">
       {/* ── Student Snapshot ───────────────────────────────────────────── */}
       {snapshot && (
-        <div className="bg-inverse-surface text-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row gap-6 justify-between relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="flex-1 z-10 grid grid-cols-2 sm:grid-cols-3 gap-6">
+        <div className="bg-surface-container-low border border-outline-variant rounded-xl p-6 flex flex-col md:flex-row gap-6 justify-between">
+          <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-6">
             <div>
-              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">CGPA</p>
-              <p className="text-2xl font-bold text-white">{snapshot.cgpa?.toFixed(2) ?? '—'}</p>
+              <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wider mb-1">CGPA</p>
+              <p className="text-2xl font-bold text-on-surface">{snapshot.cgpa?.toFixed(2) ?? '—'}</p>
             </div>
             <div>
-              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">Projects</p>
-              <p className="text-2xl font-bold text-white">{snapshot.projectCount ?? '—'}</p>
+              <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wider mb-1">Projects</p>
+              <p className="text-2xl font-bold text-on-surface">{snapshot.projectCount ?? '—'}</p>
             </div>
             <div>
-              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">Semesters Completed</p>
-              <p className="text-2xl font-bold text-white">{snapshot.semesterCount ?? '—'}</p>
+              <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wider mb-1">Semesters Completed</p>
+              <p className="text-2xl font-bold text-on-surface">{snapshot.semesterCount ?? '—'}</p>
             </div>
           </div>
-          <div className="w-px bg-surface-container-high hidden md:block z-10" />
-          <div className="flex-1 z-10 grid grid-cols-2 sm:grid-cols-3 gap-6">
+          <div className="w-px bg-outline-variant/50 hidden md:block" />
+          <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-6">
             <div>
-              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">Teacher Interactions</p>
-              <p className="text-2xl font-bold text-on-surface-variant">{snapshot.interactions ?? '—'}</p>
+              <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wider mb-1">Teacher Interactions</p>
+              <p className="text-2xl font-bold text-primary">{snapshot.interactions ?? '—'}</p>
             </div>
             <div className="col-span-2">
-              <p className="text-xs text-on-surface-variant/70 font-medium uppercase tracking-wider mb-1">Last Activity</p>
-              <p className="text-sm font-semibold text-white mt-1.5">
+              <p className="text-xs text-on-surface-variant font-medium uppercase tracking-wider mb-1">Last Activity</p>
+              <p className="text-sm font-semibold text-on-surface mt-1.5">
                 {snapshot.lastInteraction ? new Date(snapshot.lastInteraction).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : 'None recorded'}
               </p>
             </div>

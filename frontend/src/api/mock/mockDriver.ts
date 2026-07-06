@@ -21,6 +21,45 @@ const allAdmins:   any[] = getMockData(adminModules).map(a => JSON.parse(JSON.st
 
 const mockMilestones: any[] = [];
 
+// In-memory share bundles created by the teacher's ShareProfilesWizard
+interface ShareBundle {
+  token: string;
+  studentIds: string[];
+  createdAt: string;
+  expiresAt: string;
+}
+
+const BUNDLES_STORAGE_KEY = 'mit_mock_share_bundles';
+
+/** Load previously generated bundles from localStorage (survive page refresh). */
+function loadBundles(): ShareBundle[] {
+  try {
+    const raw = localStorage.getItem(BUNDLES_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveBundles(bundles: ShareBundle[]) {
+  try {
+    localStorage.setItem(BUNDLES_STORAGE_KEY, JSON.stringify(bundles));
+  } catch { /* quota exceeded — silently ignore */ }
+}
+
+const shareBundles: ShareBundle[] = [
+  // Demo token — always available, seeded with all student IDs lazily
+  {
+    token: 'demo1234',
+    studentIds: [],
+    createdAt: new Date('2026-07-01').toISOString(),
+    expiresAt: new Date('2099-12-31').toISOString(),
+  },
+  // Merge in any bundles generated in previous sessions
+  ...loadBundles(),
+];
+
+
 // Admin Cohorts
 const allCohorts: any[] = [
   {
@@ -221,6 +260,27 @@ export const mockDriver = {
     const student = allStudents.find(s => s.user.id === userId);
     if (!student) throw new Error('Student not found');
     student.projects = (student.projects ?? []).filter((p: any) => p.id !== projectId);
+  },
+
+  toggleFeatured(userId: string, projectId: string) {
+    const student = allStudents.find(s => s.user.id === userId);
+    if (!student) throw new Error('Student not found');
+    const projects: any[] = student.projects ?? [];
+    const idx = projects.findIndex((p: any) => p.id === projectId);
+    if (idx === -1) throw new Error('Project not found');
+
+    const current = projects[idx].isFeatured ?? false;
+    // If trying to feature, enforce max 3
+    if (!current) {
+      const featuredCount = projects.filter((p: any) => p.isFeatured).length;
+      if (featuredCount >= 3) {
+        const err: any = new Error('You can feature at most 3 projects on your recruiter profile.');
+        err.status = 422;
+        throw err;
+      }
+    }
+    projects[idx] = { ...projects[idx], isFeatured: !current, updatedAt: new Date().toISOString() };
+    return projects[idx];
   },
 
   getExperience(userId: string) {
@@ -681,5 +741,125 @@ export const mockDriver = {
       }
     }
     return mentoredProjects.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-  }
+  },
+
+  // ─── Recruiter Share Bundle ───────────────────────────────────────────────
+  createShareBundle(studentIds: string[]): ShareBundle {
+    const token = Math.random().toString(36).slice(2, 10);
+    const bundle: ShareBundle = {
+      token,
+      studentIds,
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    };
+    shareBundles.push(bundle);
+    // Persist to localStorage so the link survives page refresh
+    saveBundles(shareBundles.filter(b => b.token !== 'demo1234'));
+    return bundle;
+  },
+
+  getShareBundle(token: string) {
+    const bundle = shareBundles.find(b => b.token === token);
+    if (!bundle) return null;
+    // Lazily seed the demo bundle with all students
+    if (bundle.studentIds.length === 0) {
+      bundle.studentIds = allStudents.map(s => s.user.id);
+    }
+    const students = bundle.studentIds.map(id => {
+      const s = allStudents.find(st => st.user.id === id);
+      if (!s) return null;
+      const projects: any[] = s.projects ?? [];
+      const featured = projects.filter((p: any) => p.isFeatured);
+      const techSkills: any[] = s.skills?.technical ?? [];
+      return {
+        id: s.user.id,
+        name: s.user.name,
+        department: s.user.department,
+        batch: s.user.batch,
+        avatar: null,
+        cgpa: s.dashboard?.stats?.cgpa ?? null,
+        topSkills: techSkills.slice(0, 3).map((sk: any) => sk.name),
+        featuredProjectCount: featured.length,
+        hasExperience: (s.experience ?? []).length > 0,
+      };
+    }).filter(Boolean);
+    return {
+      token: bundle.token,
+      createdAt: bundle.createdAt,
+      expiresAt: bundle.expiresAt,
+      studentCount: students.length,
+      students,
+    };
+  },
+
+  getRecruiterStudentProfile(token: string, studentId: string) {
+    const bundle = shareBundles.find(b => b.token === token);
+    if (bundle && bundle.studentIds.length === 0) {
+      bundle.studentIds = allStudents.map(s => s.user.id);
+    }
+    const s = allStudents.find(st => st.user.id === studentId);
+    if (!s) return null;
+
+    const projects: any[] = s.projects ?? [];
+    const featured = projects.filter((p: any) => p.isFeatured);
+    // If no featured, show 3 most recent
+    const displayProjects = featured.length > 0
+      ? featured
+      : [...projects].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 3);
+
+    return {
+      id: s.user.id,
+      name: s.user.name,
+      department: s.user.department,
+      batch: s.user.batch,
+      avatar: null,
+      cgpa: s.dashboard?.stats?.cgpa ?? null,
+      bio: s.profile?.aboutMe ?? null,
+      domainInterest: s.profile?.domainInterest ?? null,
+      // Social links — mocked for now
+      github: s.profile?.github ?? `https://github.com/${s.user.name.toLowerCase().replace(' ', '-')}`,
+      portfolio: s.profile?.portfolio ?? null,
+      linkedin: s.profile?.linkedin ?? null,
+      resumePdf: s.profile?.resumePdf ?? null,
+      // Recruiter-visible portfolio data
+      projects: displayProjects.map((p: any) => ({
+        id: p.id,
+        name: p.name ?? p.title ?? '',
+        description: p.description ?? '',
+        domain: p.domain ?? p.category ?? '',
+        techStack: p.techStack ?? [],
+        status: p.status ?? 'Completed',
+        type: p.type ?? p.category ?? 'Personal Project',
+        githubRepo: p.repositoryUrl ?? null,
+        liveUrl: p.liveUrl ?? null,
+        startDate: p.startDate ?? null,
+        endDate: p.endDate ?? null,
+        isFeatured: p.isFeatured ?? false,
+      })),
+      skills: {
+        technical: (s.skills?.technical ?? []).map((sk: any) => ({ name: sk.name, domain: sk.domain, proficiency: sk.proficiency })),
+        soft: (s.skills?.soft ?? []).map((sk: any) => ({ name: sk.name, proficiency: sk.proficiency })),
+        languages: (s.skills?.languages ?? []).map((sk: any) => ({ name: sk.name, proficiency: sk.proficiency })),
+      },
+      experience: (s.experience ?? []).map((ex: any) => ({
+        id: ex.id,
+        organisation: ex.organisationName,
+        role: ex.role,
+        type: ex.type,
+        description: ex.description,
+        startDate: ex.startDate,
+        endDate: ex.endDate,
+      })),
+      achievements: (s.achievements ?? []).map((ach: any) => ({
+        id: ach.id,
+        title: ach.title,
+        description: ach.description,
+        category: ach.category,
+        type: ach.type,
+        level: ach.level,
+        date: ach.date,
+        certificateUrl: ach.certificateUrl,
+      })),
+    };
+  },
 };

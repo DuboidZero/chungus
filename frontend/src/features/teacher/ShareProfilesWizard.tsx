@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getAssignedStudents } from '../../api/services/teacher';
+import { mockDriver } from '../../api/mock';
 import type { StudentSummary } from '../../api/entities/teacher';
 import { Card } from '../../shared/ui/card';
 import { Skeleton } from '../../shared/ui/loading-skeleton';
@@ -44,8 +45,9 @@ export function ShareProfilesWizard() {
 
   const next = () => {
     if (step === 1) {
-      const token = Math.random().toString(36).slice(2, 10);
-      setLink(`https://portfolio.mitwpu.edu.in/share/${token}`);
+      const bundle = mockDriver.createShareBundle([...selected]);
+      const base = import.meta.env.VITE_DEPLOY_URL || window.location.origin;
+      setLink(`${base}/share/${bundle.token}`);
     }
     setStep(s => Math.min(2, s + 1));
   };
