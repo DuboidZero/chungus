@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import Column, String, Date, ForeignKey
 from app.database import Base, TimestampMixin
-
+from sqlalchemy import Column, String, Date, ForeignKey, Boolean
 
 class Experience(Base, TimestampMixin):
     __tablename__ = "experiences"
@@ -15,3 +15,4 @@ class Experience(Base, TimestampMixin):
     end_date = Column(Date, nullable=True)        # null = currently working (per contract)
     description = Column(String, nullable=True)
     type = Column(String, nullable=False)          # Internship / Part-time / Full-time
+    is_public = Column(Boolean, default=True, nullable=False)

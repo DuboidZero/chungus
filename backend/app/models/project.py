@@ -1,3 +1,4 @@
+from sqlalchemy import Column, String, Date, ForeignKey, JSON, Boolean
 import uuid
 from sqlalchemy import Column, String, Date, ForeignKey, JSON
 from app.database import Base, TimestampMixin
@@ -20,3 +21,4 @@ class Project(Base, TimestampMixin):
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
     github_repo = Column(String, nullable=True)    # Phase 2; null for now
+    is_public = Column(Boolean, default=True, nullable=False)   # Phase 5: show on public share page

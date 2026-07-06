@@ -25,3 +25,6 @@ class User(Base, TimestampMixin):
     # --- Phase 3 additions ---
     branch_id = Column(String(36), ForeignKey("branches.id"), nullable=True, index=True)   # teacher's branch (for mentor eligibility)
     mentor_id = Column(String(36), ForeignKey("users.id"), nullable=True, index=True)       # student's chosen mentor (a teacher)
+    # --- Phase 5 additions ---
+    share_token = Column(String(64), unique=True, nullable=True, index=True)   # public portfolio link token
+    share_enabled = Column(Boolean, default=False, nullable=False)             # is the public link active

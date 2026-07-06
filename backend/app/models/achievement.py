@@ -1,4 +1,5 @@
 import uuid
+from sqlalchemy import Column, String, Date, ForeignKey, Boolean
 from sqlalchemy import Column, String, Date, ForeignKey
 from app.database import Base, TimestampMixin
 
@@ -16,3 +17,4 @@ class Achievement(Base, TimestampMixin):
     level = Column(String, nullable=False)         # College / State / National / International
     date = Column(Date, nullable=True)
     certificate_url = Column(String, nullable=True)
+    is_public = Column(Boolean, default=True, nullable=False)
