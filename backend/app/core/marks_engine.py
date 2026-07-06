@@ -31,14 +31,30 @@ def compute_subject_result(db: Session, student_id: str, course: Course) -> dict
     obtained_total = 0.0
     max_total = 0.0
     breakdown = []
+    any_absent = False
+    failed_component = False
+
     for c in components:
         obtained = by_component.get(c.id)
         max_total += c.max_marks
+        is_absent = (obtained is None and c.id in by_component)  # entry exists but None = absent
         got = obtained if obtained is not None else 0.0
         obtained_total += got
+
+        # pass/fail check for this component
+        comp_failed = False
+        if c.min_marks is not None and got < c.min_marks:
+            comp_failed = True
+            failed_component = True
+        if is_absent:
+            any_absent = True
+            comp_failed = True
+            failed_component = True
+
         breakdown.append({
             "code": c.code, "label": c.label,
             "obtained": obtained, "max": c.max_marks, "min": c.min_marks,
+            "absent": is_absent, "failed": comp_failed,
         })
 
     if max_total == 0:
@@ -47,6 +63,12 @@ def compute_subject_result(db: Session, student_id: str, course: Course) -> dict
     percentage = round((obtained_total / max_total) * 100, 2)
     grade = marks_to_grade(percentage)
     points = GRADE_POINTS.get(grade, 0)
+
+    # If a required component was failed (below min or absent), the subject is failed
+    subject_passed = not failed_component
+    if not subject_passed:
+        grade = "F"
+        points = 0
 
     return {
         "course_id": course.id,
@@ -59,6 +81,8 @@ def compute_subject_result(db: Session, student_id: str, course: Course) -> dict
         "percentage": percentage,
         "grade": grade,
         "grade_points": points,
+        "passed": subject_passed,
+        "has_absent": any_absent,
         "components": breakdown,
     }
 

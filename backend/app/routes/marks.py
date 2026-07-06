@@ -1,12 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Response
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from openpyxl import load_workbook 
+from openpyxl import load_workbook, Workbook
+from openpyxl.styles import Font, PatternFill, Alignment
+from openpyxl.utils import get_column_letter
 from io import BytesIO
 from app.core.dependencies import get_current_admin, get_db
 from app.models.user import User
 from app.models.marks import MarkingScheme, SchemeComponent, MarksEntry
-from app.models.academic_structure import Course
+from app.models.academic_structure import Course, Division
 from app.schemas.marks import SchemeCreate, SchemeUpdate, SchemeResponse
 from app.core.marks_engine import (
     compute_student_cgpa, compute_subject_result, recompute_and_cache_cgpa,
@@ -154,7 +156,8 @@ async def upload_marks(
     admin: User = Depends(get_current_admin),
 ):
     """Upload marks for ONE course. Header row must contain component CODES
-    (CCA-TH, ETE-TH, etc.). Re-uploading updates existing marks."""
+    (CCA-TH, ETE-TH, etc.). Use 'AB' in a cell to mark a student absent.
+    Re-uploading updates existing marks."""
     course = db.query(Course).filter(Course.id == course_id).first()
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
@@ -217,16 +220,23 @@ async def upload_marks(
 
         for col_idx, comp in col_to_component.items():
             raw = row[col_idx] if col_idx < len(row) else None
+
+            # blank cell -> skip (no entry for this component)
             if raw is None or (isinstance(raw, str) and raw.strip() == ""):
                 continue
-            try:
-                val = float(raw)
-            except (ValueError, TypeError):
-                errors.append(f"Row {row_num}: '{comp.code}' value '{raw}' is not a number")
-                continue
-            if val < 0 or val > comp.max_marks:
-                errors.append(f"Row {row_num}: '{comp.code}' = {val} out of range 0..{comp.max_marks}")
-                continue
+
+            # "AB" / "A" / "ABSENT" -> store as None (absent), not a number
+            if isinstance(raw, str) and raw.strip().upper() in ("AB", "A", "ABSENT"):
+                val = None
+            else:
+                try:
+                    val = float(raw)
+                except (ValueError, TypeError):
+                    errors.append(f"Row {row_num}: '{comp.code}' value '{raw}' is not a number (use a number or 'AB' for absent)")
+                    continue
+                if val < 0 or val > comp.max_marks:
+                    errors.append(f"Row {row_num}: '{comp.code}' = {val} out of range 0..{comp.max_marks}")
+                    continue
 
             existing = db.query(MarksEntry).filter(
                 MarksEntry.student_id == student.id,
@@ -274,4 +284,156 @@ async def get_student_marks(
         "cgpa": result["cgpa"],
         "totalCredits": result["total_credits"],
         "semesters": result["semesters"],
+    }
+
+@router.get("/marks/template/{course_id}", tags=["marks"])
+async def download_marks_template(
+    course_id: str,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    """Generate a ready-to-fill Excel: PRN, Name, component columns (max in header),
+    one row per enrolled student (same branch + semester as the course)."""
+    course = db.query(Course).filter(Course.id == course_id).first()
+    if course is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
+    if not course.marking_scheme_id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="This course has no marking scheme assigned")
+
+    components = db.query(SchemeComponent).filter(
+        SchemeComponent.scheme_id == course.marking_scheme_id
+    ).order_by(SchemeComponent.display_order, SchemeComponent.code).all()
+    if not components:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="The course's marking scheme has no components")
+
+    division_ids = [d.id for d in db.query(Division).filter(
+        Division.branch_id == course.branch_id
+    ).all()]
+    students = []
+    if division_ids:
+        students = db.query(User).filter(
+            User.role == "student",
+            User.division_id.in_(division_ids),
+            User.current_semester == course.semester,
+        ).order_by(User.prn).all()
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = (course.course_code or "Marks")[:31]
+
+    headers = ["PRN", "Name"] + [
+        f"{c.code} ({int(c.max_marks) if c.max_marks == int(c.max_marks) else c.max_marks})"
+        for c in components
+    ]
+    ws.append(headers)
+
+    fill = PatternFill(start_color="1F2A44", end_color="1F2A44", fill_type="solid")
+    for i in range(1, len(headers) + 1):
+        cell = ws.cell(row=1, column=i)
+        cell.font = Font(bold=True, color="FFFFFF")
+        cell.fill = fill
+        cell.alignment = Alignment(horizontal="center")
+
+    for s in students:
+        ws.append([s.prn, s.name] + ["" for _ in components])
+
+    ws.column_dimensions["A"].width = 16
+    ws.column_dimensions["B"].width = 24
+    for idx in range(3, len(headers) + 1):
+        ws.column_dimensions[get_column_letter(idx)].width = 14
+
+    buf = BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+
+    filename = f"marks_template_{course.course_code}.xlsx"
+    return Response(
+        content=buf.getvalue(),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@router.get("/marks/course/{course_id}", response_model=dict, tags=["marks"])
+async def list_course_marks(
+    course_id: str,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    """List every student's computed result for ONE course — a class marksheet view."""
+    from app.core.marks_engine import compute_subject_result
+
+    course = db.query(Course).filter(Course.id == course_id).first()
+    if course is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
+
+    student_ids = [r.student_id for r in db.query(MarksEntry.student_id).filter(
+        MarksEntry.course_id == course_id
+    ).distinct().all()]
+
+    students = db.query(User).filter(User.id.in_(student_ids)).order_by(User.prn).all() if student_ids else []
+
+    results = []
+    passed_count = 0
+    failed_count = 0
+    for s in students:
+        res = compute_subject_result(db, s.id, course)
+        if not res:
+            continue
+        if res["passed"]:
+            passed_count += 1
+        else:
+            failed_count += 1
+        results.append({
+            "studentId": s.id,
+            "prn": s.prn,
+            "name": s.name,
+            "obtainedTotal": res["obtained_total"],
+            "maxTotal": res["max_total"],
+            "percentage": res["percentage"],
+            "grade": res["grade"],
+            "gradePoints": res["grade_points"],
+            "passed": res["passed"],
+            "hasAbsent": res["has_absent"],
+        })
+
+    return {
+        "courseId": course.id,
+        "courseCode": course.course_code,
+        "courseName": course.course_name,
+        "credits": course.credits,
+        "studentsWithMarks": len(results),
+        "passed": passed_count,
+        "failed": failed_count,
+        "students": results,
+    }
+
+
+@router.delete("/marks/course/{course_id}", response_model=dict, tags=["marks"])
+async def delete_course_marks(
+    course_id: str,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_current_admin),
+):
+    """Delete ALL marks for a course (e.g. to redo a bad upload)."""
+    course = db.query(Course).filter(Course.id == course_id).first()
+    if course is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Course not found")
+
+    affected = [r.student_id for r in db.query(MarksEntry.student_id).filter(
+        MarksEntry.course_id == course_id
+    ).distinct().all()]
+
+    deleted = db.query(MarksEntry).filter(MarksEntry.course_id == course_id).delete()
+    db.commit()
+
+    for sid in affected:
+        recompute_and_cache_cgpa(db, sid)
+
+    return {
+        "courseCode": course.course_code,
+        "deletedEntries": deleted,
+        "studentsAffected": len(affected),
     }
