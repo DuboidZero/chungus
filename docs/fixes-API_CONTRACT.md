@@ -202,16 +202,6 @@ Returns the **recruiter-safe, redacted profile** for a single student.
 }
 ```
 
-> [!IMPORTANT]
-> **The following fields MUST NOT be included in this response under any circumstances:**
-> - Semester-by-semester marks or GPA breakdown
-> - Subject marks or grades
-> - Teacher notes
-> - Internal analytics data
-> - Attendance records
-> - Internal UUIDs beyond what is necessary
-> - Administrative or cohort metadata
-
 **Project logic:**
 - If the student has **any** featured projects (`is_featured = true`), return **only** those.
 - If the student has **no** featured projects, return the **3 most recently created** projects.
@@ -235,24 +225,18 @@ Creates a new share bundle and returns a token.
 ```json
 {
   "studentIds": ["uuid1", "uuid2", "uuid3"],
-  "sections": ["academics", "skills", "projects", "experience"],
   "expiresInDays": 30
 }
 ```
 
-> [!NOTE]
-> `expiresInDays` may be `null` to create a link that never expires.
-> `sections` is an array of data categories the recruiter can view.
-
 **Success Response — `201 Created`:**
 ```json
 {
-  "token": "x8f3k2m9lp0qrs",
-  "shareUrl": "https://<your-domain>/share/x8f3k2m9lp0qrs",
+  "token": "WyJzdHVkZW50LTEiLCJzdHVkZW50LTIiXQ",
+  "shareUrl": "https://<your-domain>/share/WyJzdHVkZW50LTEiLCJzdHVkZW50LTIiXQ",
   "createdAt": "2026-07-06T00:00:00Z",
-  "expiresAt": "2026-08-05T00:00:00Z",
-  "studentCount": 3,
-  "sections": ["academics", "skills", "projects", "experience"]
+  "expiresAt":  "2026-08-05T00:00:00Z",
+  "studentCount": 3
 }
 ```
 
@@ -279,7 +263,7 @@ Permanently revokes a share bundle, making the link inaccessible immediately.
 
 ### `GET /share`
 
-Returns all share bundles (active, expired, revoked) created by the authenticated teacher.
+Returns all active (non-expired) share bundles created by the authenticated teacher.
 
 **Auth:** Required (teacher JWT)
 
@@ -287,18 +271,12 @@ Returns all share bundles (active, expired, revoked) created by the authenticate
 ```json
 [
   {
-    "token": "x8f3k2m9lp0qrs",
-    "shareUrl": "https://<your-domain>/share/x8f3k2m9lp0qrs",
+    "token": "abc12345",
+    "shareUrl": "https://portfolio.mitwpu.edu.in/share/abc12345",
     "createdAt": "2026-07-01T00:00:00Z",
-    "expiresAt": "2026-07-31T00:00:00Z",
-    "revokedAt": null,
+    "expiresAt":  "2026-07-31T00:00:00Z",
     "studentCount": 5,
-    "sections": ["academics", "skills", "projects"],
-    "status": "active"
+    "isExpired": false
   }
 ]
 ```
-
-> [!NOTE]
-> `status` is one of `"active"`, `"expired"`, or `"revoked"`. The backend derives this from `expiresAt` and `revokedAt`.
-> `expiresAt` may be `null` for links that never expire.

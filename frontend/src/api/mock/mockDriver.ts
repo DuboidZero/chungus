@@ -21,17 +21,48 @@ const allAdmins:   any[] = getMockData(adminModules).map(a => JSON.parse(JSON.st
 
 const mockMilestones: any[] = [];
 
-// ─── Share Bundle Persistence ────────────────────────────────────────────────
-// Bundles are stored in localStorage to simulate server-side persistence.
-// In production, the backend stores these so they can be listed, revoked, and audited.
+// ─── Share Bundle — Hybrid Approach ──────────────────────────────────────────
+// The TOKEN is self-contained: it base64url-encodes the full bundle payload
+// (studentIds, sections, expiresAt). This means ANY browser can decode and
+// render the recruiter view without shared state — works cross-device on Vercel.
+//
+// localStorage is used ONLY for the teacher's management list (Shared Profiles
+// page). It stores metadata for listing, revoking, and status tracking.
+// In production the backend replaces both roles entirely.
 
 interface ShareBundle {
   token: string;
   studentIds: string[];
-  sections: string[];       // e.g. ['academics','skills','projects']
+  sections: string[];
   createdAt: string;
   expiresAt: string | null; // null = never expires
-  revokedAt: string | null; // null = not revoked
+  revokedAt: string | null;
+}
+
+/** Payload encoded inside the token itself — cross-browser readable. */
+interface TokenPayload {
+  studentIds: string[];
+  sections: string[];
+  expiresAt: string | null;
+}
+
+function encodeToken(payload: TokenPayload): string {
+  const json = JSON.stringify(payload);
+  return btoa(unescape(encodeURIComponent(json)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+function decodeToken(token: string): TokenPayload | null {
+  if (token === 'demo1234') return null;
+  try {
+    const pad = token.length % 4;
+    const b64 = token.replace(/-/g, '+').replace(/_/g, '/')
+                     + (pad ? '='.repeat(4 - pad) : '');
+    const json = decodeURIComponent(escape(atob(b64)));
+    const p = JSON.parse(json);
+    if (!Array.isArray(p?.studentIds)) return null;
+    return p as TokenPayload;
+  } catch { return null; }
 }
 
 const BUNDLES_KEY = 'mit_share_bundles';
@@ -47,8 +78,7 @@ function saveShareBundles(bundles: ShareBundle[]) {
   try { localStorage.setItem(BUNDLES_KEY, JSON.stringify(bundles)); } catch {}
 }
 
-/** Get the status of a bundle. */
-function getBundleStatus(b: ShareBundle): 'active' | 'expired' | 'revoked' {
+function getBundleStatus(b: Pick<ShareBundle, 'revokedAt' | 'expiresAt'>): 'active' | 'expired' | 'revoked' {
   if (b.revokedAt) return 'revoked';
   if (b.expiresAt && new Date(b.expiresAt) < new Date()) return 'expired';
   return 'active';
@@ -744,21 +774,25 @@ export const mockDriver = {
     sections: string[],
     expiresInDays: number | null,
   ): ShareBundle {
-    const token = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
     const now = new Date();
+    const expiresAt = expiresInDays != null
+      ? new Date(now.getTime() + expiresInDays * 24 * 60 * 60 * 1000).toISOString()
+      : null;
+    // Token encodes the full payload — cross-browser, cross-device, no server needed
+    const token = encodeToken({ studentIds, sections, expiresAt });
     const bundle: ShareBundle = {
       token,
       studentIds,
       sections,
       createdAt: now.toISOString(),
-      expiresAt: expiresInDays != null
-        ? new Date(now.getTime() + expiresInDays * 24 * 60 * 60 * 1000).toISOString()
-        : null,
+      expiresAt,
       revokedAt: null,
     };
+    // Also persist to localStorage for teacher's management list only
     const all = loadShareBundles();
-    all.push(bundle);
-    saveShareBundles(all);
+    // Avoid duplicates if teacher regenerates same selection
+    const existing = all.findIndex(b => b.token === token);
+    if (existing === -1) { all.push(bundle); saveShareBundles(all); }
     return bundle;
   },
 
@@ -799,22 +833,21 @@ export const mockDriver = {
           hasExperience: (s.experience ?? []).length > 0,
         };
       });
-      return {
-        token: 'demo1234',
-        createdAt: new Date('2026-07-01').toISOString(),
-        expiresAt: null,
-        studentCount: students.length,
-        students,
-      };
+      return { token: 'demo1234', createdAt: new Date('2026-07-01').toISOString(), expiresAt: null, studentCount: students.length, students };
     }
 
-    // Look up persisted bundle
-    const all = loadShareBundles();
-    const bundle = all.find(b => b.token === token);
-    if (!bundle) return null;
-    if (getBundleStatus(bundle) !== 'active') return null;
+    // Decode payload from token — works in any browser, any device
+    const payload = decodeToken(token);
+    if (!payload) return null;
 
-    const students = bundle.studentIds.map(id => {
+    // Check expiry from payload itself
+    if (payload.expiresAt && new Date(payload.expiresAt) < new Date()) return null;
+
+    // Best-effort revocation check via localStorage (same browser only)
+    const stored = loadShareBundles().find(b => b.token === token);
+    if (stored?.revokedAt) return null;
+
+    const students = payload.studentIds.map(id => {
       const s = allStudents.find(st => st.user.id === id);
       if (!s) return null;
       const projects: any[] = s.projects ?? [];
@@ -834,9 +867,9 @@ export const mockDriver = {
     }).filter(Boolean);
 
     return {
-      token: bundle.token,
-      createdAt: bundle.createdAt,
-      expiresAt: bundle.expiresAt,
+      token,
+      createdAt: stored?.createdAt ?? new Date().toISOString(),
+      expiresAt: payload.expiresAt,
       studentCount: students.length,
       students,
     };
@@ -845,10 +878,16 @@ export const mockDriver = {
   getRecruiterStudentProfile(token: string, studentId: string) {
     // Demo token — always allowed
     if (token !== 'demo1234') {
-      const all = loadShareBundles();
-      const bundle = all.find(b => b.token === token);
-      if (!bundle || getBundleStatus(bundle) !== 'active') return null;
-      if (!bundle.studentIds.includes(studentId)) return null;
+      // Decode from token — works in any browser, any device
+      const payload = decodeToken(token);
+      if (!payload) return null;
+      // Check expiry from payload
+      if (payload.expiresAt && new Date(payload.expiresAt) < new Date()) return null;
+      // Check student is in the bundle
+      if (!payload.studentIds.includes(studentId)) return null;
+      // Best-effort revocation check (same browser only in mock)
+      const stored = loadShareBundles().find(b => b.token === token);
+      if (stored?.revokedAt) return null;
     }
     const s = allStudents.find(st => st.user.id === studentId);
     if (!s) return null;
